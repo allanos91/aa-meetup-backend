@@ -37,23 +37,9 @@ if (!isProduction) {
     })
   );
 
-
-
-
-
-// app.use('/api/events', eventsRouter);
-// app.use('/api/groups', groupsRouter);
-// app.use('/api/users', usersRouter);
-// app.use('/api/venues', venuesRouter);
-
 const routes = require('./routes');
-const eventsRouter = require('./routes/events')
-const groupsRouter = require('./routes/groups')
-const usersRouter = require('./routes/users')
-const venuesRouter = require('./routes/venues')
-// ...
 
-app.use(routes, eventsRouter, groupsRouter, usersRouter, venuesRouter);
+app.use(routes);
 
 
 
