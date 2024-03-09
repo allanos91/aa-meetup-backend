@@ -1,9 +1,9 @@
-# `Cleet Up`
+# `Cleetup`
 
 ## Database Schema Design
 
 
- ![Schema](images/db_schema.png)
+ ![Schema](images/cleetup_schema.png)
 
 ## API Documentation
 
