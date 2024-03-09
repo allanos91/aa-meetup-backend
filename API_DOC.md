@@ -1,8 +1,9 @@
-# `<name of application here>`
+# `Cleet Up`
 
 ## Database Schema Design
 
-Schema Design: https://dbdiagram.io/d/DB-project-65e7f79fcd45b569fba1d67e
+
+ ![Schema](images/db_schema.png)
 
 ## API Documentation
 
