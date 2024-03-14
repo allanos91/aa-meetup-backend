@@ -13,13 +13,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       pageId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       previewImg: {
         type: Sequelize.BOOLEAN
       },
       pageType: {
-        type: Sequelize.ENUM
+        type: Sequelize.ENUM('Group', 'Event')
       },
       createdAt: {
         allowNull: false,
