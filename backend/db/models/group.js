@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
           otherKey: 'userId'
         }
       )
-      Group.hasOne(
+      Group.belongsTo(
         models.User,
         {
           foreignKey: 'organizerId',
