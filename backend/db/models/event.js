@@ -35,7 +35,7 @@ module.exports = (sequelize, DataTypes) => {
     group_id: DataTypes.INTEGER,
     venue_id: DataTypes.INTEGER,
     name: DataTypes.STRING,
-    type: DataTypes.STRING,
+    eventType: DataTypes.STRING,
     start_date: DataTypes.DATE,
     end_date: DataTypes.DATE,
     description: DataTypes.STRING

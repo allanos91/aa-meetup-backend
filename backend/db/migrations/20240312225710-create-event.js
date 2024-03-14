@@ -34,7 +34,7 @@ module.exports = {
       name: {
         type: Sequelize.STRING
       },
-      type: {
+      eventType: {
         type: Sequelize.STRING
       },
       startDate: {

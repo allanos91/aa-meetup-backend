@@ -49,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
     organizer_id: DataTypes.INTEGER,
     name: DataTypes.STRING,
     about: DataTypes.STRING,
-    type: DataTypes.STRING,
+    groupType: DataTypes.STRING,
     private: DataTypes.BOOLEAN,
     city: DataTypes.STRING,
     state: DataTypes.STRING

@@ -29,7 +29,7 @@ module.exports = {
       about: {
         type: Sequelize.STRING
       },
-      type: {
+      groupType: {
         type: Sequelize.STRING
       },
       private: {
