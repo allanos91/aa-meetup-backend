@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: 'pageId',
           constraints: false,
           scope: {
-            page_type: 'Group'
+            pageType: 'Group'
           }
         }
       )
@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Group.init({
-    organizer_id: DataTypes.INTEGER,
+    organizerId: DataTypes.INTEGER,
     name: DataTypes.STRING,
     about: DataTypes.STRING,
     groupType: DataTypes.STRING,
