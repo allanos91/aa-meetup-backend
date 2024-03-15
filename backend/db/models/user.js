@@ -19,14 +19,14 @@ module.exports = (sequelize, DataTypes) => {
           otherKey: 'groupId'
         }
       )
-      User.belongsToMany(
-        models.Event,
-        {
-          through: models.Attendee,
-          foreignKey: 'userId',
-          otherKey: 'eventId'
-        }
-      )
+      // User.belongsToMany(
+      //   models.Event,
+      //   {
+      //     through: models.Attendee,
+      //     foreignKey: 'userId',
+      //     otherKey: 'eventId'
+      //   }
+      // )
       User.hasMany(
         models.Group,
         {
