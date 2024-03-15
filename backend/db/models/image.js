@@ -29,9 +29,9 @@ module.exports = (sequelize, DataTypes) => {
   }
   Image.init({
     url: DataTypes.STRING,
-    page_id: DataTypes.INTEGER,
-    preview_img: DataTypes.BOOLEAN,
-    page_type: DataTypes.ENUM('Group', 'Event')
+    pageId: DataTypes.INTEGER,
+    previewImg: DataTypes.BOOLEAN,
+    pageType: DataTypes.ENUM('Group', 'Event')
   }, {
     sequelize,
     modelName: 'Image',
