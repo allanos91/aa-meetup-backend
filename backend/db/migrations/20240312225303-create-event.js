@@ -19,7 +19,7 @@ module.exports = {
       },
       groupId: {
         type: Sequelize.INTEGER,
-        reference: {
+        references: {
           model: 'Groups',
           key: 'id'
         }
