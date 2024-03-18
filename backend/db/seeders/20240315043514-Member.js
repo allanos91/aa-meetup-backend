@@ -16,22 +16,22 @@ module.exports = {
       {
 
           userId: 1,
-          eventId: 1,
-          status: 'pending'
+          groupId: 1,
+          status: 'member'
 
       },
       {
 
           userId: 2,
-          eventId: 2,
-          status: 'co-host'
+          groupId: 1,
+          status: 'member'
 
       },
       {
 
           userId: 3,
-          eventId: 3,
-          status: 'member'
+          groupId: 1,
+          status: 'pending'
 
       }
     ], { validate: true });
@@ -45,7 +45,7 @@ module.exports = {
      * await queryInterface.bulkDelete('People', null, {});
      */
     const Op = Sequelize.Op;
-    return queryInterface.bulkDelete('Member', {
+    return queryInterface.bulkDelete('Members', {
       status: {[Op.in]: ['member','co-host','pending']}
     })
   }

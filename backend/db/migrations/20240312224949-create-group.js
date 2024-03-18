@@ -24,10 +24,12 @@ module.exports = {
         }
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       about: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       groupType: {
         type: Sequelize.STRING

@@ -53,19 +53,30 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     about: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        len: {
+          args: [5, 500],
+          msg: "Must be greater than 4 characters and less than 500 characters"
+        }
+      }
     },
     groupType: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     },
     private: {
-      type: DataTypes.STRING
+      type: DataTypes.BOOLEAN,
+      allowNull: false
     },
     city: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     },
     state: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false
     }
   }, {
     sequelize,
