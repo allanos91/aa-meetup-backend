@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.belongsTo(
+      User.belongsToMany(
         models.Group,
         {
           through: models.Member,
@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
           otherKey: 'groupId'
         }
       )
-      User.belongsTo(
+      User.belongsToMany(
         models.Event,
         {
           through: models.Attendee,
