@@ -44,13 +44,29 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Group.init({
-    organizerId: DataTypes.INTEGER,
-    name: DataTypes.STRING,
-    about: DataTypes.STRING,
-    groupType: DataTypes.STRING,
-    private: DataTypes.BOOLEAN,
-    city: DataTypes.STRING,
-    state: DataTypes.STRING
+    organizerId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    about: {
+      type: DataTypes.STRING
+    },
+    groupType: {
+      type: DataTypes.STRING
+    },
+    private: {
+      type: DataTypes.STRING
+    },
+    city: {
+      type: DataTypes.STRING
+    },
+    state: {
+      type: DataTypes.STRING
+    }
   }, {
     sequelize,
     modelName: 'Group',

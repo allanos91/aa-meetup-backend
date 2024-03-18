@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
     url: DataTypes.STRING,
     pageId: DataTypes.INTEGER,
     previewImg: DataTypes.BOOLEAN,
-    pageType: DataTypes.ENUM('Group', 'Event')
+    imageableType: DataTypes.ENUM('Group', 'Event')
   }, {
     sequelize,
     modelName: 'Image',

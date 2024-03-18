@@ -26,7 +26,7 @@ module.exports = {
       previewImg: {
         type: Sequelize.BOOLEAN
       },
-      pageType: {
+      imageableType: {
         type: Sequelize.ENUM('Group', 'Event')
       },
       createdAt: {
