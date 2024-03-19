@@ -14,14 +14,14 @@ module.exports = (sequelize, DataTypes) => {
       Image.belongsTo(
         models.Group,
         {
-          foreignKey: 'pageId',
+          foreignKey: 'imageableId',
           constraints: false
         }
       )
       Image.belongsTo(
         models.Event,
         {
-          foreignKey: 'pageId',
+          foreignKey: 'imageableId',
           constraints: false
         }
       )
@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Image.init({
     url: DataTypes.STRING,
-    pageId: DataTypes.INTEGER,
+    imageableId: DataTypes.INTEGER,
     previewImg: DataTypes.BOOLEAN,
     imageableType: DataTypes.ENUM('Group', 'Event')
   }, {

@@ -19,7 +19,7 @@ module.exports = {
     await Group.bulkCreate([
       {
         organizerId: 1,
-        name: "Alex's group",
+        name: "Alex's group1",
         about: "fun group",
         groupType: "Live",
         private: false,
@@ -28,7 +28,7 @@ module.exports = {
       },
       {
         organizerId: 1,
-        name: "Nathan's group",
+        name: "Alex's group2",
         about: "fun group",
         groupType: "Live",
         private: false,
@@ -37,9 +37,9 @@ module.exports = {
       },
       {
         organizerId: 1,
-        name: "Rene's group",
+        name: "Alex's group3",
         about: "fun group",
-        groupType: "Live",
+        groupType: "private",
         private: false,
         city: "Costa Mesa",
         state: "CA"

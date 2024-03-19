@@ -1,11 +1,68 @@
 // Instantiate router - DO NOT MODIFY
 const express = require('express');
 const router = express.Router();
-const { Group, Member, User } = require('../../db/models')
+const { Group, Member, User, Image, Venue } = require('../../db/models')
 const { requireAuth }  = require('../../utils/auth');
-const { or } = require('sequelize');
 const group = require('../../db/models/group');
 
+
+//Get all venues for a group specified by id.
+router.get(':/groupId/venues', async (req, res, next) => {
+    try {
+        const groupId = parseInt(req.params.groupId)
+        const venues = await Venue.findAll({
+            where: {
+                groupId : groupId
+            }
+        })
+
+
+    } catch (error) {
+
+    }
+})
+
+
+//adds an image to a group based on groupId
+router.post('/:groupId/images', requireAuth, async (req, res, next) => {
+    try {
+        const userId = req.user.dataValues.id
+        const group = await Group.findOne({
+        where: {
+            id: parseInt(req.params.groupId)
+        }
+    })
+
+    if (!group) {
+        const newErr = new Error('Group could not be found')
+        newErr.status = 404
+        throw newErr
+    }
+
+
+    if (userId !== group.dataValues.organizerId) {
+        const err = new Error('Must be organizer of group to post new image.')
+        err.status = 400
+        throw err
+    }
+
+    const newImage = await Image.create({
+        url: req.body.url,
+        imageableId: parseInt(req.params.groupId),
+        previewImg: req.body.previewImg,
+        imageableType: 'Group'
+    })
+
+
+    res.json({
+        url: newImage.url,
+        imageableId: newImage.imageableId,
+        previewImg: newImage.previewImg,
+    })
+    } catch (error) {
+        next(error)
+    }
+})
 
 
 //gets all the groups that belong to the current user
@@ -19,7 +76,7 @@ router.get('/current', async (req, res) => {
     res.json(groups)
 })
 
-//gets details of a group from an id.
+//gets details of a group from an id and numMembers
 router.get('/:groupId', async (req, res, next)=> {
     try {
         //finds group by id
@@ -46,37 +103,70 @@ router.get('/:groupId', async (req, res, next)=> {
             id: organizerId
         }
     })
+    //finds all images of the group then puts into an array.
+    let arr = []
+    const images = await Image.findAll({
+        attributes: {
+            exclude: ['createdAt', 'updatedAt', 'imageableType', 'imageableId']
+        },
+        where: {
+            imageableId : groupId,
+            imageableType : 'Group'
+        }
+    })
+    for (let i = 0; i < images.length; i++) {
+        arr.push(images[i].dataValues)
+    }
+
+    //sends the response object.
     res.json({
         groupInfo: {
         ...group.toJSON(), numMembers
         },
+        groupImages: arr,
         organizerInfo: organizerInfo
     })
+    //catches error
     } catch (error) {
         error.status = 404
         error.message = "Group does not exist"
         next(error)
     }
-
 })
 
-//gets all the groups with numMembers and image
+//gets all the groups info with numMembers
 router.get('/', async (req, res) => {
     //gets all the groups
         let arr = []
         const groups = await Group.findAll()
-    //gets numMember aggregate data, combines with group, then gets pushed into an array.
+    //gets numMember aggregate data and gets preview image, combines with group, then gets pushed into an array.
         for (let i = 0; i < groups.length; i++) {
         let obj = {...groups[i].toJSON()}
+        //gets aggregate members
         const numMembers = await Member.count({
             where: {
                 groupId: groups[i].dataValues.id,
                 status: 'member'
             }
         })
+        //gets preview image
+        const previewImage = await Image.findOne({
+            attributes: ['url'],
+            where: {
+                imageableId: groups[i].dataValues.id,
+                imageableType: 'Group',
+                previewImg: true
+            }
+        })
+        //combines if previewImage exists
+        if (previewImage) {
+            obj.previewImage = previewImage.toJSON().url
+        }
+        obj.previewImage ? obj.previewImage : obj.previewImage = null
         obj.numMembers = numMembers
         arr.push(obj)
         }
+
     //returns the array
         res.json(arr)
     })
@@ -95,20 +185,17 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
                 id: groupId
             }
         })
-
         //check if group exists
         if (!group) {
             const err = new Error('Group group does not exist')
             err.status = 404
             throw err
         }
-
         //check if user owns the group.
         if (userId !== group.organizerId) {
             const err = new Error('Correct autherization require. User must own the group.')
             throw err
         }
-
         //destructure updates from req body
         const { name, about, type, private, city, state } = req.body
 
@@ -120,9 +207,7 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
             city,
             state
         }, {validate: true})
-
         res.json(group)
-
     } catch (error) {
         error.message ? error.message : "Invalid inputs"
         error.status ? error.status : error.status = 400
@@ -134,7 +219,6 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
 //deletes a group by id
 router.delete('/:groupId',requireAuth, async (req, res, next) => {
     try {
-
         const groupId = parseInt(req.params.groupId)
         const userId = req.user.dataValues.id
         // find the group
@@ -143,7 +227,6 @@ router.delete('/:groupId',requireAuth, async (req, res, next) => {
                 id: groupId
             }
         })
-
         //check if group exists
         if (!group) {
             const err = new Error('Group does not exist')
@@ -151,16 +234,13 @@ router.delete('/:groupId',requireAuth, async (req, res, next) => {
             throw err
         }
         const groupName = group.name
-
         //check if user owns the group.
         if (userId !== group.organizerId) {
             const err = new Error('Correct autherization require. User must own the group.')
             throw err
         }
-
         //deletes the group
         await group.destroy()
-
         res.json({
             message:  `Your group ${groupName} was successfully deleted.`
         })

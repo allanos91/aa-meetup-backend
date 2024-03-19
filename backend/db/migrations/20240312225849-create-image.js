@@ -20,7 +20,7 @@ module.exports = {
       url: {
         type: Sequelize.STRING
       },
-      pageId: {
+      imageableId: {
         type: Sequelize.INTEGER,
       },
       previewImg: {
