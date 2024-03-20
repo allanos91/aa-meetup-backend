@@ -7,16 +7,19 @@ const group = require('../../db/models/group');
 
 
 //Get all venues for a group specified by id.
-router.get(':/groupId/venues', async (req, res, next) => {
+router.get('/:groupId/venues', async (req, res, next) => {
     try {
         const groupId = parseInt(req.params.groupId)
         const venues = await Venue.findAll({
+            attributes: {
+                exclude: ['createdAt', 'updatedAt']
+            },
             where: {
                 groupId : groupId
             }
         })
 
-
+        res.json(venues)
     } catch (error) {
 
     }
