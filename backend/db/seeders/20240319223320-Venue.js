@@ -35,6 +35,78 @@ module.exports = {
         address: '7658 blvd',
         city: 'Phoenix',
         state: 'Arizona',
+        lat: 12.12,
+        lng: 91.12
+      },
+      {
+        groupId: 2,
+        address: '21122 harbor lane',
+        city: 'CastlePark',
+        state: 'Missouri',
+        lat: 80.01,
+        lng: 67.12
+      },
+      {
+        groupId: 2,
+        address: '1212456 England st ',
+        city: 'Talahassee',
+        state: 'Florida',
+        lat: 21.54,
+        lng: 75.36
+      },
+      {
+        groupId: 2,
+        address: '7658 blvd',
+        city: 'Buena Park',
+        state: 'California',
+        lat: 69.71,
+        lng: 48.12
+      },
+      {
+        groupId: 1,
+        address: '7658 blvd',
+        city: 'Phoenix',
+        state: 'Arizona',
+        lat: 69.71,
+        lng: 48.12
+      },
+      {
+        groupId: 3,
+        address: '7658 blvd',
+        city: 'Phoenix',
+        state: 'Arizona',
+        lat: 69.71,
+        lng: 48.12
+      },
+      {
+        groupId: 3,
+        address: '7658 blvd',
+        city: 'Phoenix',
+        state: 'Arizona',
+        lat: 69.71,
+        lng: 48.12
+      },
+      {
+        groupId: 3,
+        address: '7658 blvd',
+        city: 'Phoenix',
+        state: 'Arizona',
+        lat: 69.71,
+        lng: 48.12
+      },
+      {
+        groupId: 2,
+        address: '7658 blvd',
+        city: 'Phoenix',
+        state: 'Arizona',
+        lat: 69.71,
+        lng: 48.12
+      },
+      {
+        groupId: 1,
+        address: '7658 blvd',
+        city: 'Phoenix',
+        state: 'Arizona',
         lat: 69.71,
         lng: 48.12
       }

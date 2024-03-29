@@ -1,9 +1,62 @@
 // Instantiate router - DO NOT MODIFY
 const express = require('express');
 const router = express.Router();
-const { Group, Member, User, Image, Venue } = require('../../db/models')
+const { Group, Member, User, Groupimage, Venue } = require('../../db/models')
 const { requireAuth }  = require('../../utils/auth');
-const group = require('../../db/models/group');
+
+//Create a new venue for a group
+router.post('/:groupId/venues', requireAuth, async(req, res, next) => {
+    try {
+        const groupId = parseInt(req.params.groupId)
+
+        //finds group by id
+        const group = await Group.findOne({
+            where: {
+                id: groupId
+            }
+        })
+        //checks if group exists
+        if (!group) {
+            throw new Error('Group not found')
+        }
+        //checks if user is organizer or co-host
+        const userId = req.user.dataValues.id
+        const organizerId = group.dataValues.organizerId
+        const isCohost = await Member.findOne({
+            where: {
+                groupId: groupId,
+                userId: userId,
+                status: 'co-host'
+            }
+        })
+
+        if (!(userId === organizerId || isCohost)) {
+            const err = new Error('Must be organizer or co-host of group.')
+            err.status = 400
+            throw err
+        }
+
+
+
+
+
+        const { address, city, state, lat, lng } = req.body
+        const newVenue = await Venue.create({
+            groupId: groupId,
+            address,
+            city,
+            state,
+            lat,
+            lng
+        })
+
+        console.log(newVenue)
+
+        res.json(newVenue)
+    } catch (error) {
+        next(error)
+    }
+})
 
 
 //Get all venues for a group specified by id.
@@ -19,9 +72,15 @@ router.get('/:groupId/venues', async (req, res, next) => {
             }
         })
 
+        if (!venues[0]) {
+            const err = new Error('Group cannot be found.')
+            err.status = 404
+            throw err
+        }
+
         res.json(venues)
     } catch (error) {
-
+        next(error)
     }
 })
 
@@ -49,17 +108,16 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
         throw err
     }
 
-    const newImage = await Image.create({
+    const newImage = await Groupimage.create({
+        groupId: parseInt(req.params.groupId),
         url: req.body.url,
-        imageableId: parseInt(req.params.groupId),
-        previewImg: req.body.previewImg,
-        imageableType: 'Group'
+        previewImg: req.body.previewImg
     })
 
 
     res.json({
         url: newImage.url,
-        imageableId: newImage.imageableId,
+        groupId: newImage.groupId,
         previewImg: newImage.previewImg,
     })
     } catch (error) {
@@ -108,13 +166,12 @@ router.get('/:groupId', async (req, res, next)=> {
     })
     //finds all images of the group then puts into an array.
     let arr = []
-    const images = await Image.findAll({
+    const images = await Groupimage.findAll({
         attributes: {
-            exclude: ['createdAt', 'updatedAt', 'imageableType', 'imageableId']
+            exclude: ['createdAt', 'updatedAt', 'groupId']
         },
         where: {
-            imageableId : groupId,
-            imageableType : 'Group'
+            groupId : groupId,
         }
     })
     for (let i = 0; i < images.length; i++) {
@@ -149,15 +206,14 @@ router.get('/', async (req, res) => {
         const numMembers = await Member.count({
             where: {
                 groupId: groups[i].dataValues.id,
-                status: 'member'
+                status: ['member', 'co-host']
             }
         })
-        //gets preview image
-        const previewImage = await Image.findOne({
+        // gets preview image
+        const previewImage = await Groupimage.findOne({
             attributes: ['url'],
             where: {
-                imageableId: groups[i].dataValues.id,
-                imageableType: 'Group',
+                groupId: groups[i].dataValues.id,
                 previewImg: true
             }
         })
@@ -243,7 +299,11 @@ router.delete('/:groupId',requireAuth, async (req, res, next) => {
             throw err
         }
         //deletes the group
-        await group.destroy()
+        await Group.destroy( {
+            where: {
+                id: groupId
+            }
+        })
         res.json({
             message:  `Your group ${groupName} was successfully deleted.`
         })

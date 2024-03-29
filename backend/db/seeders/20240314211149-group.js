@@ -27,8 +27,8 @@ module.exports = {
         state: "CA"
       },
       {
-        organizerId: 1,
-        name: "Alex's group2",
+        organizerId: 2,
+        name: "Nathan's group2",
         about: "fun group",
         groupType: "Live",
         private: false,
@@ -36,8 +36,8 @@ module.exports = {
         state: "CA"
       },
       {
-        organizerId: 1,
-        name: "Alex's group3",
+        organizerId: 3,
+        name: "Rene's group3",
         about: "fun group",
         groupType: "private",
         private: false,

@@ -31,9 +31,44 @@ module.exports = {
 
           userId: 3,
           groupId: 1,
-          status: 'pending'
+          status: 'co-host'
 
-      }
+      },
+      {
+
+        userId: 4,
+        groupId: 2,
+        status: 'member'
+
+    },
+    {
+
+        userId: 5,
+        groupId: 1,
+        status: 'co-host'
+
+    },
+    {
+
+        userId: 6,
+        groupId: 3,
+        status: 'member'
+
+    },
+  {
+
+      userId: 7,
+      groupId: 3,
+      status: 'member'
+
+  },
+  {
+
+      userId: 8,
+      groupId: 2,
+      status: 'co-host'
+
+  }
     ], { validate: true });
   },
 

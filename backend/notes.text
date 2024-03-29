@@ -1,1 +1,6 @@
 
+fix scope of all models to exclude created at and updated at unless specified otherwise.
+
+add more seed data to test all the routes at the end of the project.
+
+go back and fix error handlers of each route to make sure it matches what they want.

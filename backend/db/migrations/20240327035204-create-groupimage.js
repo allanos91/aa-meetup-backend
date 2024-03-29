@@ -1,16 +1,8 @@
 'use strict';
-
-let options = {};
-if (process.env.NODE_ENV === 'production') {
-  options.schema = process.env.SCHEMA;
-};
-
-
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Events', {
+    await queryInterface.createTable('Groupimages', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -25,28 +17,11 @@ module.exports = {
         },
         onDelete: 'cascade'
       },
-      venueId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Venues',
-          key: 'id'
-        },
-        onDelete: 'cascade'
-      },
-      name: {
+      url: {
         type: Sequelize.STRING
       },
-      eventType: {
-        type: Sequelize.STRING
-      },
-      startDate: {
-        type: Sequelize.DATE
-      },
-      endDate: {
-        type: Sequelize.DATE
-      },
-      description: {
-        type: Sequelize.STRING
+      previewImg: {
+        type: Sequelize.BOOLEAN
       },
       createdAt: {
         allowNull: false,
@@ -56,10 +31,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    }, options);
+    });
   },
   async down(queryInterface, Sequelize) {
-    options.tableName='Events';
-    return queryInterface.dropTable(options);
+    await queryInterface.dropTable('Groupimages');
   }
 };
