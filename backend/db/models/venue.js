@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         models.Event,
         {
           foreignKey: 'venueId',
+          onDelete: 'cascade'
 
         }
       )
@@ -22,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         models.Group,
         {
           foreignKey: 'groupId',
+          onDelete: 'cascade'
         }
       )
     }

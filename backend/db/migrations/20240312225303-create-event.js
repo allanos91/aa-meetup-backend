@@ -48,6 +48,12 @@ module.exports = {
       description: {
         type: Sequelize.STRING
       },
+      capacity: {
+        type: Sequelize.INTEGER,
+      },
+      price: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

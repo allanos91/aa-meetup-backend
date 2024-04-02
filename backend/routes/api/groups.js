@@ -1,8 +1,223 @@
 // Instantiate router - DO NOT MODIFY
 const express = require('express');
 const router = express.Router();
-const { Group, Member, User, Groupimage, Venue } = require('../../db/models')
+const { Group, Member, User, Groupimage, Venue, Attendee, Eventimage, Event } = require('../../db/models')
 const { requireAuth }  = require('../../utils/auth');
+
+
+//change status of membership of group specified by id.
+router.put
+
+//request membership for a group based on group id
+
+router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
+    const groupId = parseInt(req.params.groupId)
+    const userId = req.user.dataValues.id
+
+    //check if group exists
+    const group = await Group.findOne({
+        where: {
+            id: groupId
+        }
+    })
+    if (!group) {
+        const err = new Error('Group could not be found.')
+        err.status = 404
+        throw err
+    }
+    //check if member has status pending
+    const member = await Member.findOne({
+        where: {
+            userId : userId,
+            groupId: groupId,
+        }
+    })
+
+    if (member) {
+        const err = new Error('User status is already pending or accepted.')
+        err.status = 400
+        throw err
+    }
+    const newMember  = await Member.create({
+        userId,
+        groupId,
+        status: 'pending'
+    })
+    res.json(newMember)
+})
+
+//get all members of a group specified by id.
+router.get('/:groupId/members', async (req, res, next) => {
+
+    //check if group exists
+    const group = await Group.findOne({
+        where: {
+            id: parseInt(req.params.groupId)
+        }
+    })
+
+    //get the members
+    const members = await Member.findAll({
+        attributes: {
+            exclude: ['createdAt', 'updatedAt', 'groupId']
+        },
+        where: {
+            groupId: parseInt(req.params.groupId)
+        }
+    })
+    //checks if user is organizer of group
+    const isOrganizer = group.organizerId === req.user.dataValues.id
+
+    //get user information for each member
+    let arr = []
+
+    for(let i = 0; i < members.length; i++) {
+        let obj = {}
+        const user = await User.findOne({
+            where: {
+                id: members[i].dataValues.userId
+            }
+        })
+
+        if (!isOrganizer) {
+            if (members[i].dataValues.status === 'pending') {
+                continue
+            }
+        }
+        obj.id = user.dataValues.id
+        obj.firstName = user.dataValues.firstName
+        obj.lastName = user.dataValues.lastName
+        obj.status = members[i].dataValues.status
+        arr.push(obj)
+    }
+
+    res.json(arr)
+})
+
+
+//create an event for a group specified by id.
+router.post('/:groupId/events', requireAuth, async(req, res, next) => {
+    //find group by id
+    const group = await Group.findOne({
+        attributes: {
+            exclude: ['private', 'groupType', 'about','createdAt', 'updatedAt']
+        },
+        where: {
+            id: parseInt(req.params.groupId)
+        }
+    })
+    //check if group exists
+    if (!group) {
+        const err = new Error('Group cannot be found.')
+        err.status = 404
+        throw err
+    }
+    //check if current user is the owner or co-host
+    const organizerId = group.dataValues.organizerId
+    const isCohost = await Member.findOne({
+        where: {
+            userId: parseInt(req.user.dataValues.id),
+            groupId: parseInt(req.params.groupId),
+            status: 'co-host'
+        }
+    })
+    if (!(req.user.dataValues.id === organizerId || isCohost)) {
+        const err = new Error('Must be organizer or co-host.')
+        err.status = 400
+        throw err
+    }
+    let { groupId, venueId, name, type, capacity, price, description, startDate, endDate } = req.body
+
+    //checks if venue exists
+    if (venueId) {
+        const venueExists = await Venue.findOne({
+            where: {
+                id: req.body.venueId
+            }
+        })
+        if (!venueExists) {
+            const err = new Error('Venue could not be found.')
+            err.status = 404
+            throw err
+        }
+    }
+    const newEvent = await Event.create({
+        groupId, venueId: venueId ? venueId : venueId = null, name, type, capacity, price, description, startDate: new Date(`${startDate}`), endDate: new Date(`${endDate}`)
+    })
+
+    res.json(newEvent)
+})
+
+
+//returns all events of a group specified by id.
+router.get('/:groupId/events', async (req, res, next) => {
+
+    //find group by id
+    const group = await Group.findOne({
+        attributes: {
+            exclude: ['private', 'groupType', 'about','createdAt', 'updatedAt']
+        },
+        where: {
+            id: parseInt(req.params.groupId)
+        }
+    })
+    //check if group exists
+    if (!group) {
+        const err = new Error('Group can not be found.')
+        err.status = 404
+        throw err
+    }
+    //gets events from group
+    const events = await group.getEvents({
+        attributes: {
+            exclude: ['createdAt', 'updatedAt']
+        }
+    })
+
+    //gets numAttending aggregate data and gets preview image, combines with event, pushed into array
+    let arr = []
+    for (let i = 0; i < events.length; i++) {
+        let obj = {...events[i].toJSON()}
+        //gets aggregate attending
+        const numAttending = await Attendee.count({
+            where: {
+                eventId: events[i].dataValues.id,
+                status: 'attending'
+            }
+        })
+        //gets preview image
+        const previewImage = await Eventimage.findOne({
+            attributes: ['url'],
+            where: {
+                eventId: events[i].dataValues.id,
+                previewImg: true
+            }
+        })
+        //combines if previewImage exists
+        if (previewImage) {
+            obj.previewImage = previewImage.toJSON().url
+        }
+        obj.previewImage ? obj.previewImg : obj.previewImg = null
+        obj.numAttending = numAttending
+
+        //get related group data
+        obj.groupData = group.toJSON()
+
+        //get related venue data if exists
+        const venue = await Venue.findOne({
+            attributes: {
+                exclude: ['groupId', 'address', 'lat', 'lng', 'createdAt', 'updatedAt']
+            },
+            where: {
+                id: events[i].dataValues.venueId
+            }
+        })
+        venue ? obj.venueData = venue.toJSON() : obj.venueData = null
+        arr.push(obj)
+    }
+    res.json(arr)
+})
+
 
 //Create a new venue for a group
 router.post('/:groupId/venues', requireAuth, async(req, res, next) => {
