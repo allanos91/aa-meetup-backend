@@ -14,25 +14,29 @@ module.exports = {
     */
     await Member.bulkCreate([
       {
-
           userId: 1,
           groupId: 1,
           status: 'member'
-
       },
       {
-
+        userId: 2,
+        groupId: 2,
+        status: 'member'
+      },
+      {
           userId: 2,
           groupId: 1,
-          status: 'pending'
-
+          status: 'member'
       },
       {
-
+        userId: 3,
+        groupId: 3,
+        status: 'member'
+      },
+      {
           userId: 3,
           groupId: 1,
           status: 'co-host'
-
       },
       {
 
@@ -42,33 +46,25 @@ module.exports = {
 
     },
     {
-
         userId: 5,
         groupId: 1,
         status: 'co-host'
-
     },
     {
-
         userId: 6,
         groupId: 3,
         status: 'member'
-
     },
-  {
-
+    {
       userId: 7,
       groupId: 3,
       status: 'member'
-
-  },
-  {
-
+    },
+    {
       userId: 8,
       groupId: 2,
       status: 'co-host'
-
-  }
+    }
     ], { validate: true });
   },
 

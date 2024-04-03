@@ -4,9 +4,129 @@ const router = express.Router();
 const { Group, Member, User, Groupimage, Venue, Attendee, Eventimage, Event } = require('../../db/models')
 const { requireAuth }  = require('../../utils/auth');
 
+//delete member of a group specified by id
+router.delete('/:groupId/membership/:memberId', requireAuth, async (req, res, next) =>{
+    //check if group exists
+    const userId = req.user.dataValues.id
+    const groupId = parseInt(req.params.groupId)
+    const group = await Group.findByPk(groupId)
+
+    if (!group) {
+        const err = new Error('Group does not exist')
+        err.status = 404
+        throw err
+    }
+
+    //check if member exists
+    const memberId = parseInt(req.params.memberId)
+    const member = await User.findByPk(memberId)
+
+    if (!member) {
+        const err = new Error('User does not exist.')
+        err.status = 404
+        throw err
+    }
+
+    //check if membership exists
+    const membership = await Member.findOne({
+        where: {
+            groupId,
+            userId: memberId
+        }
+    })
+
+    if (!membership) {
+        const err = new Error('Membership does not exist for this User.')
+        err.status = 400
+        throw err
+    }
+
+    //check if user is organizer/deleting themselves.
+    const organizerId = group.dataValues.organizerId
+    const isDelSelf = (userId === parseInt(req.params.memberId))
+
+    if (!(organizerId === userId || isDelSelf)) {
+        const err = new Error('User must be the organizer to remove other members.')
+        err.status = 403
+        throw err
+    }
+    await Member.destroy({
+        where: {
+            groupId,
+            userId: memberId
+        }
+    })
+    res.json({
+        message: "Member successfully removed from group."
+    })
+})
 
 //change status of membership of group specified by id.
-router.put
+router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
+    //check if group exists
+    const userId = req.user.dataValues.id
+    const groupId = parseInt(req.params.groupId)
+    const group = await Group.findByPk(groupId)
+
+    if (!group) {
+        const err = new Error('Group does not exist')
+        err.status = 404
+        throw err
+    }
+
+
+    //check if user is organizer or co-host
+    const organizerId = group.dataValues.organizerId
+    const isCohost = await Member.findOne({
+        where: {
+            userId,
+            groupId,
+            status: 'co-host'
+        }
+    })
+    //checks organizer when change is co-host
+    if (req.body.status === 'co-host' && userId !== organizerId) {
+        const err = new Error('User must be organizer to change status to co-host')
+        err.status = 403
+        throw err
+    }
+
+    //checks both if change is member
+    if (!(isCohost || userId === organizerId)) {
+        const err = new Error('User must be organizer or co-host to accept membership requests')
+        err.status = 403
+        throw err
+    }
+
+    //checks if change to status is "pending"
+    if (req.body.status === 'pending') {
+        const err = new Error('Cannot change status to pending')
+        err.status = 400
+    }
+
+    //checks if member belongs to group
+    const { memberId, status } = req.body
+
+    const member = await Member.findOne({
+        where: {
+            userId: memberId,
+            groupId: groupId
+        }
+    })
+
+    if (!member) {
+        const err = new Error('Member does not belong to group')
+        err.status = 404
+        throw err
+    }
+    //edits membership status
+    await member.set({
+        status
+    })
+    await member.save()
+
+    res.json(member)
+})
 
 //request membership for a group based on group id
 
@@ -55,6 +175,11 @@ router.get('/:groupId/members', async (req, res, next) => {
             id: parseInt(req.params.groupId)
         }
     })
+    if (!group) {
+        const err = new Error('Group does not exist')
+        err.status = 404
+        throw err
+    }
 
     //get the members
     const members = await Member.findAll({
@@ -67,7 +192,7 @@ router.get('/:groupId/members', async (req, res, next) => {
     })
     //checks if user is organizer of group
     const isOrganizer = group.organizerId === req.user.dataValues.id
-
+    console.log()
     //get user information for each member
     let arr = []
 
@@ -250,11 +375,6 @@ router.post('/:groupId/venues', requireAuth, async(req, res, next) => {
             err.status = 400
             throw err
         }
-
-
-
-
-
         const { address, city, state, lat, lng } = req.body
         const newVenue = await Venue.create({
             groupId: groupId,
@@ -341,15 +461,39 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
 })
 
 
-//gets all the groups that belong to the current user
-router.get('/current', async (req, res) => {
-    const user = req.user
-    const groups = await Group.findAll({
+//gets all the groups that belong to the current user or joined by current user include numMembers
+router.get('/current', requireAuth, async (req, res) => {
+    let arr = []
+    const userId = req.user.dataValues.id
+    const memberships = await Member.findAll({
         where: {
-            organizerId : user.dataValues.id
+            userId,
+            status: ['member', 'co-host']
         }
     })
-    res.json(groups)
+
+    for (let i = 0; i < memberships.length; i++) {
+        //find group info
+        const group = await Group.findByPk(memberships[i].dataValues.groupId)
+        //get numMembers
+        const numMembers = await Member.count({
+            where: {
+                groupId: group.dataValues.id,
+                status: ['member', 'co-host']
+            }
+        })
+        //get previewImage
+        const previewImage = await Groupimage.findOne({
+            attributes: ['url'],
+            where: {
+                groupId: group.dataValues.id,
+                previewImg: true
+            }
+        })
+        let obj = {...group.toJSON(), numMembers, previewImage: previewImage ? previewImage.url : null}
+        arr.push(obj)
+    }
+    res.json({Groups: arr})
 })
 
 //gets details of a group from an id and numMembers
@@ -366,7 +510,7 @@ router.get('/:groupId', async (req, res, next)=> {
     const numMembers = await Member.count({
         where: {
             groupId: groupId,
-            status: 'member'
+            status: ['member', 'co-host']
         }
     })
     //finds organizerInfo
@@ -409,7 +553,7 @@ router.get('/:groupId', async (req, res, next)=> {
     }
 })
 
-//gets all the groups info with numMembers
+//gets all the groups info with numMembers and preview image
 router.get('/', async (req, res) => {
     //gets all the groups
         let arr = []
@@ -540,6 +684,12 @@ router.post('/',requireAuth, async (req, res, next) => {
         city: req.body.city,
         state: req.body.state
     })
+    const newMember = await Member.create({
+        userId: req.user.dataValues.id,
+        groupId: newGroup.dataValues.id,
+        status: 'member'
+    })
+    console.log(newMember)
     res.json(newGroup)
 } catch (error) {
     error.status = 400
