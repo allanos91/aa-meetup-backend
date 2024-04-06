@@ -107,6 +107,8 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
         status
     })
     editAttendee.save()
+    delete editAttendee.dataValues.createdAt
+    delete editAttendee.dataValues.updatedAt
     res.json(editAttendee)
 })
 

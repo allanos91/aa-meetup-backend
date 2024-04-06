@@ -3,7 +3,8 @@ const express = require('express');
 const router = express.Router();
 const { Group, Member, User, Groupimage, Venue, Attendee, Eventimage, Event } = require('../../db/models')
 const { requireAuth }  = require('../../utils/auth');
-const { formatDate } = require('../../utils/validation')
+const { formatDate } = require('../../utils/validation');
+const { format } = require('sequelize/lib/utils');
 
 //delete member of a group specified by id
 router.delete('/:groupId/membership/:memberId', requireAuth, async (req, res, next) =>{
@@ -125,7 +126,8 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
         status
     })
     await member.save()
-
+    delete member.dataValues.createdAt
+    delete member.dataValues.updatedAt
     res.json(member)
 })
 
@@ -164,6 +166,8 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
         groupId,
         status: 'pending'
     })
+    delete newMember.dataValues.createdAt
+    delete newMember.dataValues.updatedAt
     res.json(newMember)
 })
 
@@ -332,6 +336,12 @@ router.get('/:groupId/events', async (req, res, next) => {
     //gets numAttending aggregate data and gets preview image, combines with event, pushed into array
     let arr = []
     for (let i = 0; i < events.length; i++) {
+        //format date
+        const startDate = events[i].dataValues.startDate
+        const endDate = events[i].dataValues.endDate
+        events[i].dataValues.startDate = formatDate(startDate)
+        events[i].dataValues.endDate = formatDate(endDate)
+
         let obj = {...events[i].toJSON()}
         //gets aggregate attending
         const numAttending = await Attendee.count({
@@ -356,7 +366,7 @@ router.get('/:groupId/events', async (req, res, next) => {
         obj.numAttending = numAttending
 
         //get related group data
-        obj.groupData = group.toJSON()
+        obj.Group = group.toJSON()
 
         //get related venue data if exists
         const venue = await Venue.findOne({
@@ -367,10 +377,10 @@ router.get('/:groupId/events', async (req, res, next) => {
                 id: events[i].dataValues.venueId
             }
         })
-        venue ? obj.venueData = venue.toJSON() : obj.venueData = null
+        venue ? obj.Venue = venue.toJSON() : obj.venueData = null
         arr.push(obj)
     }
-    res.json(arr)
+    res.json({Events:arr})
 })
 
 
@@ -416,8 +426,8 @@ router.post('/:groupId/venues', requireAuth, async(req, res, next) => {
             lat,
             lng
         })
-
-        console.log(newVenue)
+        delete newVenue.dataValues.createdAt
+        delete newVenue.dataValues.updatedAt
 
         res.json(newVenue)
     } catch (error) {
@@ -530,6 +540,11 @@ router.get('/current', requireAuth, async (req, res) => {
                 previewImg: true
             }
         })
+        //format date
+        const createdAt = group.dataValues.createdAt
+        const updatedAt = group.dataValues.updatedAt
+        group.dataValues.createdAt = formatDate(createdAt)
+        group.dataValues.updatedAt = formatDate(updatedAt)
         let obj = {...group.toJSON(), numMembers, previewImage: previewImage ? previewImage.url : null}
         arr.push(obj)
     }
