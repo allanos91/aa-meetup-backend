@@ -120,5 +120,10 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
+    options.tableName = 'Venues'
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      city: {[Op.in]: ['Phoenix','Buena Park','Talahassee','Missouri','Las Vegas','Fountain Valley']}
+    }, {truncate: true, cascade: true ,restartIdentity: true,})
   }
 };

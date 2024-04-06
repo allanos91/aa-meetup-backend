@@ -83,6 +83,6 @@ module.exports = {
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       status: {[Op.in]: ['member','co-host','pending']}
-    })
+    }, {truncate: true, cascade: true ,restartIdentity: true,})
   }
 };
