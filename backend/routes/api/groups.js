@@ -197,7 +197,7 @@ router.get('/:groupId/members', async (req, res, next) => {
     })
     //checks if user is organizer of group
     const isOrganizer = group.organizerId === req.user.dataValues.id
-    console.log()
+
     //get user information for each member
     let arr = []
 
