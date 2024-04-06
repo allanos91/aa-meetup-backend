@@ -31,7 +31,7 @@ const validDate = (date) => {
 }
 
 const formatDate = (date) => {
-  return `${date.getFullYear()}-${date.getDate()}-${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+  return `${date.getFullYear()}-${date.getDate()}-${date.getDay()} ${date.getHours()}:00:00`
 }
 
 module.exports = {
