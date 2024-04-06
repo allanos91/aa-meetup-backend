@@ -32,7 +32,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
-      groupType: {
+      type: {
         type: Sequelize.STRING
       },
       private: {

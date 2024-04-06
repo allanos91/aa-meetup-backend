@@ -22,9 +22,28 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Groupimage.init({
-    groupId: DataTypes.INTEGER,
-    url: DataTypes.STRING,
-    previewImg: DataTypes.BOOLEAN
+    groupId: {
+      type: DataTypes.INTEGER,
+      allowNull:false,
+    },
+    url: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "url required"
+        }
+      }
+    },
+    previewImg: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "priviewImg must be a boolean"
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'Groupimage',

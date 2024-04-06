@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const { requireAuth }  = require('../../utils/auth');
+const { validDate } = require('../../utils/validation')
 const { Event, Attendee, Eventimage, Group, Venue, Member, User } = require('../../db/models');
 
 
@@ -313,6 +314,15 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
 
 //add an image to an event specified by id
 router.post('/:eventId/images', requireAuth, async (req, res, next) => {
+    //check if event exists
+    const event = await Event.findByPk(parseInt(req.params.eventId))
+    if (!event) {
+        const err = new Error("Event could not be found")
+        err.status = 404
+        next(err)
+        return
+    }
+
     //check if user is attending event
     const isAttending = await Attendee.findOne({
         where: {
@@ -398,14 +408,89 @@ router.get('/:eventId',  async (req, res, next) => {
 })
 
 
-//gets all events, numAttending, previewImage
+//gets all events, numAttending, previewImage, add query params: page, size, name, type, startDate
 router.get('/', requireAuth, async (req, res, next) => {
+    //validate page, size, name query params
+    if (req.query.page) {
+        if (typeof parseInt(req.query.page) !== "number" || req.query.page < 1) {
+            const err = new Error ("Bad Request")
+            err.status = 400
+            err.errors ? err.errors.page = "Page must be greater than or equal to 1" : err.errors = {page: "Page must be greater than or equal to 1"}
+            next(err)
+            return
+        }
+    }
+    if (req.query.size) {
+        if (typeof parseInt(req.query.size) !== "number" || req.query.size < 1 || req.query.size > 20) {
+            const err = new Error ("Bad Request")
+            err.status = 400
+            err.errors = {size: "Size must be between 1 and 20"}
+            next (err)
+            return
+        }
+    }
+
+    if (req.query.name) {
+        if (typeof req.query.name !== "string") {
+            const err = new Error("Bad Request")
+            err.status = 400
+            err.errors = {name : "Name must be a string"}
+            next(err)
+            return
+        }
+    }
+
+    //assign query param variables
+    let page = req.query.page ? parseInt(req.query.page) : 1
+    let size = req.query.size ? parseInt(req.query.size) : 20
+
+    let { name, type, startDate } = req.query
+    startDate ? startDate = new Date(startDate) : null
+    let queryParams = {name, type, startDate}
+
+
+    //validate startDate and type params
+    if (req.query.startDate) {
+        if (!validDate(startDate)) {
+            const err = new Error("Bad Request")
+            err.status = 400
+            err.errors = {startDate: "Start date must be a valid datetime"}
+            next(err)
+            return
+        }
+    }
+
+
+    if (req.query.type) {
+        if ((type !== 'Online' || type !== 'In Person')) {
+            const err = new Error("Bad Request")
+            err.status = 400
+            err.errors = {type: "Type must be 'Online' or 'In Person'"}
+            next(err)
+            return
+        }
+    }
+
+    for (let key in queryParams) {
+        if (!queryParams[key]) {
+            delete queryParams[key]
+        }
+    }
+
+
+
     //find all events
     const events = await Event.findAll({
         attributes: {
             exclude: ['createdAt', 'updatedAt', 'description']
-        }
+        },
+        where: {
+            ...queryParams
+        },
+        limit: size,
+        offset: size * (page - 1),
     })
+
     let arr = []
     //gets numAttendee aggregate data and gets preview image, combines with event, then gets pushed into an array.
     for (let i = 0; i < events.length; i++) {
@@ -443,7 +528,7 @@ router.get('/', requireAuth, async (req, res, next) => {
 
         })
         //combines group data into object
-        obj.groupData = group.toJSON()
+        obj.Group = group.toJSON()
 
         //get related venue if exists
         const venue = await Venue.findOne({
@@ -454,12 +539,13 @@ router.get('/', requireAuth, async (req, res, next) => {
                 id: events[i].dataValues.venueId
             }
         })
-        venue ? obj.venueData = venue.toJSON() : obj.venueData = null
+        venue ? obj.Venue = venue.toJSON() : obj.venueData = null
         arr.push(obj)
     }
     //returns the array
-    res.json(arr)
+    res.json({Events: arr})
 })
+
 
 
 

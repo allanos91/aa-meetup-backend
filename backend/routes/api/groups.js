@@ -263,12 +263,27 @@ router.post('/:groupId/events', requireAuth, async(req, res, next) => {
         if (!venueExists) {
             const err = new Error('Venue could not be found.')
             err.status = 404
-            throw err
+            next(err)
+            return
         }
     }
+
+
+
+   
+
     const newEvent = await Event.create({
         groupId, venueId: venueId ? venueId : venueId = null, name, type, capacity, price, description, startDate: new Date(`${startDate}`), endDate: new Date(`${endDate}`)
     })
+
+    //checks if endDate is after startDate
+    if (new Date(`${startDate}`).getTime() >= new Date(`${endDate}`).getTime()) {
+        await newEvent.destroy()
+        const err = new Error('End date is less than start date')
+        err.status = 400
+        next (err)
+        return
+    }
 
     res.json(newEvent)
 })
@@ -357,7 +372,9 @@ router.post('/:groupId/venues', requireAuth, async(req, res, next) => {
         })
         //checks if group exists
         if (!group) {
-            throw new Error('Group not found')
+            const err = new Error('Group not found')
+            err.status = 400
+            next(err)
         }
         //checks if user is organizer or co-host
         const userId = req.user.dataValues.id
@@ -373,7 +390,7 @@ router.post('/:groupId/venues', requireAuth, async(req, res, next) => {
         if (!(userId === organizerId || isCohost)) {
             const err = new Error('Must be organizer or co-host of group.')
             err.status = 400
-            throw err
+            next(err)
         }
         const { address, city, state, lat, lng } = req.body
         const newVenue = await Venue.create({
@@ -389,6 +406,8 @@ router.post('/:groupId/venues', requireAuth, async(req, res, next) => {
 
         res.json(newVenue)
     } catch (error) {
+        error.status = 400
+        error.message = "Bad Request"
         next(error)
     }
 })
@@ -413,9 +432,10 @@ router.get('/:groupId/venues', async (req, res, next) => {
             throw err
         }
 
-        res.json(venues)
+        res.json({Venues: venues})
     } catch (error) {
         next(error)
+        return
     }
 })
 
@@ -433,21 +453,23 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
     if (!group) {
         const newErr = new Error('Group could not be found')
         newErr.status = 404
-        throw newErr
+        next(newErr)
+        return
     }
 
 
     if (userId !== group.dataValues.organizerId) {
         const err = new Error('Must be organizer of group to post new image.')
         err.status = 400
-        throw err
+        next(err)
+        return
     }
 
     const newImage = await Groupimage.create({
         groupId: parseInt(req.params.groupId),
         url: req.body.url,
         previewImg: req.body.previewImg
-    })
+    }, {validate: true})
 
 
     res.json({
@@ -456,7 +478,10 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
         previewImg: newImage.previewImg,
     })
     } catch (error) {
+        error.message = "Bad Request"
+        error.status = 400
         next(error)
+        return
     }
 })
 
@@ -680,7 +705,7 @@ router.post('/',requireAuth, async (req, res, next) => {
         name: req.body.name,
         about: req.body.about,
         private: req.body.private,
-        groupType: req.body.groupType,
+        type: req.body.type,
         city: req.body.city,
         state: req.body.state
     })
@@ -689,11 +714,10 @@ router.post('/',requireAuth, async (req, res, next) => {
         groupId: newGroup.dataValues.id,
         status: 'member'
     })
-    console.log(newMember)
     res.json(newGroup)
 } catch (error) {
     error.status = 400
-    error.message = "Missing or invalid inputs"
+    error.message = "Bad request"
     next(error)
 }
 })

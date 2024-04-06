@@ -17,7 +17,14 @@ router.use('/groups', groupsRouter);
 router.use('/venues', venuesRouter);
 router.use('/events', eventsRouter);
 router.use('/group-images', groupImagesRouter);
-router.use('/event-images', eventImagesRouter)
+router.use('/event-images', eventImagesRouter);
+
+router.use('/', (err, req, res, next) => {
+  err.message ? err.message : err.message = "server error"
+  err.status ? err.status : err.status = 500
+  // delete err.stack
+  throw err
+})
 
 router.post('/test', (req, res) => {
   res.json({ requestBody: req.body });

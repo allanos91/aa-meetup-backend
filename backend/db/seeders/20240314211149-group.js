@@ -20,8 +20,8 @@ module.exports = {
       {
         organizerId: 1,
         name: "Alex's group1",
-        about: "fun group",
-        groupType: "Live",
+        about: "aslkdfjalksdjflaksdfjalksdjfalksdfjalksdfjlasdfjlaksdfj",
+        type: "In person",
         private: false,
         city: "Costa Mesa",
         state: "CA"
@@ -29,8 +29,8 @@ module.exports = {
       {
         organizerId: 2,
         name: "Nathan's group2",
-        about: "fun group",
-        groupType: "Live",
+        about: "asdflklsdkfjlskdfjalskdfjalksdjfalksdfjalksdjflkasjfdlaksdjflasdlfjl",
+        type: "In person",
         private: false,
         city: "Costa Mesa",
         state: "CA"
@@ -38,8 +38,8 @@ module.exports = {
       {
         organizerId: 3,
         name: "Rene's group3",
-        about: "fun group",
-        groupType: "private",
+        about: "asdfasdfasgafskjfhsdkljfhalksdjflaksdjflaksjflaskdjflaksdfjlafl",
+        type: "Online",
         private: false,
         city: "Costa Mesa",
         state: "CA"
