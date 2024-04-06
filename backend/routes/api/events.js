@@ -2,8 +2,9 @@
 const express = require('express');
 const router = express.Router();
 const { requireAuth }  = require('../../utils/auth');
-const { validDate } = require('../../utils/validation')
+const { validDate, formatDate } = require('../../utils/validation')
 const { Event, Attendee, Eventimage, Group, Venue, Member, User } = require('../../db/models');
+const { format } = require('sequelize/lib/utils');
 
 
 //delete attendance of an event specified by id
@@ -255,6 +256,7 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
             id: parseInt(req.params.eventId)
         }
     })
+    console.log(event)
     if (!event) {
         const err = new Error('Event does not exist')
         err.status = 404
@@ -280,7 +282,7 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
         throw err
     }
 
-    const { groupId, venueId, name, type, capacity, price, description, startDate, endDate } = req.body
+    const {venueId, name, type, capacity, price, description, startDate, endDate } = req.body
     //check if venue exists
 
     if (venueId) {
@@ -298,7 +300,7 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
 
 
     //edit event details
-    event.set({
+    await event.set({
         venueId: venueId ? venueId : event.dataValues.venueId,
         name: name ? name : event.dataValues.name,
         type: type ? type : event.dataValues.type,
@@ -309,6 +311,13 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
         endDate: endDate  ? endDate : event.dataValues.endDate
     })
     await event.save()
+    delete event.dataValues.createdAt
+    delete event.dataValues.updatedAt
+    //format start and end date
+    const sDateToFormat = event.dataValues.startDate
+    const eDateToFormat = event.dataValues.endDate
+    event.dataValues.startDate = formatDate(sDateToFormat)
+    event.dataValues.endDate = formatDate(eDateToFormat)
     res.json(event)
 })
 
@@ -367,6 +376,11 @@ router.get('/:eventId',  async (req, res, next) => {
         err.status = 404
         throw err
     }
+    //formatDate
+    const sDateToFormat = event.dataValues.startDate
+    const eDateToFormat = event.dataValues.endDate
+    event.dataValues.startDate = formatDate(sDateToFormat)
+    event.dataValues.endDate = formatDate(eDateToFormat)
 
     //gets numAttending aggregate data
     const numAttending = await Attendee.count({
@@ -400,10 +414,10 @@ router.get('/:eventId',  async (req, res, next) => {
             exclude: ['createdAt', 'updatedAt', 'eventId']
         },
         where: {
-            id: parseInt(req.params.eventId)
+            eventId: parseInt(req.params.eventId)
         }
     })
-    let obj = {...event.toJSON(), numAttending: numAttending + 1, groupData, venueData, eventImages}
+    let obj = {...event.toJSON(), numAttending: numAttending, Group: groupData, Venue: venueData, EventImages: eventImages}
     res.json(obj)
 })
 
@@ -490,10 +504,15 @@ router.get('/', requireAuth, async (req, res, next) => {
         limit: size,
         offset: size * (page - 1),
     })
+    console.log(events)
 
     let arr = []
     //gets numAttendee aggregate data and gets preview image, combines with event, then gets pushed into an array.
     for (let i = 0; i < events.length; i++) {
+        const startDate = events[i].dataValues.startDate
+        const endDate = events[i].dataValues.endDate
+        events[i].dataValues.startDate = formatDate(startDate)
+        events[i].dataValues.endDate = formatDate(endDate)
         let obj = {...events[i].toJSON()}
         //gets aggregate attendees
         const numAttendees = await Attendee.count({
@@ -520,7 +539,7 @@ router.get('/', requireAuth, async (req, res, next) => {
         //get related group data
         const group = await Group.findOne({
             attributes: {
-                exclude: ['private', 'groupType', 'about','createdAt', 'updatedAt']
+                exclude: ['private', 'type', 'about','createdAt', 'updatedAt']
             },
             where: {
                 id: events[i].dataValues.groupId
