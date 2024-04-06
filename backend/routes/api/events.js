@@ -66,7 +66,6 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
 
     //check if user is organizer of co-host
     const currUserId = req.user.dataValues.id
-    console.log(currUserId)
     const group = await event.getGroup()
     const organizerId = group.dataValues.organizerId
     const isCohost =  await Member.findOne({
@@ -258,7 +257,6 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
             id: parseInt(req.params.eventId)
         }
     })
-    console.log(event)
     if (!event) {
         const err = new Error('Event does not exist')
         err.status = 404
@@ -506,7 +504,6 @@ router.get('/', requireAuth, async (req, res, next) => {
         limit: size,
         offset: size * (page - 1),
     })
-    console.log(events)
 
     let arr = []
     //gets numAttendee aggregate data and gets preview image, combines with event, then gets pushed into an array.
