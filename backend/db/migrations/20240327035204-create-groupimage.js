@@ -41,6 +41,7 @@ module.exports = {
     }, options);
   },
   async down(queryInterface, Sequelize) {
+    options.tableName='Groupimages';
     await queryInterface.dropTable(options);
   }
 };
