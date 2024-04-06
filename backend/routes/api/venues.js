@@ -47,6 +47,8 @@ router.put('/:venueId', requireAuth, async (req, res, next) => {
     })
 
     await venue.save()
+    delete venue.dataValues.createdAt
+    delete venue.dataValues.updatedAt
     res.json(venue)
 })
 

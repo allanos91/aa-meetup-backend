@@ -252,7 +252,7 @@ router.post('/:groupId/events', requireAuth, async(req, res, next) => {
         err.status = 400
         throw err
     }
-    let { groupId, venueId, name, type, capacity, price, description, startDate, endDate } = req.body
+    let { venueId, name, type, capacity, price, description, startDate, endDate } = req.body
 
     //checks if venue exists
     if (venueId) {
@@ -270,11 +270,17 @@ router.post('/:groupId/events', requireAuth, async(req, res, next) => {
     }
 
 
-
-
+    //creates event
 
     const newEvent = await Event.create({
-        groupId, venueId: venueId ? venueId : venueId = null, name, type, capacity, price, description, startDate: new Date(`${startDate}`), endDate: new Date(`${endDate}`)
+        groupId: parseInt(req.params.groupId), venueId: venueId ? venueId : venueId = null, name, type, capacity, price, description, startDate: new Date(`${startDate}`), endDate: new Date(`${endDate}`)
+    })
+
+    //creates attendee for creator
+     await Attendee.create({
+        userId: parseInt(req.user.dataValues.id),
+        eventId: newEvent.dataValues.id,
+        status: 'attending'
     })
 
     //checks if endDate is after startDate
@@ -285,7 +291,15 @@ router.post('/:groupId/events', requireAuth, async(req, res, next) => {
         next (err)
         return
     }
+    delete newEvent.dataValues.updatedAt
+    delete newEvent.dataValues.createdAt
 
+    //formats dates
+    const sDateToFormat = newEvent.dataValues.startDate
+    const eDateToFormat = newEvent.dataValues.endDate
+
+    newEvent.dataValues.startDate = formatDate(sDateToFormat)
+    newEvent.dataValues.endDate = formatDate(eDateToFormat)
     res.json(newEvent)
 })
 
@@ -415,7 +429,7 @@ router.post('/:groupId/venues', requireAuth, async(req, res, next) => {
 
 
 //Get all venues for a group specified by id.
-router.get('/:groupId/venues', async (req, res, next) => {
+router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
     try {
         const groupId = parseInt(req.params.groupId)
         const venues = await Venue.findAll({
@@ -532,6 +546,11 @@ router.get('/:groupId', async (req, res, next)=> {
             id: groupId,
         },
     })
+    //formats Dates
+    const createdAt = group.dataValues.createdAt
+    const updatedAt = group.dataValues.updatedAt
+    group.dataValues.createdAt = formatDate(createdAt)
+    group.dataValues.updatedAt = formatDate(updatedAt)
     //counts number of members of group
     const numMembers = await Member.count({
         where: {
@@ -573,13 +592,16 @@ router.get('/:groupId', async (req, res, next)=> {
         }
     })
 
+    for (let i = 0; i < venues.length; i++) {
+        venueArr.push(venues[i].dataValues)
+    }
+
     //sends the response object.
     res.json({
-        groupInfo: {
-        ...group.toJSON(), numMembers
-        },
-        groupImages: arr,
-        organizerInfo: organizerInfo
+        ...group.toJSON(), numMembers,
+        GroupImages: arr,
+        Organizer: organizerInfo,
+        Venues: venueArr
     })
     //catches error
     } catch (error) {
@@ -668,6 +690,8 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
             city,
             state
         }, {validate: true})
+        delete group.dataValues.createdAt
+        delete group.dataValues.updatedAt
         res.json(group)
     } catch (error) {
         error.message ? error.message : "Invalid inputs"
@@ -732,6 +756,8 @@ router.post('/',requireAuth, async (req, res, next) => {
         groupId: newGroup.dataValues.id,
         status: 'member'
     })
+    delete newGroup.dataValues.createdAt
+    delete newGroup.dataValues.updatedAt
     res.json(newGroup)
 } catch (error) {
     error.status = 400
