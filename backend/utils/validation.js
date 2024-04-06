@@ -30,7 +30,12 @@ const validDate = (date) => {
   }
 }
 
+const formatDate = (date) => {
+  return `${date.getFullYear()}-${date.getDate()}-${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+}
+
 module.exports = {
   handleValidationErrors,
-  validDate
+  validDate,
+  formatDate
 };

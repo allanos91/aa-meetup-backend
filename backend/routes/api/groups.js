@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { Group, Member, User, Groupimage, Venue, Attendee, Eventimage, Event } = require('../../db/models')
 const { requireAuth }  = require('../../utils/auth');
+const { formatDate } = require('../../utils/validation')
 
 //delete member of a group specified by id
 router.delete('/:groupId/membership/:memberId', requireAuth, async (req, res, next) =>{
@@ -270,7 +271,7 @@ router.post('/:groupId/events', requireAuth, async(req, res, next) => {
 
 
 
-   
+
 
     const newEvent = await Event.create({
         groupId, venueId: venueId ? venueId : venueId = null, name, type, capacity, price, description, startDate: new Date(`${startDate}`), endDate: new Date(`${endDate}`)
@@ -468,7 +469,7 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
     const newImage = await Groupimage.create({
         groupId: parseInt(req.params.groupId),
         url: req.body.url,
-        previewImg: req.body.previewImg
+        previewImg: req.body.preview
     }, {validate: true})
 
 
@@ -521,7 +522,7 @@ router.get('/current', requireAuth, async (req, res) => {
     res.json({Groups: arr})
 })
 
-//gets details of a group from an id and numMembers
+//gets details of a group from an id and numMembers and venues
 router.get('/:groupId', async (req, res, next)=> {
     try {
         //finds group by id
@@ -561,6 +562,16 @@ router.get('/:groupId', async (req, res, next)=> {
     for (let i = 0; i < images.length; i++) {
         arr.push(images[i].dataValues)
     }
+    //finds all Venues of the group the puts into an array
+    let venueArr = []
+    const venues = await Venue.findAll({
+        attributes: {
+            exclude: ['createdAt', 'updatedAt', 'groupId']
+        },
+        where: {
+            groupId: groupId
+        }
+    })
 
     //sends the response object.
     res.json({
@@ -585,6 +596,11 @@ router.get('/', async (req, res) => {
         const groups = await Group.findAll()
     //gets numMember aggregate data and gets preview image, combines with group, then gets pushed into an array.
         for (let i = 0; i < groups.length; i++) {
+        const createdAt = groups[i].dataValues.createdAt
+        const updatedAt = groups[i].dataValues.updatedAt
+        groups[i].dataValues.createdAt = formatDate(createdAt)
+        groups[i].dataValues.updatedAt = formatDate(updatedAt)
+
         let obj = {...groups[i].toJSON()}
         //gets aggregate members
         const numMembers = await Member.count({
@@ -610,8 +626,10 @@ router.get('/', async (req, res) => {
         arr.push(obj)
         }
 
+
+
     //returns the array
-        res.json(arr)
+        res.json({Groups: arr})
     })
 
 
