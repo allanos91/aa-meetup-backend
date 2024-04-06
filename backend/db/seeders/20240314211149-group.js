@@ -58,6 +58,6 @@ module.exports = {
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
       name: { [Op.in]: ["Rene's group", "Nathan's group", "Alex's group"] }
-    }, {});
+    }, {truncate: true, cascade: true ,restartIdentity: true,});
   }
 };

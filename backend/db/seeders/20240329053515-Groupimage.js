@@ -65,5 +65,10 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
+    options.tableName = 'Groupimages'
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      previewImg: {[Op.in]: [true, false]}
+    }, {truncate: true, cascade: true ,restartIdentity: true,})
   }
 };
