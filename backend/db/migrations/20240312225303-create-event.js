@@ -22,19 +22,21 @@ module.exports = {
         references: {
           model: 'Groups',
           key: 'id'
-        }
+        },
+        onDelete: 'cascade'
       },
       venueId: {
         type: Sequelize.INTEGER,
         references: {
           model: 'Venues',
           key: 'id'
-        }
+        },
+        onDelete: 'cascade'
       },
       name: {
         type: Sequelize.STRING
       },
-      eventType: {
+      type: {
         type: Sequelize.STRING
       },
       startDate: {
@@ -45,6 +47,12 @@ module.exports = {
       },
       description: {
         type: Sequelize.STRING
+      },
+      capacity: {
+        type: Sequelize.INTEGER,
+      },
+      price: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

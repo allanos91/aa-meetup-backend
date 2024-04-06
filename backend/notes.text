@@ -1,33 +1,8 @@
 
-eventModel
+fix scope of all models to exclude created at and updated at unless specified otherwise.
 
+add more seed data to test all the routes at the end of the project.
 
-Event.belongsToMany(
-      //   models.User,
-      //   {
-      //     through: models.Attendee,
-      //     foreignKey: 'eventId',
-      //     otherKey: 'userId'
-      //   }
-      // )
+go back and fix error handlers of each route to make sure it matches api doc.
 
-
-      userModel
-      // User.belongsToMany(
-      //   models.Event,
-      //   {
-      //     through: models.Attendee,
-      //     foreignKey: 'userId',
-      //     otherKey: 'eventId'
-      //   }
-      // )
-
-
-    event migration
-      groupId: {
-        type: Sequelize.INTEGER,
-        // reference: {
-        //   model: 'Groups',
-        //   key: 'id'
-        // }
-      }
+go back and fix dates to be more user friendly.

@@ -20,6 +20,22 @@ const handleValidationErrors = (req, _res, next) => {
   next();
 };
 
+const validDate = (date) => {
+  if (!date){
+    return false
+  }  if (date.getTime() > Date.now()) {
+    return true
+  } else {
+    return false
+  }
+}
+
+const formatDate = (date) => {
+  return `${date.getFullYear()}-${date.getDate()}-${date.getDay()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+}
+
 module.exports = {
-  handleValidationErrors
+  handleValidationErrors,
+  validDate,
+  formatDate
 };
