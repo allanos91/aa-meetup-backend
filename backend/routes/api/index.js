@@ -22,7 +22,7 @@ router.use('/event-images', eventImagesRouter);
 router.use('/', (err, req, res, next) => {
   err.message ? err.message : err.message = "server error"
   err.status ? err.status : err.status = 500
-  delete err.stack
+  // delete err.stack
   throw err
 })
 

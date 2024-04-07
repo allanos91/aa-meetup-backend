@@ -64,7 +64,7 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
         throw err
     }
 
-    //check if user is organizer of co-host
+    //check if user is organizer or co-host
     const currUserId = req.user.dataValues.id
     const group = await event.getGroup()
     const organizerId = group.dataValues.organizerId
@@ -181,6 +181,19 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
         next(err)
         return
     }
+    //check if user is a member
+    const groupId = event.dataValues.groupId
+    const member = await Member.findOne({
+        where: {
+            groupId,
+            userId: req.user.dataValues.id
+        }
+    })
+    if (!member) {
+        const err = new Error("User must be a member to request attendance")
+        err.status = 403
+        next(err)
+    }
 
     //check if user has pending request
 
@@ -251,7 +264,8 @@ router.delete('/:eventId', requireAuth, async (req, res, next) => {
 
 //edits an event specified by id
 router.put('/:eventId', requireAuth, async (req, res, next) => {
-    //check if event exists
+    try {
+        //check if event exists
     const event = await Event.findOne({
         where: {
             id: parseInt(req.params.eventId)
@@ -260,7 +274,7 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
     if (!event) {
         const err = new Error('Event does not exist')
         err.status = 404
-        throw err
+        next(err)
     }
     //check if user is organizer or co-host
     const group = await event.getGroup({
@@ -279,7 +293,7 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
     if (!(req.user.dataValues.id === organizerId || isCohost)) {
         const err = new Error('User must be organizer or co-host')
         err.status = 400
-        throw err
+        next(err)
     }
 
     const {venueId, name, type, capacity, price, description, startDate, endDate } = req.body
@@ -294,7 +308,7 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
         if (!venue) {
             const err = new Error('Venue does not exist')
             err.status = 404
-            throw err
+            next(err)
         }
     }
 
@@ -319,6 +333,12 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
     event.dataValues.startDate = formatDate(sDateToFormat)
     event.dataValues.endDate = formatDate(eDateToFormat)
     res.json(event)
+    } catch (error) {
+        error.message = "Validation error"
+        error.status = 401
+        next(error)
+    }
+
 })
 
 //add an image to an event specified by id
@@ -342,7 +362,7 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
     })
     if (!isAttending) {
         const err = new Error("User must be an attendee to add an image.")
-        err.status = 400
+        err.status = 403
         throw err
     }
 
@@ -490,9 +510,6 @@ router.get('/', requireAuth, async (req, res, next) => {
             delete queryParams[key]
         }
     }
-
-
-
     //find all events
     const events = await Event.findAll({
         attributes: {
@@ -533,7 +550,7 @@ router.get('/', requireAuth, async (req, res, next) => {
             obj.previewImage = previewImage.toJSON().url
         }
         obj.previewImage ? obj.previewImg : obj.previewImg = null
-        obj.numAttending = numAttendees + 1
+        obj.numAttending = numAttendees
 
         //get related group data
         const group = await Group.findOne({
