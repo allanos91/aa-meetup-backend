@@ -73,7 +73,8 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
     if (!group) {
         const err = new Error('Group does not exist')
         err.status = 404
-        throw err
+        next(err)
+        return
     }
 
 
@@ -90,14 +91,16 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
     if (req.body.status === 'co-host' && userId !== organizerId) {
         const err = new Error('User must be organizer to change status to co-host')
         err.status = 403
-        throw err
+        next(err)
+        return
     }
 
     //checks both if change is member
     if (!(isCohost || userId === organizerId)) {
         const err = new Error('User must be organizer or co-host to accept membership requests')
         err.status = 403
-        throw err
+        next(err)
+        return
     }
 
     //checks if change to status is "pending"
@@ -105,6 +108,7 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
         const err = new Error('Cannot change status to pending')
         err.status = 400
         next(err)
+        return
     }
 
     //checks if member belongs to group
@@ -205,10 +209,9 @@ router.get('/:groupId/members', async (req, res, next) => {
             status: 'co-host'
         }
     })
-    console.log(isCohost)
 
     //get user information for each member
-    let arr = []
+    let arr = [members]
 
     for(let i = 0; i < members.length; i++) {
         let obj = {}
@@ -417,6 +420,7 @@ router.post('/:groupId/venues', requireAuth, async(req, res, next) => {
             const err = new Error('Group not found')
             err.status = 404
             next(err)
+            return
         }
         //checks if user is organizer or co-host
         const userId = req.user.dataValues.id
@@ -433,6 +437,7 @@ router.post('/:groupId/venues', requireAuth, async(req, res, next) => {
             const err = new Error('Must be organizer or co-host of group.')
             err.status = 403
             next(err)
+            return
         }
         const { address, city, state, lat, lng } = req.body
         const newVenue = await Venue.create({
@@ -464,6 +469,7 @@ router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
             const err = new Error("Group couldn't be found")
             err.status = 404
             next(err)
+            return
         }
         //check if user is organizer or co-host
         const organizerId = group.dataValues.organizerId
@@ -478,6 +484,7 @@ router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
             const err = new Error("User must be organizer or co-host")
             err.status = 403
             next(err)
+            return
         }
 
         const groupId = parseInt(req.params.groupId)

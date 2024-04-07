@@ -193,6 +193,7 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
         const err = new Error("User must be a member to request attendance")
         err.status = 403
         next(err)
+        return
     }
 
     //check if user has pending request
@@ -275,6 +276,7 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
         const err = new Error('Event does not exist')
         err.status = 404
         next(err)
+        return
     }
     //check if user is organizer or co-host
     const group = await event.getGroup({
@@ -294,6 +296,7 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
         const err = new Error('User must be organizer or co-host')
         err.status = 400
         next(err)
+        return
     }
 
     const {venueId, name, type, capacity, price, description, startDate, endDate } = req.body
@@ -309,6 +312,7 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
             const err = new Error('Venue does not exist')
             err.status = 404
             next(err)
+            return
         }
     }
 

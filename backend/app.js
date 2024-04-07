@@ -47,6 +47,7 @@ app.use((_req, _res, next) => {
   err.errors = { message: "The requested resource couldn't be found." };
   err.status = 404;
   next(err);
+  return
 });
 
 const { ValidationError } = require('sequelize');
@@ -65,6 +66,7 @@ app.use((err, _req, _res, next) => {
     err.errors = errors;
   }
   next(err);
+  return
 });
 
 // backend/app.js
