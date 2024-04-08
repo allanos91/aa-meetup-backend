@@ -465,32 +465,29 @@ router.get('/:eventId',  async (req, res, next) => {
 //gets all events, numAttending, previewImage, add query params: page, size, name, type, startDate
 router.get('/', async (req, res, next) => {
     //validate page, size, name query params
+    let err = new Error("Bad Request")
+    err.errors = {}
+    let isError = false
     if (req.query.page) {
         if (typeof parseInt(req.query.page) !== "number" || req.query.page < 1) {
-            const err = new Error ("Bad Request")
             err.status = 400
-            err.errors ? err.errors.page = "Page must be greater than or equal to 1" : err.errors = {page: "Page must be greater than or equal to 1"}
-            next(err)
-            return
+            err.errors.page = "Page must be greater than or equal to 1"
+            isError = true
         }
     }
     if (req.query.size) {
         if (typeof parseInt(req.query.size) !== "number" || req.query.size < 1 || req.query.size > 20) {
-            const err = new Error ("Bad Request")
             err.status = 400
-            err.errors = {size: "Size must be between 1 and 20"}
-            next (err)
-            return
+            err.errors.size = "Size must be between 1 and 20"
+            isError = true
         }
     }
 
     if (req.query.name) {
-        if (typeof req.query.name !== "string") {
-            const err = new Error("Bad Request")
+        if (!isNaN(parseInt(req.query.name))) {
             err.status = 400
-            err.errors = {name : "Name must be a string"}
-            next(err)
-            return
+            err.errors.name = "Name must be a string"
+            isError = true
         }
     }
 
@@ -506,23 +503,24 @@ router.get('/', async (req, res, next) => {
     //validate startDate and type params
     if (req.query.startDate) {
         if (!validDate(startDate)) {
-            const err = new Error("Bad Request")
             err.status = 400
-            err.errors = {startDate: "Start date must be a valid datetime"}
-            next(err)
-            return
+            err.errors.startDate = "Start date must be a valid datetime"
+            isError = true
         }
     }
 
 
     if (req.query.type) {
-        if ((type !== 'Online' || type !== 'In Person')) {
-            const err = new Error("Bad Request")
+        if ((type !== 'Online' && type !== 'In Person')) {
             err.status = 400
-            err.errors = {type: "Type must be 'Online' or 'In Person'"}
-            next(err)
-            return
+            err.errors.type = "Type must be 'Online' or 'In Person'"
+            isError = true
         }
+    }
+
+    if (isError) {
+        next(err)
+        return
     }
 
     for (let key in queryParams) {

@@ -57,8 +57,8 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Type must be Online or In person"
         },
         isVal(value) {
-          if (value !== "Online" && value !== "In person") {
-            const err =  new Error("Type must be Online or In person")
+          if (value !== "Online" && value !== "In Person") {
+            const err =  new Error("Type must be Online or In Person")
             err.status = 400
             throw err
           }

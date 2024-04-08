@@ -70,10 +70,30 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     firstName: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isValid(value) {
+          if (!value) {
+            const err = new Error("First name is required")
+            err.status = 400
+            throw err
+          }
+        }
+      }
     },
     lastName: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        isValid(value) {
+          if (!value) {
+            const err = new Error("Last name is required")
+            err.status = 400
+            throw err
+          }
+        }
+      }
     }
   }, {
     sequelize,
