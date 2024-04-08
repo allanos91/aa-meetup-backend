@@ -94,7 +94,7 @@ module.exports = {
       groupId: 1,
       venueId: 9,
       name: "Ian's groovy hangout.",
-      type: "Online",
+      type: "In Person",
       startDate: new Date('April 20, 2024 16:00:00'),
       endDate: new Date('April 20, 2024 17:00:00'),
       description: 'desc'
