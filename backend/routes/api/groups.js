@@ -173,6 +173,9 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
     })
     delete newMember.dataValues.createdAt
     delete newMember.dataValues.updatedAt
+    delete newMember.dataValues.groupId
+    newMember.dataValues.memberId = newMember.dataValues.userId
+    delete newMember.dataValues.userId
     res.json(newMember)
 })
 
@@ -253,7 +256,8 @@ router.post('/:groupId/events', requireAuth, async(req, res, next) => {
     if (!group) {
         const err = new Error('Group cannot be found.')
         err.status = 404
-        throw err
+        next(err)
+        return
     }
     //check if current user is the owner or co-host
     const organizerId = group.dataValues.organizerId
@@ -321,7 +325,7 @@ router.post('/:groupId/events', requireAuth, async(req, res, next) => {
     res.json(newEvent)
     } catch (error) {
         error.message = "Validation Error"
-        error.status = 401
+        error.status = 400
         next(error)
     }
 })
@@ -369,7 +373,6 @@ router.get('/:groupId/events', async (req, res, next) => {
                 status: 'attending'
             }
         })
-        console.log(numAttending)
         //gets preview image
         const previewImage = await Eventimage.findOne({
             attributes: ['url'],
@@ -542,12 +545,16 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
         previewImg: req.body.preview
     }, {validate: true})
 
+    delete newImage.dataValues.groupId
+    newImage.dataValues.preview = newImage.dataValues.previewImg
+    delete newImage.dataValues.previewImg
+    delete newImage.dataValues.createdAt
+    delete newImage.dataValues.updatedAt
 
-    res.json({
-        url: newImage.url,
-        groupId: newImage.groupId,
-        previewImg: newImage.previewImg,
-    })
+
+    res.json(
+        newImage
+    )
     } catch (error) {
         error.message = "Bad Request"
         error.status = 400
@@ -763,7 +770,7 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
         res.json(group)
     } catch (error) {
         error.message = "Validation error"
-        error.status ? error.status : error.status = 401
+        error.status ? error.status : error.status = 400
         next(error)
     }
 
@@ -784,13 +791,16 @@ router.delete('/:groupId',requireAuth, async (req, res, next) => {
         if (!group) {
             const err = new Error('Group does not exist')
             err.status = 404
-            throw err
+            next(err)
+            return
         }
         const groupName = group.name
         //check if user owns the group.
         if (userId !== group.organizerId) {
             const err = new Error('Correct autherization require. User must own the group.')
-            throw err
+            err.status = 403
+            next(err)
+            return
         }
         //deletes the group
         await Group.destroy( {

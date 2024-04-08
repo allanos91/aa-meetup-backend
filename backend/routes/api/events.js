@@ -15,7 +15,8 @@ router.delete('/:eventId/attendance/:userId', requireAuth, async (req, res, next
     if (!user) {
         const err = new Error("User couldn't be found")
         err.status = 404
-        throw err
+        next(err)
+        return
     }
     //check if event exists
     const event = await Event.findByPk(parseInt(req.params.eventId))
@@ -23,7 +24,8 @@ router.delete('/:eventId/attendance/:userId', requireAuth, async (req, res, next
     if (!event) {
         const err = new Error('Event does not exist')
         err.status = 404
-        throw err
+        next(err)
+        return
     }
     //check if attendee exists
     const attendee = await Attendee.findOne({
@@ -35,7 +37,8 @@ router.delete('/:eventId/attendance/:userId', requireAuth, async (req, res, next
     if (!attendee) {
         const err = new Error("Attendance does not exist for this User")
         err.status = 404
-        throw err
+        next(err)
+        return
     }
     //check if user is organizer or deleting themselves
     const group = await event.getGroup()
@@ -45,7 +48,8 @@ router.delete('/:eventId/attendance/:userId', requireAuth, async (req, res, next
     if (!(req.user.dataValues.id === organizerId || isDelSelf)) {
         const err = new Error('Only organizer can delete attendance.')
         err.status = 403
-        throw err
+        next(err)
+        return
     }
     //delete attendance
     await attendee.destroy()
@@ -61,7 +65,8 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
     if (!event) {
         const err = new Error('Event does not exist')
         err.status = 404
-        throw err
+        next(err)
+        return
     }
 
     //check if user is organizer or co-host
@@ -78,7 +83,8 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
     if (!(currUserId === organizerId || isCohost)) {
         const err =  new Error('User is not the organizer or co-host of the group.')
         err.status = 403
-        throw err
+        next(err)
+        return
     }
 
     const { userId, status } = req.body
@@ -87,7 +93,8 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
     if (status === 'pending') {
         const err = new Error('Cannot change status to pending')
         err.status = 400
-        throw err
+        next(err)
+        return
     }
 
     //check if attendee exists
@@ -100,7 +107,8 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
     if (!attendee) {
         const err = new Error('Attendance between the user and event does not exist')
         err.status = 404
-        throw err
+        next(err)
+        return
     }
     const editAttendee = await attendee.set({
         status
@@ -120,7 +128,8 @@ router.get('/:eventId/attendees', async(req, res, next) => {
     if (!event) {
         const err = new Error('Event does not exist')
         err.status = 404
-        throw err
+        next(err)
+        return
     }
     //check if user is organizer or co-host
     const group = await event.getGroup()
@@ -186,7 +195,8 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
     const member = await Member.findOne({
         where: {
             groupId,
-            userId: req.user.dataValues.id
+            userId: req.user.dataValues.id,
+            status: ['member', 'co-host']
         }
     })
     if (!member) {
@@ -197,7 +207,6 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
     }
 
     //check if user has pending request
-
     const userId = req.user.dataValues.id
     const eventId = parseInt(req.params.eventId)
     const status = 'pending'
@@ -210,7 +219,8 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
     if (hasStatus) {
         const err = new Error('User status is already pending or attending.')
         err.status = 400
-        throw err
+        next(err)
+        return
     }
 
     //creates attendee
@@ -219,6 +229,9 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
         eventId,
         status
     })
+    delete attendee.dataValues.eventId
+    delete attendee.dataValues.createdAt
+    delete attendee.dataValues.updatedAt
     res.json(attendee)
 })
 
@@ -252,7 +265,7 @@ router.delete('/:eventId', requireAuth, async (req, res, next) => {
     })
     if (!(organizerId === req.user.dataValues.id || isCohost)) {
         const err = new Error('User must be organizer or co-host')
-        err.status = 400
+        err.status = 403
         throw err
     }
     //deletes the event
@@ -294,7 +307,7 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
     })
     if (!(req.user.dataValues.id === organizerId || isCohost)) {
         const err = new Error('User must be organizer or co-host')
-        err.status = 400
+        err.status = 403
         next(err)
         return
     }
@@ -376,6 +389,9 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
         url,
         previewImg,
     })
+    delete newImage.dataValues.eventId
+    newImage.dataValues.preview = newImage.dataValues.previewImg
+    delete newImage.dataValues.previewImg
     res.json({
         id: newImage.dataValues.id,
         url : newImage.dataValues.url,

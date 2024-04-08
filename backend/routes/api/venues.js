@@ -34,7 +34,7 @@ router.put('/:venueId', requireAuth, async (req, res, next) => {
 
     if (!(req.user.dataValues.id === group.dataValues.organizerId || isCohost)) {
         const err = new Error("Must be organizer or co-host to edit group.")
-        err.status = 400
+        err.status = 403
         next(err)
         return
     }
@@ -55,7 +55,7 @@ router.put('/:venueId', requireAuth, async (req, res, next) => {
     res.json(venue)
     } catch (error) {
         error.message = "Bad Request"
-        error.status = 401
+        error.status = 400
         next(error)
     }
 
