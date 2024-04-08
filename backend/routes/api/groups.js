@@ -214,7 +214,7 @@ router.get('/:groupId/members', async (req, res, next) => {
     })
 
     //get user information for each member
-    let arr = [members]
+    let arr = []
 
     for(let i = 0; i < members.length; i++) {
         let obj = {}
@@ -647,6 +647,8 @@ router.get('/:groupId', async (req, res, next)=> {
         }
     })
     for (let i = 0; i < images.length; i++) {
+        images.dataValues.preview = images.dataValues.previewImg
+        delete images.dataValues.previewImage
         arr.push(images[i].dataValues)
     }
     //finds all Venues of the group the puts into an array
@@ -834,8 +836,11 @@ router.post('/',requireAuth, async (req, res, next) => {
         groupId: newGroup.dataValues.id,
         status: 'member'
     })
-    delete newGroup.dataValues.createdAt
-    delete newGroup.dataValues.updatedAt
+
+    const fCreatedDate = formatCandUDate(newGroup.dataValues.createdAt)
+    const fUpdatedDate = formatCandUDate(newGroup.dataValues.updatedAt)
+    newGroup.dataValues.createdAt = fCreatedDate
+    newGroup.dataValues.updatedAt = fUpdatedDate
     res.statusCode = 201
     res.json(newGroup)
 } catch (error) {
