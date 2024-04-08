@@ -52,7 +52,7 @@ module.exports = {
     {
         userId: 5,
         groupId: 1,
-        status: 'co-host'
+        status: 'pending'
     },
     {
         userId: 6,

@@ -3,8 +3,8 @@ const express = require('express');
 const router = express.Router();
 const { Group, Member, User, Groupimage, Venue, Attendee, Eventimage, Event } = require('../../db/models')
 const { requireAuth }  = require('../../utils/auth');
-const { formatDate } = require('../../utils/validation');
-const { format } = require('sequelize/lib/utils');
+const { formatDate, formatCandUDate } = require('../../utils/validation');
+
 
 //delete member of a group specified by id
 router.delete('/:groupId/membership/:memberId', requireAuth, async (req, res, next) =>{
@@ -39,7 +39,7 @@ router.delete('/:groupId/membership/:memberId', requireAuth, async (req, res, ne
 
     if (!membership) {
         const err = new Error('Membership does not exist for this User.')
-        err.status = 400
+        err.status = 404
         throw err
     }
 
@@ -73,7 +73,8 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
     if (!group) {
         const err = new Error('Group does not exist')
         err.status = 404
-        throw err
+        next(err)
+        return
     }
 
 
@@ -90,20 +91,24 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
     if (req.body.status === 'co-host' && userId !== organizerId) {
         const err = new Error('User must be organizer to change status to co-host')
         err.status = 403
-        throw err
+        next(err)
+        return
     }
 
     //checks both if change is member
     if (!(isCohost || userId === organizerId)) {
         const err = new Error('User must be organizer or co-host to accept membership requests')
         err.status = 403
-        throw err
+        next(err)
+        return
     }
 
     //checks if change to status is "pending"
     if (req.body.status === 'pending') {
         const err = new Error('Cannot change status to pending')
         err.status = 400
+        next(err)
+        return
     }
 
     //checks if member belongs to group
@@ -168,6 +173,9 @@ router.post('/:groupId/membership', requireAuth, async (req, res, next) => {
     })
     delete newMember.dataValues.createdAt
     delete newMember.dataValues.updatedAt
+    delete newMember.dataValues.groupId
+    newMember.dataValues.memberId = newMember.dataValues.userId
+    delete newMember.dataValues.userId
     res.json(newMember)
 })
 
@@ -195,11 +203,18 @@ router.get('/:groupId/members', async (req, res, next) => {
             groupId: parseInt(req.params.groupId)
         }
     })
-    //checks if user is organizer of group
-    const isOrganizer = group.organizerId === req.user.dataValues.id
+    //checks if user is organizer of group or co-host
+    const isOrganizer = group.dataValues.organizerId === req.user.dataValues.id
+    const isCohost = await Member.findOne({
+        where: {
+            userId: req.user.dataValues.id,
+            groupId: parseInt(req.params.groupId),
+            status: 'co-host'
+        }
+    })
 
     //get user information for each member
-    let arr = []
+    let arr = [members]
 
     for(let i = 0; i < members.length; i++) {
         let obj = {}
@@ -209,7 +224,7 @@ router.get('/:groupId/members', async (req, res, next) => {
             }
         })
 
-        if (!isOrganizer) {
+        if (!(isOrganizer || isCohost)) {
             if (members[i].dataValues.status === 'pending') {
                 continue
             }
@@ -227,7 +242,8 @@ router.get('/:groupId/members', async (req, res, next) => {
 
 //create an event for a group specified by id.
 router.post('/:groupId/events', requireAuth, async(req, res, next) => {
-    //find group by id
+    try {
+        //find group by id
     const group = await Group.findOne({
         attributes: {
             exclude: ['private', 'groupType', 'about','createdAt', 'updatedAt']
@@ -240,7 +256,8 @@ router.post('/:groupId/events', requireAuth, async(req, res, next) => {
     if (!group) {
         const err = new Error('Group cannot be found.')
         err.status = 404
-        throw err
+        next(err)
+        return
     }
     //check if current user is the owner or co-host
     const organizerId = group.dataValues.organizerId
@@ -253,8 +270,9 @@ router.post('/:groupId/events', requireAuth, async(req, res, next) => {
     })
     if (!(req.user.dataValues.id === organizerId || isCohost)) {
         const err = new Error('Must be organizer or co-host.')
-        err.status = 400
-        throw err
+        err.status = 403
+        next(err)
+        return
     }
     let { venueId, name, type, capacity, price, description, startDate, endDate } = req.body
 
@@ -305,6 +323,11 @@ router.post('/:groupId/events', requireAuth, async(req, res, next) => {
     newEvent.dataValues.startDate = formatDate(sDateToFormat)
     newEvent.dataValues.endDate = formatDate(eDateToFormat)
     res.json(newEvent)
+    } catch (error) {
+        error.message = "Validation Error"
+        error.status = 400
+        next(error)
+    }
 })
 
 
@@ -398,8 +421,9 @@ router.post('/:groupId/venues', requireAuth, async(req, res, next) => {
         //checks if group exists
         if (!group) {
             const err = new Error('Group not found')
-            err.status = 400
+            err.status = 404
             next(err)
+            return
         }
         //checks if user is organizer or co-host
         const userId = req.user.dataValues.id
@@ -414,8 +438,9 @@ router.post('/:groupId/venues', requireAuth, async(req, res, next) => {
 
         if (!(userId === organizerId || isCohost)) {
             const err = new Error('Must be organizer or co-host of group.')
-            err.status = 400
+            err.status = 403
             next(err)
+            return
         }
         const { address, city, state, lat, lng } = req.body
         const newVenue = await Venue.create({
@@ -441,6 +466,30 @@ router.post('/:groupId/venues', requireAuth, async(req, res, next) => {
 //Get all venues for a group specified by id.
 router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
     try {
+        //check if group exists
+        const group = await Group.findByPk(req.params.groupId)
+        if (!group) {
+            const err = new Error("Group couldn't be found")
+            err.status = 404
+            next(err)
+            return
+        }
+        //check if user is organizer or co-host
+        const organizerId = group.dataValues.organizerId
+        const isCohost = await Member.findOne({
+            where: {
+                userId: req.user.dataValues.id,
+                groupId: req.params.groupId,
+                status: 'co-host'
+            }
+        })
+        if (!(isCohost || req.user.dataValues.id === organizerId)) {
+            const err = new Error("User must be organizer or co-host")
+            err.status = 403
+            next(err)
+            return
+        }
+
         const groupId = parseInt(req.params.groupId)
         const venues = await Venue.findAll({
             attributes: {
@@ -485,7 +534,7 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
 
     if (userId !== group.dataValues.organizerId) {
         const err = new Error('Must be organizer of group to post new image.')
-        err.status = 400
+        err.status = 403
         next(err)
         return
     }
@@ -496,12 +545,16 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
         previewImg: req.body.preview
     }, {validate: true})
 
+    delete newImage.dataValues.groupId
+    newImage.dataValues.preview = newImage.dataValues.previewImg
+    delete newImage.dataValues.previewImg
+    delete newImage.dataValues.createdAt
+    delete newImage.dataValues.updatedAt
 
-    res.json({
-        url: newImage.url,
-        groupId: newImage.groupId,
-        previewImg: newImage.previewImg,
-    })
+
+    res.json(
+        newImage
+    )
     } catch (error) {
         error.message = "Bad Request"
         error.status = 400
@@ -543,8 +596,8 @@ router.get('/current', requireAuth, async (req, res) => {
         //format date
         const createdAt = group.dataValues.createdAt
         const updatedAt = group.dataValues.updatedAt
-        group.dataValues.createdAt = formatDate(createdAt)
-        group.dataValues.updatedAt = formatDate(updatedAt)
+        group.dataValues.createdAt = formatCandUDate(createdAt)
+        group.dataValues.updatedAt = formatCandUDate(updatedAt)
         let obj = {...group.toJSON(), numMembers, previewImage: previewImage ? previewImage.url : null}
         arr.push(obj)
     }
@@ -564,8 +617,8 @@ router.get('/:groupId', async (req, res, next)=> {
     //formats Dates
     const createdAt = group.dataValues.createdAt
     const updatedAt = group.dataValues.updatedAt
-    group.dataValues.createdAt = formatDate(createdAt)
-    group.dataValues.updatedAt = formatDate(updatedAt)
+    group.dataValues.createdAt = formatCandUDate(createdAt)
+    group.dataValues.updatedAt = formatCandUDate(updatedAt)
     //counts number of members of group
     const numMembers = await Member.count({
         where: {
@@ -635,8 +688,8 @@ router.get('/', async (req, res) => {
         for (let i = 0; i < groups.length; i++) {
         const createdAt = groups[i].dataValues.createdAt
         const updatedAt = groups[i].dataValues.updatedAt
-        groups[i].dataValues.createdAt = formatDate(createdAt)
-        groups[i].dataValues.updatedAt = formatDate(updatedAt)
+        groups[i].dataValues.createdAt = formatCandUDate(createdAt)
+        groups[i].dataValues.updatedAt = formatCandUDate(updatedAt)
 
         let obj = {...groups[i].toJSON()}
         //gets aggregate members
@@ -687,12 +740,17 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
         if (!group) {
             const err = new Error('Group group does not exist')
             err.status = 404
-            throw err
+            next(err)
+            return
         }
+
+
         //check if user owns the group.
-        if (userId !== group.organizerId) {
-            const err = new Error('Correct autherization require. User must own the group.')
-            throw err
+        if (userId !== group.dataValues.organizerId) {
+            const err = new Error('Correct autherization required. User must own the group.')
+            err.status = 403
+            next(err)
+            return
         }
         //destructure updates from req body
         const { name, about, type, private, city, state } = req.body
@@ -705,11 +763,13 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
             city,
             state
         }, {validate: true})
-        delete group.dataValues.createdAt
-        delete group.dataValues.updatedAt
+        let formatCreatedAt = formatCandUDate(group.dataValues.createdAt)
+        let formatUpdatedAt = formatCandUDate(group.dataValues.updatedAt)
+        group.dataValues.createdAt = formatCreatedAt
+        group.dataValues.updatedAt = formatUpdatedAt
         res.json(group)
     } catch (error) {
-        error.message ? error.message : "Invalid inputs"
+        error.message = "Validation error"
         error.status ? error.status : error.status = 400
         next(error)
     }
@@ -731,13 +791,16 @@ router.delete('/:groupId',requireAuth, async (req, res, next) => {
         if (!group) {
             const err = new Error('Group does not exist')
             err.status = 404
-            throw err
+            next(err)
+            return
         }
         const groupName = group.name
         //check if user owns the group.
         if (userId !== group.organizerId) {
             const err = new Error('Correct autherization require. User must own the group.')
-            throw err
+            err.status = 403
+            next(err)
+            return
         }
         //deletes the group
         await Group.destroy( {
@@ -773,6 +836,7 @@ router.post('/',requireAuth, async (req, res, next) => {
     })
     delete newGroup.dataValues.createdAt
     delete newGroup.dataValues.updatedAt
+    res.statusCode = 201
     res.json(newGroup)
 } catch (error) {
     error.status = 400

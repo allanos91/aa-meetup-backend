@@ -37,8 +37,15 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull:{
+        notNull: {
           msg: "Street address is required"
+        },
+        emptyString(value) {
+          if (value === "") {
+            const err = new Error("Street address is required")
+            err.status = 400
+            throw err
+          }
         }
       }
     },
@@ -48,6 +55,13 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull:{
           msg: "City is required"
+        },
+        emptyString(value) {
+          if (value === "") {
+            const err = new Error("City is required")
+            err.status = 400
+            throw err
+          }
         }
       }
     },
@@ -57,6 +71,13 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notNull: {
           msg: "State is required"
+        },
+        emptyString(value) {
+          if (value === "") {
+            const err = new Error("State is required")
+            err.status = 400
+            throw err
+          }
         }
       }
     },

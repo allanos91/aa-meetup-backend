@@ -5,7 +5,8 @@ const { Group, Member, Venue } = require('../../db/models')
 const { requireAuth }  = require('../../utils/auth');
 
 router.put('/:venueId', requireAuth, async (req, res, next) => {
-    //finds venue by id
+    try {
+        //finds venue by id
     const venueId = parseInt(req.params.venueId)
     const venue = await Venue.findOne({
         where: {
@@ -17,7 +18,8 @@ router.put('/:venueId', requireAuth, async (req, res, next) => {
     if (!venue) {
         const err = new Error("Venue was not found.")
         err.status = 404
-        throw err
+        next(err)
+        return
     }
 
     //check if user is co-host or organizer
@@ -32,24 +34,31 @@ router.put('/:venueId', requireAuth, async (req, res, next) => {
 
     if (!(req.user.dataValues.id === group.dataValues.organizerId || isCohost)) {
         const err = new Error("Must be organizer or co-host to edit group.")
-        err.status = 400
-        throw err
+        err.status = 403
+        next(err)
+        return
     }
 
     const { address, city, state, lat, lng } = req.body
 
-    venue.set({
-        address: address ? address : venue.dataValues.address,
-        city: city ? city : venue.dataValues.city,
-        state: state ? state: venue.dataValues.state,
-        lat: lat ? lat : venue.dataValues.lat,
-        lng: lng ? lng : venue.dataValues.lng
+
+    await venue.update({
+        address,
+        city,
+        state,
+        lat,
+        lng
     })
 
-    await venue.save()
     delete venue.dataValues.createdAt
     delete venue.dataValues.updatedAt
     res.json(venue)
+    } catch (error) {
+        error.message = "Bad Request"
+        error.status = 400
+        next(error)
+    }
+
 })
 
 

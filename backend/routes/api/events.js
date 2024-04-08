@@ -15,7 +15,8 @@ router.delete('/:eventId/attendance/:userId', requireAuth, async (req, res, next
     if (!user) {
         const err = new Error("User couldn't be found")
         err.status = 404
-        throw err
+        next(err)
+        return
     }
     //check if event exists
     const event = await Event.findByPk(parseInt(req.params.eventId))
@@ -23,7 +24,8 @@ router.delete('/:eventId/attendance/:userId', requireAuth, async (req, res, next
     if (!event) {
         const err = new Error('Event does not exist')
         err.status = 404
-        throw err
+        next(err)
+        return
     }
     //check if attendee exists
     const attendee = await Attendee.findOne({
@@ -35,7 +37,8 @@ router.delete('/:eventId/attendance/:userId', requireAuth, async (req, res, next
     if (!attendee) {
         const err = new Error("Attendance does not exist for this User")
         err.status = 404
-        throw err
+        next(err)
+        return
     }
     //check if user is organizer or deleting themselves
     const group = await event.getGroup()
@@ -45,11 +48,12 @@ router.delete('/:eventId/attendance/:userId', requireAuth, async (req, res, next
     if (!(req.user.dataValues.id === organizerId || isDelSelf)) {
         const err = new Error('Only organizer can delete attendance.')
         err.status = 403
-        throw err
+        next(err)
+        return
     }
     //delete attendance
     await attendee.destroy()
-    res.json("Successfully deleted attendance from event")
+    res.json({message: "Successfully deleted attendance from event"})
 
 })
 
@@ -61,10 +65,11 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
     if (!event) {
         const err = new Error('Event does not exist')
         err.status = 404
-        throw err
+        next(err)
+        return
     }
 
-    //check if user is organizer of co-host
+    //check if user is organizer or co-host
     const currUserId = req.user.dataValues.id
     const group = await event.getGroup()
     const organizerId = group.dataValues.organizerId
@@ -78,7 +83,8 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
     if (!(currUserId === organizerId || isCohost)) {
         const err =  new Error('User is not the organizer or co-host of the group.')
         err.status = 403
-        throw err
+        next(err)
+        return
     }
 
     const { userId, status } = req.body
@@ -87,7 +93,8 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
     if (status === 'pending') {
         const err = new Error('Cannot change status to pending')
         err.status = 400
-        throw err
+        next(err)
+        return
     }
 
     //check if attendee exists
@@ -100,7 +107,8 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
     if (!attendee) {
         const err = new Error('Attendance between the user and event does not exist')
         err.status = 404
-        throw err
+        next(err)
+        return
     }
     const editAttendee = await attendee.set({
         status
@@ -120,7 +128,8 @@ router.get('/:eventId/attendees', async(req, res, next) => {
     if (!event) {
         const err = new Error('Event does not exist')
         err.status = 404
-        throw err
+        next(err)
+        return
     }
     //check if user is organizer or co-host
     const group = await event.getGroup()
@@ -181,9 +190,23 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
         next(err)
         return
     }
+    //check if user is a member
+    const groupId = event.dataValues.groupId
+    const member = await Member.findOne({
+        where: {
+            groupId,
+            userId: req.user.dataValues.id,
+            status: ['member', 'co-host']
+        }
+    })
+    if (!member) {
+        const err = new Error("User must be a member to request attendance")
+        err.status = 403
+        next(err)
+        return
+    }
 
     //check if user has pending request
-
     const userId = req.user.dataValues.id
     const eventId = parseInt(req.params.eventId)
     const status = 'pending'
@@ -196,7 +219,8 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
     if (hasStatus) {
         const err = new Error('User status is already pending or attending.')
         err.status = 400
-        throw err
+        next(err)
+        return
     }
 
     //creates attendee
@@ -205,6 +229,9 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
         eventId,
         status
     })
+    delete attendee.dataValues.eventId
+    delete attendee.dataValues.createdAt
+    delete attendee.dataValues.updatedAt
     res.json(attendee)
 })
 
@@ -238,7 +265,7 @@ router.delete('/:eventId', requireAuth, async (req, res, next) => {
     })
     if (!(organizerId === req.user.dataValues.id || isCohost)) {
         const err = new Error('User must be organizer or co-host')
-        err.status = 400
+        err.status = 403
         throw err
     }
     //deletes the event
@@ -251,7 +278,8 @@ router.delete('/:eventId', requireAuth, async (req, res, next) => {
 
 //edits an event specified by id
 router.put('/:eventId', requireAuth, async (req, res, next) => {
-    //check if event exists
+    try {
+        //check if event exists
     const event = await Event.findOne({
         where: {
             id: parseInt(req.params.eventId)
@@ -260,7 +288,8 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
     if (!event) {
         const err = new Error('Event does not exist')
         err.status = 404
-        throw err
+        next(err)
+        return
     }
     //check if user is organizer or co-host
     const group = await event.getGroup({
@@ -278,8 +307,9 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
     })
     if (!(req.user.dataValues.id === organizerId || isCohost)) {
         const err = new Error('User must be organizer or co-host')
-        err.status = 400
-        throw err
+        err.status = 403
+        next(err)
+        return
     }
 
     const {venueId, name, type, capacity, price, description, startDate, endDate } = req.body
@@ -294,7 +324,8 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
         if (!venue) {
             const err = new Error('Venue does not exist')
             err.status = 404
-            throw err
+            next(err)
+            return
         }
     }
 
@@ -319,6 +350,12 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
     event.dataValues.startDate = formatDate(sDateToFormat)
     event.dataValues.endDate = formatDate(eDateToFormat)
     res.json(event)
+    } catch (error) {
+        error.message = "Validation error"
+        error.status = 400
+        next(error)
+    }
+
 })
 
 //add an image to an event specified by id
@@ -342,7 +379,7 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
     })
     if (!isAttending) {
         const err = new Error("User must be an attendee to add an image.")
-        err.status = 400
+        err.status = 403
         throw err
     }
 
@@ -352,6 +389,9 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
         url,
         previewImg,
     })
+    delete newImage.dataValues.eventId
+    newImage.dataValues.preview = newImage.dataValues.previewImg
+    delete newImage.dataValues.previewImg
     res.json({
         id: newImage.dataValues.id,
         url : newImage.dataValues.url,
@@ -490,9 +530,6 @@ router.get('/', requireAuth, async (req, res, next) => {
             delete queryParams[key]
         }
     }
-
-
-
     //find all events
     const events = await Event.findAll({
         attributes: {
@@ -533,7 +570,7 @@ router.get('/', requireAuth, async (req, res, next) => {
             obj.previewImage = previewImage.toJSON().url
         }
         obj.previewImage ? obj.previewImg : obj.previewImg = null
-        obj.numAttending = numAttendees + 1
+        obj.numAttending = numAttendees
 
         //get related group data
         const group = await Group.findOne({
