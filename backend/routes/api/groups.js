@@ -614,6 +614,7 @@ router.get('/:groupId', async (req, res, next)=> {
             id: groupId,
         },
     })
+
     //formats Dates
     const createdAt = group.dataValues.createdAt
     const updatedAt = group.dataValues.updatedAt
@@ -626,6 +627,7 @@ router.get('/:groupId', async (req, res, next)=> {
             status: ['member', 'co-host']
         }
     })
+
     //finds organizerInfo
     const organizerId = group.organizerId
     const organizerInfo = await User.findOne({
@@ -636,6 +638,7 @@ router.get('/:groupId', async (req, res, next)=> {
             id: organizerId
         }
     })
+
     //finds all images of the group then puts into an array.
     let arr = []
     const images = await Groupimage.findAll({
@@ -646,9 +649,11 @@ router.get('/:groupId', async (req, res, next)=> {
             groupId : groupId,
         }
     })
+
     for (let i = 0; i < images.length; i++) {
-        images.dataValues.preview = images.dataValues.previewImg
-        delete images.dataValues.previewImage
+
+        images[i].dataValues.preview = images[i].dataValues.previewImg
+        delete images[i].dataValues.previewImg
         arr.push(images[i].dataValues)
     }
     //finds all Venues of the group the puts into an array
