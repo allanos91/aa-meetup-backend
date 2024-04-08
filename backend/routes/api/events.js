@@ -463,7 +463,7 @@ router.get('/:eventId',  async (req, res, next) => {
 
 
 //gets all events, numAttending, previewImage, add query params: page, size, name, type, startDate
-router.get('/', requireAuth, async (req, res, next) => {
+router.get('/', async (req, res, next) => {
     //validate page, size, name query params
     if (req.query.page) {
         if (typeof parseInt(req.query.page) !== "number" || req.query.page < 1) {
