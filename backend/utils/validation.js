@@ -36,7 +36,7 @@ const formatDate = (date) => {
 
 
 const formatCandUDate = (date) => {
-  return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+  return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} ${date.getHours()}:0${date.getMinutes()}:0${date.getSeconds()}`
 }
 
 

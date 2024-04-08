@@ -596,8 +596,8 @@ router.get('/current', requireAuth, async (req, res) => {
         //format date
         const createdAt = group.dataValues.createdAt
         const updatedAt = group.dataValues.updatedAt
-        group.dataValues.createdAt = formatDate(createdAt)
-        group.dataValues.updatedAt = formatDate(updatedAt)
+        group.dataValues.createdAt = formatCandUDate(createdAt)
+        group.dataValues.updatedAt = formatCandUDate(updatedAt)
         let obj = {...group.toJSON(), numMembers, previewImage: previewImage ? previewImage.url : null}
         arr.push(obj)
     }
@@ -617,8 +617,8 @@ router.get('/:groupId', async (req, res, next)=> {
     //formats Dates
     const createdAt = group.dataValues.createdAt
     const updatedAt = group.dataValues.updatedAt
-    group.dataValues.createdAt = formatDate(createdAt)
-    group.dataValues.updatedAt = formatDate(updatedAt)
+    group.dataValues.createdAt = formatCandUDate(createdAt)
+    group.dataValues.updatedAt = formatCandUDate(updatedAt)
     //counts number of members of group
     const numMembers = await Member.count({
         where: {
@@ -688,8 +688,8 @@ router.get('/', async (req, res) => {
         for (let i = 0; i < groups.length; i++) {
         const createdAt = groups[i].dataValues.createdAt
         const updatedAt = groups[i].dataValues.updatedAt
-        groups[i].dataValues.createdAt = formatDate(createdAt)
-        groups[i].dataValues.updatedAt = formatDate(updatedAt)
+        groups[i].dataValues.createdAt = formatCandUDate(createdAt)
+        groups[i].dataValues.updatedAt = formatCandUDate(updatedAt)
 
         let obj = {...groups[i].toJSON()}
         //gets aggregate members

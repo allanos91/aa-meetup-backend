@@ -53,7 +53,7 @@ router.delete('/:eventId/attendance/:userId', requireAuth, async (req, res, next
     }
     //delete attendance
     await attendee.destroy()
-    res.json("Successfully deleted attendance from event")
+    res.json({message: "Successfully deleted attendance from event"})
 
 })
 
@@ -352,7 +352,7 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
     res.json(event)
     } catch (error) {
         error.message = "Validation error"
-        error.status = 401
+        error.status = 400
         next(error)
     }
 
