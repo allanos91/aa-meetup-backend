@@ -74,7 +74,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isValid(value) {
-          if (!value) {
+          if (!value.length) {
             const err = new Error("First name is required")
             err.status = 400
             throw err
@@ -87,7 +87,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isValid(value) {
-          if (!value) {
+          if (!value.length) {
             const err = new Error("Last name is required")
             err.status = 400
             throw err
