@@ -99,6 +99,9 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
 
     //check if attendee exists
     const attendee = await Attendee.findOne({
+        attributes: {
+            include: ['id', 'userId', 'status']
+        },
         where: {
             userId,
             eventId: parseInt(req.params.eventId),
@@ -110,10 +113,9 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
         next(err)
         return
     }
-    const editAttendee = await attendee.set({
+    const editAttendee = await attendee.update({
         status
     })
-    editAttendee.save()
     delete editAttendee.dataValues.createdAt
     delete editAttendee.dataValues.updatedAt
     res.json(editAttendee)
@@ -229,6 +231,8 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
         eventId,
         status
     })
+    attendee.dataValues.memberId = userId
+    delete attendee.dataValues.userId
     delete attendee.dataValues.eventId
     delete attendee.dataValues.createdAt
     delete attendee.dataValues.updatedAt
@@ -431,7 +435,7 @@ router.get('/:eventId',  async (req, res, next) => {
     //gets group
     const groupData = await Group.findOne({
         attributes: {
-            exclude: ['groupType', 'about','createdAt', 'updatedAt']
+            exclude: ['groupType', 'about','createdAt', 'updatedAt','organizerId','type']
         },
         where: {
             id: event.dataValues.groupId
@@ -578,6 +582,7 @@ router.get('/', async (req, res, next) => {
             },
 
         })
+        delete group.dataValues.organizerId
         //combines group data into object
         obj.Group = group.toJSON()
 
