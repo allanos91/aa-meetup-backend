@@ -383,20 +383,18 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
         throw err
     }
 
-    let { url, previewImg } = req.body
+    let { url, preview } = req.body
     const newImage = await Eventimage.create({
         eventId: parseInt(req.params.eventId),
         url,
-        previewImg,
+        previewImg : preview,
     })
     delete newImage.dataValues.eventId
-    newImage.dataValues.preview = newImage.dataValues.previewImg
+    newImage.dataValues.preview = preview
     delete newImage.dataValues.previewImg
-    res.json({
-        id: newImage.dataValues.id,
-        url : newImage.dataValues.url,
-        previewImg: newImage.dataValues.previewImg
-    })
+    delete newImage.dataValues.createdAt
+    delete newImage.dataValues.updatedAt
+    res.json(newImage)
 })
 
 //gets details of event specified by id
