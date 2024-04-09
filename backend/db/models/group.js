@@ -82,14 +82,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         valInput(value) {
-          if (value !== "In Person" && value !== "Online") {
-            const err = new Error("Type must be 'Online' or 'In Person'")
+          if (value !== "In person" && value !== "Online") {
+            const err = new Error("Type must be 'Online' or 'In person'")
             err.status = 400
             throw err
           }
         },
         notNull: {
-          msg: "Type must be 'Online' or 'In Person'"
+          msg: "Type must be 'Online' or 'In person'"
         }
       }
     },

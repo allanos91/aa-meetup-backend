@@ -115,6 +115,9 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
     const { memberId, status } = req.body
 
     const member = await Member.findOne({
+        attributes: {
+            include: ['id', 'userId', 'groupId', "status"]
+        },
         where: {
             userId: memberId,
             groupId: groupId
@@ -127,13 +130,14 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
         throw err
     }
     //edits membership status
-    await member.set({
+    const updateMember = await member.update({
         status
     })
-    await member.save()
-    delete member.dataValues.createdAt
-    delete member.dataValues.updatedAt
-    res.json(member)
+    updateMember.dataValues.memberId = member.dataValues.userId
+    delete updateMember.dataValues.userId
+    delete updateMember.dataValues.createdAt
+    delete updateMember.dataValues.updatedAt
+    res.json(updateMember)
 })
 
 //request membership for a group based on group id
@@ -236,7 +240,7 @@ router.get('/:groupId/members', async (req, res, next) => {
         arr.push(obj)
     }
 
-    res.json(arr)
+    res.json({Members: arr})
 })
 
 
@@ -337,7 +341,7 @@ router.get('/:groupId/events', async (req, res, next) => {
     //find group by id
     const group = await Group.findOne({
         attributes: {
-            exclude: ['private', 'groupType', 'about','createdAt', 'updatedAt']
+            exclude: ['private', 'groupType', 'about','createdAt', 'updatedAt','organizerId','type']
         },
         where: {
             id: parseInt(req.params.groupId)
@@ -347,7 +351,8 @@ router.get('/:groupId/events', async (req, res, next) => {
     if (!group) {
         const err = new Error('Group can not be found.')
         err.status = 404
-        throw err
+        next(err)
+        return
     }
     //gets events from group
     const events = await group.getEvents({
