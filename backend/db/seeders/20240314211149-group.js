@@ -21,7 +21,7 @@ module.exports = {
         organizerId: 1,
         name: "Alex's group1",
         about: "aslkdfjalksdjflaksdfjalksdjfalksdfjalksdfjlasdfjlaksdfj",
-        type: "In Person",
+        type: "In person",
         private: false,
         city: "Costa Mesa",
         state: "CA"
@@ -30,7 +30,7 @@ module.exports = {
         organizerId: 2,
         name: "Nathan's group2",
         about: "asdflklsdkfjlskdfjalskdfjalksdjfalksdfjalksdjflkasjfdlaksdjflasdlfjl",
-        type: "In Person",
+        type: "In person",
         private: false,
         city: "Costa Mesa",
         state: "CA"
