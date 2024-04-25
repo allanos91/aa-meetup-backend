@@ -96,7 +96,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isValid(value) {
-          if (typeof value !== "number") {
+          if (typeof value !== "number" || value < 0) {
             const err = new Error("Price is invalid")
             err.status =400
             throw err

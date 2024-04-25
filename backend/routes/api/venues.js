@@ -33,7 +33,7 @@ router.put('/:venueId', requireAuth, async (req, res, next) => {
     })
 
     if (!(req.user.dataValues.id === group.dataValues.organizerId || isCohost)) {
-        const err = new Error("Must be organizer or co-host to edit group.")
+        const err = new Error("Forbidden")
         err.status = 403
         next(err)
         return

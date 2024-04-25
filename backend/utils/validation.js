@@ -31,12 +31,14 @@ const validDate = (date) => {
 }
 
 const formatDate = (date) => {
-  return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} ${date.getHours()}:00:00`
+  let newDate = date.toISOString().split('T').join(' ').split('.')[0]
+  return newDate
 }
 
 
 const formatCandUDate = (date) => {
-  return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()} ${date.getHours()}:0${date.getMinutes()}:0${date.getSeconds()}`
+  let newDate = date.toISOString().split('T').join(' ').split('.')[0]
+  return newDate
 }
 
 
