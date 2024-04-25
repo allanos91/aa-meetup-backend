@@ -46,7 +46,7 @@ router.delete('/:eventId/attendance/:userId', requireAuth, async (req, res, next
     const isDelSelf = req.user.dataValues.id === attendee.dataValues.userId
 
     if (!(req.user.dataValues.id === organizerId || isDelSelf)) {
-        const err = new Error('Only organizer can delete attendance.')
+        const err = new Error('Forbidden')
         err.status = 403
         next(err)
         return
@@ -81,7 +81,7 @@ router.put('/:eventId/attendance', requireAuth, async (req, res, next) => {
         }
     })
     if (!(currUserId === organizerId || isCohost)) {
-        const err =  new Error('User is not the organizer or co-host of the group.')
+        const err =  new Error('Forbidden')
         err.status = 403
         next(err)
         return
@@ -202,7 +202,7 @@ router.post('/:eventId/attendance', requireAuth, async (req, res, next) => {
         }
     })
     if (!member) {
-        const err = new Error("User must be a member to request attendance")
+        const err = new Error("Forbidden")
         err.status = 403
         next(err)
         return
@@ -268,7 +268,7 @@ router.delete('/:eventId', requireAuth, async (req, res, next) => {
         }
     })
     if (!(organizerId === req.user.dataValues.id || isCohost)) {
-        const err = new Error('User must be organizer or co-host')
+        const err = new Error('Forbidden')
         err.status = 403
         throw err
     }
@@ -310,7 +310,7 @@ router.put('/:eventId', requireAuth, async (req, res, next) => {
         }
     })
     if (!(req.user.dataValues.id === organizerId || isCohost)) {
-        const err = new Error('User must be organizer or co-host')
+        const err = new Error('Forbidden')
         err.status = 403
         next(err)
         return
@@ -382,7 +382,7 @@ router.post('/:eventId/images', requireAuth, async (req, res, next) => {
         }
     })
     if (!isAttending) {
-        const err = new Error("User must be an attendee to add an image.")
+        const err = new Error("Forbidden")
         err.status = 403
         throw err
     }
@@ -480,7 +480,7 @@ router.get('/', async (req, res, next) => {
     if (req.query.size) {
         if (typeof parseInt(req.query.size) !== "number" || req.query.size < 1 || req.query.size > 20) {
             err.status = 400
-            err.errors.size = "Size must be between 1 and 20"
+            err.errors.size = "Size must be between 1 and 25"
             isError = true
         }
     }

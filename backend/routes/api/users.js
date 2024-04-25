@@ -41,7 +41,8 @@ const validateSignup = [
 
 router.post(
     '/', validateSignup,
-    async (req, res) => {
+    async (req, res, next) => {
+      try {
       const { email, password, username, firstName, lastName } = req.body;
       const hashedPassword = bcrypt.hashSync(password);
       const user = await User.create({ email, username, hashedPassword, firstName, lastName });
@@ -59,6 +60,11 @@ router.post(
       return res.json({
         user: safeUser
       });
+      } catch (error) {
+        error.message = "User already exists"
+        next(error)
+        return
+      }
     }
   );
 

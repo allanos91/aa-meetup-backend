@@ -48,7 +48,7 @@ router.delete('/:groupId/membership/:memberId', requireAuth, async (req, res, ne
     const isDelSelf = (userId === parseInt(req.params.memberId))
 
     if (!(organizerId === userId || isDelSelf)) {
-        const err = new Error('User must be the organizer to remove other members.')
+        const err = new Error('Forbidden')
         err.status = 403
         throw err
     }
@@ -89,7 +89,7 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
     })
     //checks organizer when change is co-host
     if (req.body.status === 'co-host' && userId !== organizerId) {
-        const err = new Error('User must be organizer to change status to co-host')
+        const err = new Error('Forbidden')
         err.status = 403
         next(err)
         return
@@ -97,7 +97,7 @@ router.put('/:groupId/membership', requireAuth, async (req, res, next) => {
 
     //checks both if change is member
     if (!(isCohost || userId === organizerId)) {
-        const err = new Error('User must be organizer or co-host to accept membership requests')
+        const err = new Error('Forbidden')
         err.status = 403
         next(err)
         return
@@ -273,7 +273,7 @@ router.post('/:groupId/events', requireAuth, async(req, res, next) => {
         }
     })
     if (!(req.user.dataValues.id === organizerId || isCohost)) {
-        const err = new Error('Must be organizer or co-host.')
+        const err = new Error('Forbidden')
         err.status = 403
         next(err)
         return
@@ -442,7 +442,7 @@ router.post('/:groupId/venues', requireAuth, async(req, res, next) => {
         })
 
         if (!(userId === organizerId || isCohost)) {
-            const err = new Error('Must be organizer or co-host of group.')
+            const err = new Error('Forbidden')
             err.status = 403
             next(err)
             return
@@ -489,7 +489,7 @@ router.get('/:groupId/venues', requireAuth, async (req, res, next) => {
             }
         })
         if (!(isCohost || req.user.dataValues.id === organizerId)) {
-            const err = new Error("User must be organizer or co-host")
+            const err = new Error("Forbidden")
             err.status = 403
             next(err)
             return
@@ -538,7 +538,7 @@ router.post('/:groupId/images', requireAuth, async (req, res, next) => {
 
 
     if (userId !== group.dataValues.organizerId) {
-        const err = new Error('Must be organizer of group to post new image.')
+        const err = new Error('Forbidden')
         err.status = 403
         next(err)
         return
@@ -759,7 +759,7 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
 
         //check if user owns the group.
         if (userId !== group.dataValues.organizerId) {
-            const err = new Error('Correct autherization required. User must own the group.')
+            const err = new Error('Forbidden')
             err.status = 403
             next(err)
             return
@@ -809,7 +809,7 @@ router.delete('/:groupId',requireAuth, async (req, res, next) => {
         const groupName = group.name
         //check if user owns the group.
         if (userId !== group.organizerId) {
-            const err = new Error('Correct autherization require. User must own the group.')
+            const err = new Error('Forbidden')
             err.status = 403
             next(err)
             return
