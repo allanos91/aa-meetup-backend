@@ -686,7 +686,7 @@ router.get('/:groupId', async (req, res, next)=> {
     //catches error
     } catch (error) {
         error.status = 404
-        error.message = "Group does not exist"
+        error.message = "Group cannot be found"
         next(error)
     }
 })
@@ -750,7 +750,7 @@ router.put('/:groupId', requireAuth, async (req, res, next) => {
         })
         //check if group exists
         if (!group) {
-            const err = new Error('Group group does not exist')
+            const err = new Error('Group could not be found.')
             err.status = 404
             next(err)
             return
