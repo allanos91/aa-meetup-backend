@@ -1,9 +1,10 @@
 import { NavLink } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import ProfileButton from './ProfileButton';
 import './ProfileButton.css'
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import LoginFormModal from '../LoginFormModal/LoginFormModal';
+import SignupFormModal from '../SignupFormModal/SignupFormModal';
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
@@ -23,7 +24,10 @@ function Navigation({ isLoaded }) {
             />
       </li>
       <li>
-        <NavLink to="/signup">Sign Up</NavLink>
+        <OpenModalButton
+            buttonText="Sign Up"
+            modalComponent={<SignupFormModal/>}
+        />
       </li>
     </>
   );
