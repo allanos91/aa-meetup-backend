@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as sessionActions from '../../store/session';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal'
@@ -12,6 +12,20 @@ const LoginFormModal = () => {
     const [errors, setErrors] = useState({})
     const { closeModal } = useModal()
 
+    useEffect(() => {
+        const valErrors = {}
+
+        if (credential.length <= 4) {
+            valErrors.credential = "Username must be more than 4 characters"
+        }
+
+        if (password.length <= 6) {
+            valErrors.password = "Password must be more than 6 characters"
+        }
+
+        setErrors(valErrors)
+    }, [credential, password])
+
     const handleSubmit = (e) => {
         e.preventDefault();
         setErrors({})
@@ -22,7 +36,9 @@ const LoginFormModal = () => {
         .catch(
             async (res) => {
                 const data = await res.json();
-                if (data?.errors) setErrors(data.errors);
+                if (data?.message) setErrors(data);
+                console.log(data?.message)
+                console.log(errors)
             }
         );
     };
@@ -49,7 +65,8 @@ const LoginFormModal = () => {
                 />
             </label>
             {errors.credential && <p>{errors.credential}</p>}
-            <button type="submit">Log In</button>
+            {errors.message && <p>{errors.message}</p>}
+            <button type="submit" disabled={Object.values(errors).length}>Log In</button>
         </form>
         </div>
     )

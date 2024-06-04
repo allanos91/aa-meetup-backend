@@ -3,7 +3,7 @@ import { useModal } from '../../context/Modal';
 
 export function OpenModalButton({modalComponent, buttonText, onButtonClick, onModalClose}) {
     const { setModalContent, setOnModalClose} = useModal()
-
+    
     const onClick = () => {
         if (onModalClose) setOnModalClose(onModalClose);
         setModalContent(modalComponent);

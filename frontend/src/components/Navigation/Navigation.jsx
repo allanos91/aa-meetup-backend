@@ -5,6 +5,7 @@ import './ProfileButton.css'
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import LoginFormModal from '../LoginFormModal/LoginFormModal';
 import SignupFormModal from '../SignupFormModal/SignupFormModal';
+import logo from '../../../public/football-cleat-icon.jpg'
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
@@ -16,35 +17,32 @@ function Navigation({ isLoaded }) {
       </li>
     </>
   ) : (
-    <>
-      <li>
+    <div className='user-buttons'>
         <OpenModalButton
             buttonText="Log In"
             modalComponent={<LoginFormModal/>}
             />
-      </li>
-      <li>
+
         <OpenModalButton
             buttonText="Sign Up"
             modalComponent={<SignupFormModal/>}
         />
-      </li>
-    </>
+    
+    </div>
   );
 
   return (
 
     <ul className='user-login-signup'>
-      <li id="home">
-
+      <div id="home">
         <NavLink to="/">
             <img
-         className='logo'
-         src="/frontend/public/football-cleat-icon.jpg"
+            className='logo'
+         src={logo}
          alt="cleat logo"
          />
          </NavLink>
-      </li>
+      </div>
       {isLoaded && sessionLinks}
     </ul>
   );

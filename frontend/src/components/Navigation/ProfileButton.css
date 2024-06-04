@@ -2,9 +2,17 @@
     display: none
 }
 
+.user-buttons {
+    display: flex;
+    justify-content: space-between;
+    vertical-align: center;
+    height: 30px;
+    width: 120px;
+}
 
 .logo {
-    width: 250px;
+    width: 50px;
+    height: 50px;
 }
 
 .profile-button {
@@ -14,12 +22,7 @@
 
 .user-login-signup {
     display: flex;
-    flex-direction: column;
-    align-items: end;
-
-}
-
-#home {
-    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 
 }
