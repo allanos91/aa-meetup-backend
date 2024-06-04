@@ -1,3 +1,25 @@
 .profile-dropdown.hidden {
     display: none
 }
+
+
+.logo {
+    width: 250px;
+}
+
+.profile-button {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-login-signup {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+
+}
+
+#home {
+    display: flex;
+
+}

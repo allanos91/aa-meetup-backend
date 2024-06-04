@@ -11,7 +11,7 @@ function Navigation({ isLoaded }) {
 
   const sessionLinks = sessionUser ? (
     <>
-      <li>
+      <li className='profile-button'>
         <ProfileButton user={sessionUser} />
       </li>
     </>
@@ -33,9 +33,17 @@ function Navigation({ isLoaded }) {
   );
 
   return (
-    <ul>
-      <li>
-        <NavLink to="/">Home</NavLink>
+
+    <ul className='user-login-signup'>
+      <li id="home">
+
+        <NavLink to="/">
+            <img
+         className='logo'
+         src="/frontend/public/football-cleat-icon.jpg"
+         alt="cleat logo"
+         />
+         </NavLink>
       </li>
       {isLoaded && sessionLinks}
     </ul>
