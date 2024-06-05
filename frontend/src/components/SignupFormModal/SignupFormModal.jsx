@@ -1,5 +1,5 @@
 // frontend/src/components/SignupFormPage/SignupFormPage.jsx
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal'
 import * as sessionActions from '../../store/session';
@@ -14,6 +14,23 @@ function SignupFormModal() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
+
+  useEffect(()=> {
+    const errors = {}
+
+    if (username.length <= 4) {
+      errors.username = "Name field must be more than 4 characters."
+    }
+    if (password.length <= 6) {
+      errors.password = "Password must be more than 6 characters"
+    }
+
+    if (!(email.length && username.length && firstName.length && lastName.length && password.length && confirmPassword.length)) {
+      errors.field = "empty"
+    }
+
+    setErrors(errors)
+  }, [username, password, email, firstName, lastName, confirmPassword])
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -105,7 +122,7 @@ function SignupFormModal() {
           />
         </label>
         {errors.confirmPassword && <p>{errors.confirmPassword}</p>}
-        <button type="submit">Sign Up</button>
+        <button type="submit" disabled={Object.values(errors).length}>Sign Up</button>
       </form>
     </>
   );

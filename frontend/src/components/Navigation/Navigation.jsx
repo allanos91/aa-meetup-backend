@@ -5,38 +5,44 @@ import './ProfileButton.css'
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import LoginFormModal from '../LoginFormModal/LoginFormModal';
 import SignupFormModal from '../SignupFormModal/SignupFormModal';
+import logo from '../../../public/football-cleat-icon.jpg'
 
 function Navigation({ isLoaded }) {
   const sessionUser = useSelector(state => state.session.user);
 
   const sessionLinks = sessionUser ? (
     <>
-      <li>
+      <li className='profile-button'>
         <ProfileButton user={sessionUser} />
       </li>
     </>
   ) : (
-    <>
-      <li>
+    <div className='user-buttons'>
         <OpenModalButton
             buttonText="Log In"
             modalComponent={<LoginFormModal/>}
             />
-      </li>
-      <li>
+
         <OpenModalButton
             buttonText="Sign Up"
             modalComponent={<SignupFormModal/>}
         />
-      </li>
-    </>
+    
+    </div>
   );
 
   return (
-    <ul>
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
+
+    <ul className='user-login-signup'>
+      <div id="home">
+        <NavLink to="/">
+            <img
+            className='logo'
+         src={logo}
+         alt="cleat logo"
+         />
+         </NavLink>
+      </div>
       {isLoaded && sessionLinks}
     </ul>
   );
