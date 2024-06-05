@@ -1,8 +1,6 @@
 
-
+import { Link } from 'react-router-dom'
 import './LandingPage.css'
-
-
 
 const LandingPage = () => {
 
@@ -23,17 +21,17 @@ const LandingPage = () => {
         <section className='section-three'>
             <div className='column-one'>
                 <p>Icon here</p>
-                <a>See all groups</a>
+                <Link to={'/groups'}>See all groups</Link>
                 <p>caption</p>
             </div>
             <div className='column-two'>
                 <p>Icon here</p>
-                <a>Find an event</a>
+                <Link>Find an event</Link>
                 <p>caption</p>
             </div>
             <div className='column-three'>
                 <p>Icon here</p>
-                <a>Start a new group</a>
+                <Link>Start a new group</Link>
                 <p>caption</p>
             </div>
         </section>
