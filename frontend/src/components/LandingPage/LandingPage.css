@@ -1,0 +1,40 @@
+.section-one {
+    display: flex;
+    text-align: center;
+    justify-content: space-around;
+}
+
+#section-one-desc {
+    margin-top: 10em;
+    width: 500px;
+    height: 300px;
+    font-size: larger;
+}
+
+#section-one-info {
+    margin-top: 10em;
+    width: 500px;
+    height: 300px;
+}
+
+.section-two {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.section-two-desc {
+    padding: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+#section-two-title {
+    margin-bottom:20px;
+}
+
+.section-three {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 150px;
+}

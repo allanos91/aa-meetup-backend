@@ -15,7 +15,7 @@ const LoginFormModal = () => {
     useEffect(() => {
         const valErrors = {}
 
-        if (credential.length <= 4) {
+        if (credential.length <= 4 && credential.length > 0) {
             valErrors.credential = "Username must be more than 4 characters"
         }
 
@@ -25,6 +25,15 @@ const LoginFormModal = () => {
 
         setErrors(valErrors)
     }, [credential, password])
+
+    const loginDemo = (e) => {
+        e.preventDefault();
+        return dispatch(sessionActions.login({
+            credential: 'Demo-lition',
+            password: 'password'
+        }))
+        .then(closeModal)
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -45,6 +54,7 @@ const LoginFormModal = () => {
     return (
         <div className='login'>
         <h1>Log In</h1>
+        {errors.message && <p>The provided credentials were invalid</p>}
         <form onSubmit={handleSubmit}>
             <label>
                 Username or Email
@@ -65,9 +75,9 @@ const LoginFormModal = () => {
                 />
             </label>
             {errors.credential && <p>{errors.credential}</p>}
-            {errors.message && <p>{errors.message}</p>}
             <button type="submit" disabled={Object.values(errors).length}>Log In</button>
         </form>
+        <button type="button" onClick={loginDemo}>Log in as Demo User</button>
         </div>
     )
 }
