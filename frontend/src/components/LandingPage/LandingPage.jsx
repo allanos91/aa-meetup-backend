@@ -1,10 +1,28 @@
-
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
 import './LandingPage.css'
 
 const LandingPage = () => {
-
-
+    const isLoggedIn = useSelector(state => state.session.user)
+    const ColumnThree = () => {
+        if (!isLoggedIn) {
+            return (
+            <div className='column-three'>
+                <p>Icon here</p>
+                <p className='disabled-link'>Start a new group</p>
+                <p>caption</p>
+            </div>
+            )
+        } else {
+            return (
+            <div className='column-three'>
+                <p>Icon here</p>
+                <Link>Start a new group</Link>
+                <p>caption</p>
+            </div>
+            )
+        }
+    }
 
     return (
         <span>
@@ -29,11 +47,7 @@ const LandingPage = () => {
                 <Link>Find an event</Link>
                 <p>caption</p>
             </div>
-            <div className='column-three'>
-                <p>Icon here</p>
-                <Link>Start a new group</Link>
-                <p>caption</p>
-            </div>
+            <ColumnThree/>
         </section>
         <section className='section-four'>
             <button>Join Cleet Up!</button>

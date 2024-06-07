@@ -1,28 +1,30 @@
-export const LOAD_GROUPS = "groups/LOAD_GROUPS"
+const LOAD_GROUPS = "groups/LOAD_GROUPS"
 
-const load = (groups) => ({
-    type: LOAD_GROUPS,
-    groups
+const load = (data, type) => ({
+    type,
+    data,
 })
+
+
 
 
 const initialState = {}
 
 
-
-
 export const getGroups = () => async dispatch => {
     const response = await fetch(`/api/groups`)
     const data = await response.json();
-    dispatch(load(data))
+    dispatch(load(data, LOAD_GROUPS))
     return response
 }
+
+
 
 const groupsReducer = (state = initialState, action) => {
     switch (action.type) {
         case LOAD_GROUPS: {
             const newGroups = {}
-            action.groups.Groups.forEach(group => {
+            action.data.Groups.forEach(group => {
                 newGroups[group.id] = group
             })
             return {

@@ -44,3 +44,7 @@
     justify-content: center;
     margin-top: 50px;
 }
+
+.disabled-link {
+    color:grey
+}
