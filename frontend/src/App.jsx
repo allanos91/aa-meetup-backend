@@ -5,6 +5,7 @@ import Navigation from './components/Navigation/Navigation'
 import * as sessionActions from './store/session';
 import LandingPage from './components/LandingPage/LandingPage';
 import AllGroups from './components/AllGroups/AllGroups';
+import GroupDetails from './components/GroupDetails/GroupDetails';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '/groups',
         element: <AllGroups/>
+      },
+      {
+        path: '/groups/:groupId/details',
+        element: <GroupDetails/>
       }
     ]
   }

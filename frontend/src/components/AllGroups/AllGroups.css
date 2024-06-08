@@ -31,11 +31,38 @@
 
 .group-section {
     display: grid;
-    grid-template-columns: repeat(2, auto);
-    grid-template-rows: repeat(4, auto);
+    grid-template-columns: 100px 400px;
+    grid-template-rows: 70px 70px 70px 70px;
+    width: 500px;
+    height: 280px;
+    border-style: solid;
+    border-left-color: white;
+    border-right-color: white;
+    border-bottom-color: white;
+    border-top-color: lightgray;
+    cursor: pointer;
 }
 
 .center-dot{
     margin-top: 10px;
     margin-right: 3px;
+}
+
+.event-header {
+    color: gray;
+}
+
+.group-header {
+    color:aqua;
+    text-decoration: underline;
+}
+
+.event-group-header {
+    display: flex;
+    justify-content: center;
+}
+
+.group-box {
+    display: flex;
+    justify-content: center;
 }

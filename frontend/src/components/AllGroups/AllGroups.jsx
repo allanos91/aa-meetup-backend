@@ -4,12 +4,16 @@ import { useEffect } from 'react';
 import EventGroupHeader from '../EventGroupHeader/EventGroupHeader';
 import { GroupEvents } from './GroupEvents'
 import './AllGroups.css'
+import { useNavigate } from "react-router-dom";
+
+
+
 
 
 
 const AllGroups = () => {
     const dispatch = useDispatch()
-
+    const navigate = useNavigate();
     useEffect(() => {
         dispatch(getGroups())
     },[])
@@ -24,17 +28,19 @@ const AllGroups = () => {
             {groups.map(group => {
                 const {previewImage, name, about, city, state, id} = group
                 return (
-                    <section key={id} className='group-section'>
-                    <div className='img'>{previewImage} Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias id repellendus nulla. Ullam quibusdam culpa vitae deleniti aliquam aspernatur perspiciatis, dicta nihil a delectus voluptas? Veritatis, consequatur? Cumque, reiciendis expedita!</div>
-                    <h2 key={name} className='groupname'>{name}</h2>
-                    <h3 key="location" className='location'>{`${city}, ${state}`}</h3>
-                    <p key="description" className='about'>{about}</p>
-                    <div className='numevents'>
-                    <GroupEvents id={id} private={group.private}/>
-                    <p className='center-dot'>.</p>
-                    <p>{group.private ? 'Private' : 'Public'}</p>
+                    <div className='group-box' key={`groupbox${id}`}>
+                        <section key={id} className='group-section' onClick={() => navigate(`/groups/${id}/details`)}>
+                            <div className='img'>{previewImage}</div>
+                            <h2 key={name} className='groupname'>{name}</h2>
+                            <h3 key="location" className='location'>{`${city}, ${state}`}</h3>
+                            <p key="description" className='about'>{about}</p>
+                            <div className='numevents'>
+                                <GroupEvents id={id} private={group.private}/>
+                                <p className='center-dot'>.</p>
+                                <p>{group.private ? 'Private' : 'Public'}</p>
+                            </div>
+                        </section>
                     </div>
-                    </section>
                 )
             })}
         </main>
