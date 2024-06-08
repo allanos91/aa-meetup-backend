@@ -1,0 +1,41 @@
+.img {
+    grid-row: 1 / span 4;
+    grid-column: 1;
+}
+
+.groupname {
+    grid-row: 1;
+    grid-column: 2;
+    height: auto;
+}
+
+.location {
+    grid-row: 2;
+    grid-column: 2;
+}
+
+.about {
+    grid-row: 3;
+    grid-column: 2;
+}
+
+.numevents {
+    display: grid;
+    grid-row: 4;
+    grid-column: 2;
+    grid-template-columns: 60px 10px 40px 1fr;
+    grid-template-rows: auto;
+    align-items: center;
+    justify-items: center;
+}
+
+.group-section {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    grid-template-rows: repeat(4, auto);
+}
+
+.center-dot{
+    margin-top: 10px;
+    margin-right: 3px;
+}

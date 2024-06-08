@@ -1,11 +1,11 @@
-import { Link } from 'react-router-dom'
+
 
 
 const EventGroupHeader = () => {
     return (
         <div className='event-group-header'>
-            <Link>Events</Link>
-            <Link>Groups</Link>
+            <h2>Events</h2>
+            <h2>Groups</h2>
             <p>Groups in Cleet Up!</p>
         </div>
     )

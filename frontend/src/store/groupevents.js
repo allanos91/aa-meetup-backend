@@ -11,7 +11,6 @@ const initialState = {}
 export const getEventsFromGroup = (id) => async dispatch => {
     const response = await fetch(`/api/groups/${id}/events`)
     const data = await response.json();
-    // console.log('flag2', data)
     dispatch(load(data, LOAD_GROUP_EVENTS, id))
     return response
 }

@@ -3,6 +3,7 @@ import { getGroups } from '../../store/groups';
 import { useEffect } from 'react';
 import EventGroupHeader from '../EventGroupHeader/EventGroupHeader';
 import { GroupEvents } from './GroupEvents'
+import './AllGroups.css'
 
 
 
@@ -21,16 +22,18 @@ const AllGroups = () => {
         <main>
             <EventGroupHeader/>
             {groups.map(group => {
-                const {previewImage, name, about, city, state, type, id} = group
-                // console.log('flag1',groups)
+                const {previewImage, name, about, city, state, id} = group
                 return (
                     <section key={id} className='group-section'>
-                    <div>{previewImage}</div>
-                    <h2 key={name}>{name}</h2>
-                    <h3 key="location">{`${city}, ${state}`}</h3>
-                    <p key="description">{about}</p>
-                    <GroupEvents id={id}/>
-                    <p>{type}</p>
+                    <div className='img'>{previewImage} Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias id repellendus nulla. Ullam quibusdam culpa vitae deleniti aliquam aspernatur perspiciatis, dicta nihil a delectus voluptas? Veritatis, consequatur? Cumque, reiciendis expedita!</div>
+                    <h2 key={name} className='groupname'>{name}</h2>
+                    <h3 key="location" className='location'>{`${city}, ${state}`}</h3>
+                    <p key="description" className='about'>{about}</p>
+                    <div className='numevents'>
+                    <GroupEvents id={id} private={group.private}/>
+                    <p className='center-dot'>.</p>
+                    <p>{group.private ? 'Private' : 'Public'}</p>
+                    </div>
                     </section>
                 )
             })}
