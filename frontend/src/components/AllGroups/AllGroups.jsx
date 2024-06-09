@@ -132,7 +132,6 @@ const AllGroups = () => {
                                 <h3>{cityState()}</h3>
                                 <EventDetails id={id}/>
                             </section>
-
                         </div>
                         </>
                     )
