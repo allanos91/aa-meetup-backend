@@ -7,6 +7,7 @@ import './AllGroups.css'
 import { useNavigate } from "react-router-dom";
 import { useEventHeader } from '../../context/EventHeader';
 import { getEvents } from '../../store/events';
+import EventDetails from './EventDetails'
 
 
 
@@ -14,10 +15,11 @@ import { getEvents } from '../../store/events';
 
 
 const AllGroups = () => {
-
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const { isGrayG, isGrayE} = useEventHeader()
+
+
     useEffect(() => {
         dispatch(getGroups())
         dispatch(getEvents())
@@ -79,9 +81,6 @@ const AllGroups = () => {
         prevEvents.sort((a, b) => sDateToArr(b.startDate) - sDateToArr(a.startDate))
         upEvents.sort((a,b) => sDateToArr(a.startDate) - sDateToArr(b.startDate))
 
-        console.log(prevEvents)
-        console.log(upEvents)
-
         return (
             <main>
                 <EventGroupHeader/>
@@ -106,11 +105,37 @@ const AllGroups = () => {
                     )
                 })}
                 {upEvents.map(event => {
-                    const {hi} = event
+                    return event
                 })}
                 {prevEvents.map(event => {
                     //event previewImage, start/end date, price, type, details, venue city/state ? group city/statesadf
-                    const {previewImage, startDate, name, Venue} = event
+                    const {id, previewImage, name, Venue, Group, startDate} = event
+                    const cityState = () => {
+                        if (Venue) {
+                            return (
+                                <p>{`${Venue.city} ${Venue.state}`}</p>
+                            )
+                        } else {
+                            return (
+                                <p>{`${Group.city} ${Group.state}`}</p>
+                            )
+                        }
+                    }
+
+                    return (
+                        <>
+                        <div className={eventClassName()} key={`eventbox${id}`}>
+                            <section key={id} className='group-section'>
+                                <div className='img'>{previewImage}</div>
+                                <p>{startDate}</p>
+                                <h2 key={name} className='eventname'>{name}</h2>
+                                <h3>{cityState()}</h3>
+                                <EventDetails id={id}/>
+                            </section>
+
+                        </div>
+                        </>
+                    )
                 })}
             </main>
         )
