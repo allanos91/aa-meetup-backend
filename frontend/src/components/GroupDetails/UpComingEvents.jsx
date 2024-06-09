@@ -46,9 +46,9 @@ const UpComingEvents = (id) => {
             let startDateMod = sDateToArr(event.startDate)
             let currDateMod = sDateToArr(formatDate(currDate))
             //startdate - currdate is positive, then push in eventarr
-            // if (startDateMod - currDateMod > 0) {
+            if (startDateMod - currDateMod > 0) {
                 newEventArr.push(event)
-            // }
+            }
         })
 
         if (newEventArr.length !== numUpEvents) {

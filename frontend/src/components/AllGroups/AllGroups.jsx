@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { getGroups } from '../../store/groups';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import EventGroupHeader from '../EventGroupHeader/EventGroupHeader';
 import { GroupEvents } from './GroupEvents'
 import './AllGroups.css'

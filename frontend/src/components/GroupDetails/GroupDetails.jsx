@@ -6,19 +6,27 @@ import { getGroups } from "../../store/groups";
 import { getEventsFromGroup } from "../../store/groupevents";
 import UpComingEvent from "./UpComingEvents";
 import { useNumEvents } from '../../context/NumUpEvents'
+import { useNumPastEvents } from "../../context/PastEvents";
+import PastEvents from "./PastEvents";
+import './GroupDetails.css'
 
 const GroupDetails = () => {
+    const [isHidden, setIsHidden] = useState('hidden')
+    const [creatorOptions, setCreatorOptions] = useState('hidden')
     const {numUpEvents} = useNumEvents()
+    const {numPastEvents} = useNumPastEvents()
     const {groupId} = useParams()
-    const [upIsHidden, setUpIsHidden] = useState(false)
-    const [downIsHidden, setDownIsHidden] = useState(false)
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getGroupDetails(groupId))
         dispatch(getGroups)
         dispatch(getEventsFromGroup(groupId))
-    }, [numUpEvents])
+    }, [numUpEvents, numPastEvents, isHidden, setIsHidden, creatorOptions])
+
+    const onClick = () => {
+        setIsHidden('')
+    }
 
     const group = useSelector((state) => {
         return state.groupDetails[groupId]
@@ -31,6 +39,41 @@ const GroupDetails = () => {
         return
     })
 
+    const currUser = useSelector((state) => {
+
+        if (state.session.user) {
+            return state.session.user.id
+        } else return 0
+    })
+
+    const groupCreatorId = useSelector((state) => {
+        if (state.groupDetails[groupId]) {
+            return state.groupDetails[groupId].Organizer.id
+        }
+    })
+
+    const isHiddenFunc = (num) => {
+        if (num === 0) {
+            return 'hidden'
+        } else {
+            return ''
+        }
+    }
+
+    const isUserCreatedGroup = (userid, groupid) => {
+        if (userid === groupid || !userid) {
+            return 'hidden'
+        } else {
+         return ''
+        }
+    }
+    if (currUser === groupCreatorId && creatorOptions === 'hidden') {
+        setCreatorOptions('')
+    }
+
+    if (currUser !== groupCreatorId && creatorOptions !== 'hidden' ) {
+        setCreatorOptions('hidden')
+    }
     if (group) {
         const {id, name, city, state, Organizer, GroupImages, about} = group
 
@@ -53,7 +96,11 @@ const GroupDetails = () => {
                 <p>{group.private ? 'Private' : 'Public'}</p>
             </div>
             <p>Organized by {Organizer.firstName} {Organizer.lastName}</p>
-            <button>Join this group</button>
+            <button className={isUserCreatedGroup(currUser, groupCreatorId)} onClick={onClick}>Join this group</button>
+            <button className={creatorOptions}>Create event</button>
+            <button className={creatorOptions}>Update</button>
+            <button className={creatorOptions}>Delete</button>
+            <p className={isHidden}>Feature coming soon!</p>
             </section>
             <section className="middle">
                 <div>
@@ -66,9 +113,13 @@ const GroupDetails = () => {
                 </div>
             </section>
             <section className="bottom">
-                <div>
+                <div className={isHiddenFunc(numUpEvents)}>
                     <h2>Upcoming Events ({numUpEvents})</h2>
                     <UpComingEvent id={id}/>
+                </div>
+                <div className={isHiddenFunc(numPastEvents)}>
+                    <h2>Past Events ({numPastEvents})</h2>
+                    <PastEvents id={id}/>
                 </div>
             </section>
             </>
