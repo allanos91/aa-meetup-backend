@@ -49,12 +49,27 @@
 }
 
 .event-header {
+    color:aqua;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.event-header.gray {
     color: gray;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .group-header {
     color:aqua;
     text-decoration: underline;
+    cursor: pointer;
+}
+
+.group-header.gray {
+    color: gray;
+    cursor: pointer;
+    text-decoration: none;
 }
 
 .event-group-header {
@@ -65,4 +80,8 @@
 .group-box {
     display: flex;
     justify-content: center;
+}
+
+.group-box.hidden {
+    display:none;
 }

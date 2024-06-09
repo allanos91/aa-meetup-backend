@@ -71,7 +71,7 @@ const GroupDetails = () => {
         setCreatorOptions('')
     }
 
-    if (currUser !== groupCreatorId && creatorOptions !== 'hidden' ) {
+    if (currUser !== groupCreatorId && creatorOptions !== 'hidden') {
         setCreatorOptions('hidden')
     }
     if (group) {

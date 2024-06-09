@@ -1,9 +1,19 @@
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom'
+import { useEventHeader } from '../../context/EventHeader';
 import './LandingPage.css'
 
 const LandingPage = () => {
     const isLoggedIn = useSelector(state => state.session.user)
+    const {setIsGrayE, setIsGrayG} = useEventHeader()
+
+    const onClick = () => {
+        setIsGrayE('gray')
+        setIsGrayG('')
+        return
+    }
+
+
     const ColumnThree = () => {
         if (!isLoggedIn) {
             return (
@@ -24,6 +34,7 @@ const LandingPage = () => {
         }
     }
 
+
     return (
         <span>
         <section className='section-one'>
@@ -39,7 +50,7 @@ const LandingPage = () => {
         <section className='section-three'>
             <div className='column-one'>
                 <p>Icon here</p>
-                <Link to={'/groups'}>See all groups</Link>
+                <Link to={'/groups'} onClick={onClick}>See all groups</Link>
                 <p>caption</p>
             </div>
             <div className='column-two'>

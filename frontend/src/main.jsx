@@ -9,6 +9,7 @@ import * as sessionActions from './store/session';
 import { Modal, ModalProvider } from './context/Modal'
 import { NumEventsProvider } from './context/NumUpEvents';
 import { NumPastEventsProvider } from './context/PastEvents';
+import { EventHeaderProvider } from './context/EventHeader';
 
 const store = configureStore();
 
@@ -38,8 +39,10 @@ createRoot(document.getElementById('root')).render(
     <Provider store={store}>
     <NumEventsProvider>
       <NumPastEventsProvider>
+        <EventHeaderProvider>
       <App />
       <Modal />
+      </EventHeaderProvider>
       </NumPastEventsProvider>
     </NumEventsProvider>
     </Provider>
