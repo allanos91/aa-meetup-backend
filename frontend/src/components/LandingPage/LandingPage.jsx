@@ -12,6 +12,11 @@ const LandingPage = () => {
         setIsGrayG('')
         return
     }
+    const onClickE = () => {
+        setIsGrayE('')
+        setIsGrayG('gray')
+        return
+    }
 
 
     const ColumnThree = () => {
@@ -55,7 +60,7 @@ const LandingPage = () => {
             </div>
             <div className='column-two'>
                 <p>Icon here</p>
-                <Link>Find an event</Link>
+                <Link to={'/groups'} onClick={onClickE}>Find an event</Link>
                 <p>caption</p>
             </div>
             <ColumnThree/>

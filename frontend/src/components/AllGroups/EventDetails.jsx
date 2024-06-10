@@ -8,6 +8,8 @@ import { getEventDetails } from '../../store/eventdetails';
 
 const EventDetails = (id) => {
     const dispatch = useDispatch()
+
+
     useEffect(() => {
         dispatch(getEventDetails(id.id))
     }, [])
@@ -18,6 +20,7 @@ const EventDetails = (id) => {
         }
         return
     })
+
     if (details) {
         return (
             <p>{details.description}</p>

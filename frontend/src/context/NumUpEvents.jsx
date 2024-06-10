@@ -4,10 +4,13 @@ const NumEvents = createContext();
 
 export function NumEventsProvider({children}) {
     const [numUpEvents, setNumUpEvents] = useState(0)
+    const [groupId, setGroupId] = useState(0)
 
     const contextValue = {
         setNumUpEvents,
-        numUpEvents
+        numUpEvents,
+        groupId,
+        setGroupId
     }
 
     return (

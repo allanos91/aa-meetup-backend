@@ -13,10 +13,14 @@ function ProfileButton({ user }) {
   const ulRef = useRef();
   const {setIsGrayE, setIsGrayG} = useEventHeader()
 
-    const onClick = () => {
+    const onClickG = () => {
         setIsGrayE('gray')
         setIsGrayG('')
         return
+    }
+    const onClickE = () => {
+      setIsGrayG('gray')
+      setIsGrayE('')
     }
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden")
@@ -59,7 +63,10 @@ function ProfileButton({ user }) {
           <button onClick={logout}>Log Out</button>
         </li>
         <li>
-        <Link to={'/groups'} onClick={onClick}>View groups</Link>
+        <Link to={'/groups'} onClick={onClickG}>View groups</Link>
+        </li>
+        <li>
+        <Link to={'/groups'} onClick={onClickE}>View events</Link>
         </li>
       </ul>
 

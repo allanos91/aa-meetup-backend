@@ -1,8 +1,10 @@
 import { useSelector } from "react-redux"
 import { useEffect } from "react"
 import { useNumPastEvents } from '../../context/PastEvents'
+import { useNavigate } from 'react-router-dom'
 
 const PastEvents = (id) => {
+    const navigate = useNavigate()
     const {numPastEvents, setNumPastEvents} = useNumPastEvents()
 
     useEffect(() => {
@@ -58,12 +60,12 @@ const PastEvents = (id) => {
             <>
             {newEventArr.map(event => {
                 return (
-                    <>
+                    <div className="event" key={event.id} onClick={() => navigate(`/events/${event.id}/details/${id.id}`)}>
                     <p key={event.id}>{event.previewImage ? event.previewImage: 'no image'}</p>
                     <p>{event.startDate}</p>
                     <h2>{event.name}</h2>
                     <p>{event.description}</p>
-                    </>
+                    </div>
                 )
             })}
             </>
