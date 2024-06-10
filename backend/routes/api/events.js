@@ -406,7 +406,7 @@ router.get('/:eventId',  async (req, res, next) => {
     //find event
     const event = await Event.findOne({
         attributes: {
-            exclude: ['createdAt', 'updatedAt', 'description']
+            exclude: ['createdAt', 'updatedAt']
         },
         where: {
             id : parseInt(req.params.eventId)

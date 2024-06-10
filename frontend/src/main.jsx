@@ -7,6 +7,9 @@ import configureStore from './store/store';
 import { restoreCSRF, csrfFetch} from './store/csrf'
 import * as sessionActions from './store/session';
 import { Modal, ModalProvider } from './context/Modal'
+import { NumEventsProvider } from './context/NumUpEvents';
+import { NumPastEventsProvider } from './context/PastEvents';
+import { EventHeaderProvider } from './context/EventHeader';
 
 const store = configureStore();
 
@@ -31,11 +34,19 @@ if (process.env.NODE_ENV !== 'production') {
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
+
     <ModalProvider>
     <Provider store={store}>
+    <NumEventsProvider>
+      <NumPastEventsProvider>
+        <EventHeaderProvider>
       <App />
       <Modal />
+      </EventHeaderProvider>
+      </NumPastEventsProvider>
+    </NumEventsProvider>
     </Provider>
     </ModalProvider>
+
   </React.StrictMode>
 );

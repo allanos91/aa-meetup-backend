@@ -3,12 +3,25 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { FaUserCircle } from 'react-icons/fa';
 import * as sessionActions from '../../store/session';
+import { Link } from 'react-router-dom'
+import { useEventHeader } from '../../context/EventHeader';
 
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState(false)
   const ulRef = useRef();
+  const {setIsGrayE, setIsGrayG} = useEventHeader()
+
+    const onClickG = () => {
+        setIsGrayE('gray')
+        setIsGrayG('')
+        return
+    }
+    const onClickE = () => {
+      setIsGrayG('gray')
+      setIsGrayE('')
+    }
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden")
 
@@ -49,7 +62,14 @@ function ProfileButton({ user }) {
         <li>
           <button onClick={logout}>Log Out</button>
         </li>
+        <li>
+        <Link to={'/groups'} onClick={onClickG}>View groups</Link>
+        </li>
+        <li>
+        <Link to={'/groups'} onClick={onClickE}>View events</Link>
+        </li>
       </ul>
+
     </>
   );
 }

@@ -46,8 +46,6 @@ const LoginFormModal = () => {
             async (res) => {
                 const data = await res.json();
                 if (data?.message) setErrors(data);
-                console.log(data?.message)
-                console.log(errors)
             }
         );
     };

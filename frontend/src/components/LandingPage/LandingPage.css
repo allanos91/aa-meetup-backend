@@ -38,3 +38,13 @@
     justify-content: space-around;
     margin-top: 150px;
 }
+
+.section-four {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.disabled-link {
+    color:grey
+}
