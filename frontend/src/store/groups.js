@@ -1,3 +1,5 @@
+import { csrfFetch } from "./csrf"
+
 const LOAD_GROUPS = "groups/LOAD_GROUPS"
 const POST_GROUP = "group/POST_GROUP"
 
