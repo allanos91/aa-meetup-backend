@@ -1,10 +1,16 @@
 const LOAD_GROUPS = "groups/LOAD_GROUPS"
+const POST_GROUP = "group/POST_GROUP"
 
 
 const load = (data, type, id) => ({
     type,
     data,
     id
+})
+
+const post = (data) => ({
+    data,
+    type: POST_GROUP
 })
 
 
@@ -20,9 +26,20 @@ export const getGroups = () => async dispatch => {
     return data
 }
 
-
-
-
+export const postGroup = (data) => async dispatch => {
+    const response = await csrfFetch(`/api/groups`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    if (response.ok) {
+        const group = await response.json()
+        dispatch(post(group))
+        return group
+    }
+}
 
 const groupsReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -34,6 +51,19 @@ const groupsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...newGroups
+            }
+        }
+        case POST_GROUP: {
+            if (!state.groups) {
+                state[action.data.id] = action.data
+                const newState = {
+                    ...state,
+                };
+                return newState
+            }
+            state[action.data.id] = action.data
+            return {
+                ...state
             }
         }
         default:
