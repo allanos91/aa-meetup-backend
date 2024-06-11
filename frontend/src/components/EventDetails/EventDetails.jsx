@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getEventDetails } from '../../store/eventdetails'
 import { getGroupDetails } from '../../store/groupdetails'
@@ -10,6 +10,7 @@ import { useEventHeader } from '../../context/EventHeader'
 
 
 const EventDetails = () => {
+    const [isHidden, setIsHidden] = useState('hidden')
     const {setIsGrayG, setIsGrayE} = useEventHeader()
     const dispatch = useDispatch()
     const {eventId, groupId} = useParams()
@@ -27,8 +28,6 @@ const EventDetails = () => {
         setIsGrayG('gray')
         return
     }
-
-
     const details = useSelector((state) => {
         if (state.eventDetails[eventId]) {
             return state.eventDetails[eventId]
@@ -42,7 +41,18 @@ const EventDetails = () => {
         }
     })
 
+    const userId = useSelector((state)=>{
+        return state.session.user.id
+    })
+
     if (details && groupDetails) {
+        const hiddenClass = () => {
+            if (groupDetails.Organizer.id === userId && isHidden) {
+                setIsHidden('')
+                return isHidden
+            }
+            return isHidden
+        }
         //event preview image, group preview image, public/private/, start/endate, price, online/in person, details
         let hostName = `${groupDetails.Organizer.firstName} ${groupDetails.Organizer.lastName}`
         const {name, EventImages, type, price, startDate, endDate, description} = details
@@ -82,6 +92,8 @@ const EventDetails = () => {
                     </div>
                     <p>{price ? price : 'Free'}</p>
                     <p>{type}</p>
+                    <button className={hiddenClass()}>Update</button>
+                    <button className={hiddenClass()}>Delete</button>
                 </div>
                 <h2>Details</h2>
                 <p>{description}</p>
