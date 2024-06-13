@@ -2,6 +2,8 @@ import { csrfFetch } from "./csrf"
 
 const LOAD_GROUPS = "groups/LOAD_GROUPS"
 const POST_GROUP = "group/POST_GROUP"
+const UPDATE_GROUP = "groups/UPDATE_GROUP"
+
 
 
 const load = (data, type, id) => ({
@@ -13,6 +15,11 @@ const load = (data, type, id) => ({
 const post = (data) => ({
     data,
     type: POST_GROUP
+})
+
+const update = (data) => ({
+    data,
+    type: UPDATE_GROUP
 })
 
 const initialState = {}
@@ -39,6 +46,22 @@ export const postGroup = (data) => async dispatch => {
     }
 }
 
+export const updateGroupDetails = (data, id) => async dispatch => {
+    const response = await csrfFetch(`/api/groups/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+
+    if (response.ok) {
+        const group = await response.json()
+        dispatch(update(data))
+        return group
+    }
+}
+
 const groupsReducer = (state = initialState, action) => {
     switch (action.type) {
         case LOAD_GROUPS: {
@@ -57,6 +80,19 @@ const groupsReducer = (state = initialState, action) => {
                 const newState = {
                     ...state,
                 };
+                return newState
+            }
+            state[action.data.id] = action.data
+            return {
+                ...state
+            }
+        }
+        case UPDATE_GROUP: {
+            if (!state.groups) {
+                state[action.data.id] = action.data
+                const newState = {
+                    ...state
+                }
                 return newState
             }
             state[action.data.id] = action.data

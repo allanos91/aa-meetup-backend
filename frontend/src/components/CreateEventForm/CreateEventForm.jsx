@@ -6,6 +6,7 @@ import { postImageEvent } from "../../store/eventimages"
 import { getEventsFromGroup } from "../../store/groupevents"
 import { getEvents } from "../../store/events"
 import { getGroups } from "../../store/groups"
+import { getGroupDetails } from "../../store/groupdetails"
 
 
 const CreateEventForm = () => {
@@ -19,6 +20,7 @@ const CreateEventForm = () => {
     const [Private, setPrivate] = useState(true)
     const [hidden, setHidden] = useState('hidden')
     const [errors, setErrors] = useState({})
+    const [isLoaded, setIsLoaded] = useState(false)
 
     const { groupId } = useParams()
 
@@ -104,64 +106,72 @@ const CreateEventForm = () => {
             errors.description = "Description must have 30 or more characters."
         }
         setErrors(errors)
+        dispatch(getGroupDetails(groupId))
+        dispatch(getGroups())
+        dispatch(getEventsFromGroup(groupId)).then(() => {
+            setIsLoaded(true)
+        })
     }, [eName, startD, endD, img, desc])
 
     const group = useSelector((state) => {
         return state.groupDetails[groupId]
     })
 
+    if (isLoaded) {
 
-    return (
-        <form className="event-form" onSubmit={handleSubmit}>
-        <section>
-            <h1>Create an event for {group.name}</h1>
-            <label htmlFor="Event Name">What is the name of your event?</label>
-            <input name ="Event Name" placeholder="Event Name" onChange={handleEName}/>
-            <p>Name is required</p>
-        </section>
-        <section>
-            <div>
-                <label htmlFor="type">Is this an in person or online event?</label>
-                <select name="type" onChange={handleType}>
-                    <option>In person</option>
-                    <option>Online</option>
-                </select>
-            </div>
-            <div>
-                <label htmlFor="private" onChange={handlePrivate}>Is this event private or public?</label>
-                <select name="private">
-                    <option>public</option>
-                    <option>private</option>
-                </select>
-            </div>
-            <label htmlFor="price">What is the price for your event?</label>
-            <input name="price" type="number" onChange={handlePrice}/>
-        </section>
-        <section>
-            <div>
-            <label htmlFor="start-date">When does your event start?</label>
-            <input name="start-date" type="datetime-local" placeholder="MM/DD/YYYY, HH/mm AM" onChange={handleStartD}/>
-            <p className={`errors ${hidden}`}>{errors.startDate}</p>
-            </div>
-            <div>
-            <label htmlFor="end-date">When does your event end?</label>
-            <input name="end-date" type="datetime-local" placeholder="MM/DD/YYYY, HH/mm AM" onChange={handleEndD}/>
-            <p className={`errors ${hidden}`}>{errors.endDate}</p>
-            </div>
-        </section>
-        <section>
-            <label>Please add in image url for your event below</label>
-            <input placeholder="Image Url" onChange={handleImg}/>
-            <p className={`errors ${hidden}`}>{errors.image}</p>
-        </section>
-        <section>
-            <label>Please describe your event:</label>
-            <textarea placeholder="Please include at least 30 characters" onChange={handleDesc}></textarea>
-            <p className={`errors ${hidden}`}>{errors.description}</p>
-        </section>
-        <button type="submit">Create Event</button>
-        </form>
-    )
+        return (
+            <form className="event-form" onSubmit={handleSubmit}>
+            <section>
+                <h1>Create an event for {group.name}</h1>
+                <label htmlFor="Event Name">What is the name of your event?</label>
+                <input name ="Event Name" placeholder="Event Name" onChange={handleEName}/>
+                <p className={`errors ${hidden}`}>{errors.name}</p>
+            </section>
+            <section>
+                <div>
+                    <label htmlFor="type">Is this an in person or online event?</label>
+                    <select name="type" onChange={handleType}>
+                        <option>In person</option>
+                        <option>Online</option>
+                    </select>
+                </div>
+                <div>
+                    <label htmlFor="private" onChange={handlePrivate}>Is this event private or public?</label>
+                    <select name="private">
+                        <option>public</option>
+                        <option>private</option>
+                    </select>
+                </div>
+                <label htmlFor="price">What is the price for your event?</label>
+                <input name="price" type="number" onChange={handlePrice}/>
+            </section>
+            <section>
+                <div>
+                <label htmlFor="start-date">When does your event start?</label>
+                <input name="start-date" type="datetime-local" placeholder="MM/DD/YYYY, HH/mm AM" onChange={handleStartD}/>
+                <p className={`errors ${hidden}`}>{errors.startDate}</p>
+                </div>
+                <div>
+                <label htmlFor="end-date">When does your event end?</label>
+                <input name="end-date" type="datetime-local" placeholder="MM/DD/YYYY, HH/mm AM" onChange={handleEndD}/>
+                <p className={`errors ${hidden}`}>{errors.endDate}</p>
+                </div>
+            </section>
+            <section>
+                <label>Please add in image url for your event below</label>
+                <input placeholder="Image Url" onChange={handleImg}/>
+                <p className={`errors ${hidden}`}>{errors.image}</p>
+            </section>
+            <section>
+                <label>Please describe your event:</label>
+                <textarea placeholder="Please include at least 30 characters" onChange={handleDesc}></textarea>
+                <p className={`errors ${hidden}`}>{errors.description}</p>
+            </section>
+            <button type="submit">Create Event</button>
+            </form>
+        )
+    }
+
 }
 
 export default CreateEventForm

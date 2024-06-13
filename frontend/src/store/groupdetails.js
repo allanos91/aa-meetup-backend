@@ -6,6 +6,8 @@ const load = (data, type, id) => ({
     id
 })
 
+
+
 const initialState = {}
 
 export const getGroupDetails = (id) => async dispatch => {
@@ -13,7 +15,9 @@ export const getGroupDetails = (id) => async dispatch => {
     const data = await response.json()
     dispatch(load(data, LOAD_GROUP, id))
     return data
-}
+    }
+
+
 
 const groupDetailsReducer = (state = initialState, action) => {
     switch(action.type) {

@@ -21,7 +21,7 @@ const GroupDetails = () => {
 
     useEffect(() => {
         dispatch(getGroupDetails(groupId))
-        dispatch(getGroups)
+        dispatch(getGroups())
         dispatch(getEventsFromGroup(groupId))
     }, [numUpEvents, numPastEvents, isHidden, setIsHidden, creatorOptions])
 
@@ -99,7 +99,7 @@ const GroupDetails = () => {
             <p>Organized by {Organizer.firstName} {Organizer.lastName}</p>
             <button className={isUserCreatedGroup(currUser, groupCreatorId)} onClick={onClick}>Join this group</button>
             <button className={creatorOptions} onClick={()=>navigate(`/groups/${id}/events/new`)}>Create event</button>
-            <button className={creatorOptions}>Update</button>
+            <button className={creatorOptions} onClick={()=>navigate(`/groups/${id}/edit`)} >Update</button>
             <button className={creatorOptions}>Delete</button>
             <p className={isHidden}>Feature coming soon!</p>
             </section>
