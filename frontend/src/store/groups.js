@@ -15,11 +15,7 @@ const post = (data) => ({
     type: POST_GROUP
 })
 
-
-
-
 const initialState = {}
-
 
 export const getGroups = () => async dispatch => {
     const response = await fetch(`/api/groups`)

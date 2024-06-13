@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom"
 import "./CreateGroupForm.css"
 import { useDispatch } from "react-redux"
 import { postGroup } from "../../store/groups"
+import { postImageGroup } from "../../store/groupimages"
+
 
 
 
@@ -56,6 +58,14 @@ const CreateGroupForm = () => {
             state: splitLoc[1]
         }
         let res = await dispatch(postGroup(payload))
+
+        const imagePayload = {
+            url: img,
+            preview: true
+        }
+
+        await dispatch(postImageGroup(imagePayload, res.id))
+
         navigate(`/groups/${res.id}/details`)
     }
 
@@ -78,8 +88,8 @@ const CreateGroupForm = () => {
             errors.location = "Location is required"
         }
 
-        if (desc.length < 30) {
-            errors.desc = "Description must be at least 30 characters long"
+        if (desc.length < 50) {
+            errors.desc = "Description must be at least 50 characters long"
         }
 
         if (!validateImg(img)) {

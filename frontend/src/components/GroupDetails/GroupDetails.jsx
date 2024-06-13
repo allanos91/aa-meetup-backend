@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, useNavigate } from "react-router-dom"
 import { useEffect, useState} from "react"
 import { useSelector, useDispatch } from 'react-redux';
 import { getGroupDetails } from "../../store/groupdetails";
@@ -17,6 +17,7 @@ const GroupDetails = () => {
     const {numPastEvents} = useNumPastEvents()
     const {groupId} = useParams()
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     useEffect(() => {
         dispatch(getGroupDetails(groupId))
@@ -97,7 +98,7 @@ const GroupDetails = () => {
             </div>
             <p>Organized by {Organizer.firstName} {Organizer.lastName}</p>
             <button className={isUserCreatedGroup(currUser, groupCreatorId)} onClick={onClick}>Join this group</button>
-            <button className={creatorOptions}>Create event</button>
+            <button className={creatorOptions} onClick={()=>navigate(`/groups/${id}/events/new`)}>Create event</button>
             <button className={creatorOptions}>Update</button>
             <button className={creatorOptions}>Delete</button>
             <p className={isHidden}>Feature coming soon!</p>
