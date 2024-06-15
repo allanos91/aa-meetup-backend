@@ -27,9 +27,7 @@ const EventDetails = () => {
         dispatch(getGroupDetails(groupId))
         if (isDeleted) {
             setIsDeleted(false)
-            setIsGrayE('')
-            setIsGrayG('gray')
-            navigate('/groups')
+            navigate(`/groups/${groupId}/details`)
         }
     }, [eventId, isDeleted])
 
