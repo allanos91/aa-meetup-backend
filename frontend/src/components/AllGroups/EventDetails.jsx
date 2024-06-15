@@ -23,7 +23,7 @@ const EventDetails = (id) => {
 
     if (details) {
         return (
-            <p>{details.description}</p>
+            <p className='event-description'>{details.description}</p>
         )
     } else {
         return (
