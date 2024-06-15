@@ -98,7 +98,7 @@ const AllGroups = () => {
                         <>
                         <div className={groupClassName()} key={`groupbox${id}`}>
                             <section key={id} className='group-section' onClick={() => navigate(`/groups/${id}/details`)}>
-                                <div className='img'>{previewImage}</div>
+                                <img className='group-img' src={previewImage}/>
                                 <h2 key={name} className='groupname'>{name}</h2>
                                 <h3 key="location" className='location'>{`${city}, ${state}`}</h3>
                                 <p key="description" className='about'>{about}</p>
@@ -129,13 +129,13 @@ const AllGroups = () => {
                         <>
                         <div className={eventClassName()} key={`eventbox${id}`} onClick={() => navigate(`/events/${event.id}/details/${groupId}`)}>
                             <section key={id} className='group-section'>
-                                <div className='img'>{previewImage}</div>
+                                <img className='event-img' src={previewImage}/>
                                 <p>{startDate}</p>
                                 <h2 key={name} className='eventname'>{name}</h2>
                                 <h3>{cityState()}</h3>
                                 <EventDetails id={id}/>
                             </section>
-                        </div>
+                        </div> 
                         </>
                     )
                 })}
@@ -157,7 +157,7 @@ const AllGroups = () => {
                         <>
                         <div className={eventClassName()} key={`eventbox${id}`} onClick={() => navigate(`/events/${event.id}/details/${groupId}`)}>
                             <section key={id} className='group-section'>
-                                <div className='img'>{previewImage}</div>
+                                <img className='event-img' src={previewImage}/>
                                 <p>{startDate}</p>
                                 <h2 key={name} className='eventname'>{name}</h2>
                                 <h3>{cityState()}</h3>

@@ -85,3 +85,19 @@
 .group-box.hidden {
     display:none;
 }
+
+
+.group-img {
+    height: 100px;
+    width: 100px;
+}
+
+.event-img {
+    height: 100px;
+    width: 100px;
+}
+
+.event-box {
+    display: flex;
+    justify-content: center;
+}
