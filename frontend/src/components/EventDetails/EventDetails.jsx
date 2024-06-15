@@ -1,10 +1,12 @@
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getEventDetails } from '../../store/eventdetails'
 import { getGroupDetails } from '../../store/groupdetails'
 import { useEventHeader } from '../../context/EventHeader'
-
+import OpenModalButton from '../OpenModalButton/OpenModalButton'
+import { useIsDeletedObj } from '../../context/IsDeleted'
+import DeleteEventModal from '../DeleteEventModal/DeleteEventModal'
 
 
 
@@ -14,6 +16,8 @@ const EventDetails = () => {
     const {setIsGrayG, setIsGrayE} = useEventHeader()
     const dispatch = useDispatch()
     const {eventId, groupId} = useParams()
+    const {isDeleted, setIsDeleted} = useIsDeletedObj()
+    const navigate = useNavigate()
 
     //dispatch get all groups, compare groupId of event to groups, if match, return Organizer name.
 
@@ -21,7 +25,13 @@ const EventDetails = () => {
     useEffect(()=> {
         dispatch(getEventDetails(eventId))
         dispatch(getGroupDetails(groupId))
-    }, [eventId])
+        if (isDeleted) {
+            setIsDeleted(false)
+            setIsGrayE('')
+            setIsGrayG('gray')
+            navigate('/groups')
+        }
+    }, [eventId, isDeleted])
 
     const onClickE = () => {
         setIsGrayE('')
@@ -92,8 +102,13 @@ const EventDetails = () => {
                     </div>
                     <p>{price ? price : 'Free'}</p>
                     <p>{type}</p>
+                    <div className={hiddenClass()}>
                     <button className={hiddenClass()}>Update</button>
-                    <button className={hiddenClass()}>Delete</button>
+                    <OpenModalButton
+                        buttonText="Delete"
+                        modalComponent={<DeleteEventModal eventId={eventId}/>}
+                    />
+                    </div>
                 </div>
                 <h2>Details</h2>
                 <p>{description}</p>

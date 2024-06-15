@@ -106,11 +106,16 @@ const CreateEventForm = () => {
             errors.description = "Description must have 30 or more characters."
         }
         setErrors(errors)
-        dispatch(getGroupDetails(groupId))
-        dispatch(getGroups())
-        dispatch(getEventsFromGroup(groupId)).then(() => {
-            setIsLoaded(true)
-        })
+
+        if (!isLoaded) {
+            dispatch(getGroupDetails(groupId))
+            dispatch(getGroups())
+            dispatch(getEventsFromGroup(groupId)).then(() => {
+                if (!isLoaded) {
+                    setIsLoaded(true)
+                }
+            })
+        }
     }, [eName, startD, endD, img, desc])
 
     const group = useSelector((state) => {
