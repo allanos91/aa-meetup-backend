@@ -25,7 +25,7 @@ module.exports = {
       type: "Online",
       startDate: new Date('April 20, 2024 5:00:00'),
       endDate: new Date('April 20, 2024 17:00:00'),
-      description: 'desc'
+      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!'
     },
     {
       groupId: 1,
@@ -34,7 +34,7 @@ module.exports = {
       type: "Online",
       startDate: new Date('April 20, 2024 5:00:00'),
       endDate: new Date('April 20, 2024 17:00:00'),
-      description: 'desc'
+      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!'
     },
     {
       groupId: 2,
@@ -43,7 +43,7 @@ module.exports = {
       type: "Online",
       startDate: new Date('April 20, 2024 5:00:00'),
       endDate: new Date('April 20, 2024 17:00:00'),
-      description: 'desc'
+      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!'
     },
     {
       groupId: 2,
@@ -52,7 +52,7 @@ module.exports = {
       type: "Online",
       startDate: new Date('April 20, 2024 16:00:00'),
       endDate: new Date('April 20, 2024 17:00:00'),
-      description: 'desc'
+      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!'
     },
     {
       groupId: 2,
@@ -61,7 +61,7 @@ module.exports = {
       type: "Online",
       startDate: new Date('April 20, 2024 16:00:00'),
       endDate: new Date('April 20, 2024 17:00:00'),
-      description: 'desc'
+      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!'
     },
     {
       groupId: 3,
@@ -70,7 +70,7 @@ module.exports = {
       type: "Online",
       startDate: new Date('April 20, 2024 16:00:00'),
       endDate: new Date('April 20, 2024 17:00:00'),
-      description: 'desc'
+      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!'
     },
     {
       groupId: 1,
@@ -79,7 +79,7 @@ module.exports = {
       type: "Online",
       startDate: new Date('April 20, 2024 16:00:00'),
       endDate: new Date('April 20, 2024 17:00:00'),
-      description: 'desc'
+      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!'
     },
     {
       groupId: 2,
@@ -88,7 +88,7 @@ module.exports = {
       type: "Online",
       startDate: new Date('April 20, 2024 16:00:00'),
       endDate: new Date('April 20, 2024 17:00:00'),
-      description: 'desc'
+      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!'
     },
     {
       groupId: 1,
@@ -97,7 +97,7 @@ module.exports = {
       type: "In person",
       startDate: new Date('April 20, 2024 16:00:00'),
       endDate: new Date('April 20, 2024 17:00:00'),
-      description: 'desc'
+      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!'
     },
     {
       groupId: 2,
@@ -106,7 +106,7 @@ module.exports = {
       type: "Online",
       startDate: new Date('April 20, 2024 16:00:00'),
       endDate: new Date('April 20, 2024 17:00:00'),
-      description: 'desc'
+      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!'
     },
     {
       groupId: 3,
@@ -115,7 +115,7 @@ module.exports = {
       type: "Online",
       startDate: new Date('April 20, 2024 16:00:00'),
       endDate: new Date('April 20, 2024 17:00:00'),
-      description: 'desc'
+      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!'
     },
     {
       groupId: 2,
@@ -124,7 +124,7 @@ module.exports = {
       type: "Online",
       startDate: new Date('April 20, 2024 16:00:00'),
       endDate: new Date('April 20, 2024 17:00:00'),
-      description: 'desc'
+      description: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!'
     }
    ])
   },

@@ -64,7 +64,7 @@ const UpComingEvents = (id) => {
             <>
             {newEventArr.map(event => {
                 return (
-                    <div className="event" key={event.id} onClick={() => navigate(`/events/${event.id}/details`)}>
+                    <div className="event" key={event.id} onClick={() => navigate(`/events/${event.id}/details/${id.id}`)}>
                     <p key={event.id}>{event.previewImage ? event.previewImage: 'no image'}</p>
                     <p>{event.startDate}</p>
                     <h2>{event.name}</h2>

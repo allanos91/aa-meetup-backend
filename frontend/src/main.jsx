@@ -10,6 +10,7 @@ import { Modal, ModalProvider } from './context/Modal'
 import { NumEventsProvider } from './context/NumUpEvents';
 import { NumPastEventsProvider } from './context/PastEvents';
 import { EventHeaderProvider } from './context/EventHeader';
+import { IsDeletedProvider } from './context/IsDeleted';
 
 const store = configureStore();
 
@@ -34,19 +35,19 @@ if (process.env.NODE_ENV !== 'production') {
 
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-
     <ModalProvider>
-    <Provider store={store}>
-    <NumEventsProvider>
-      <NumPastEventsProvider>
-        <EventHeaderProvider>
-      <App />
-      <Modal />
-      </EventHeaderProvider>
-      </NumPastEventsProvider>
-    </NumEventsProvider>
-    </Provider>
+      <Provider store={store}>
+        <NumEventsProvider>
+          <NumPastEventsProvider>
+            <EventHeaderProvider>
+              <IsDeletedProvider>
+                <App />
+                <Modal />
+              </IsDeletedProvider>
+            </EventHeaderProvider>
+          </NumPastEventsProvider>
+        </NumEventsProvider>
+      </Provider>
     </ModalProvider>
-
   </React.StrictMode>
 );

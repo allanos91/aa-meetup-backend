@@ -51,6 +51,7 @@ function ProfileButton({ user }) {
 
   return (
     <>
+      <Link to='/groups/createGroup'>Start a new group</Link>
       <button onClick={toggleMenu}>
         <FaUserCircle />
       </button>

@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, useNavigate } from "react-router-dom"
 import { useEffect, useState} from "react"
 import { useSelector, useDispatch } from 'react-redux';
 import { getGroupDetails } from "../../store/groupdetails";
@@ -9,6 +9,9 @@ import { useNumEvents } from '../../context/NumUpEvents'
 import { useNumPastEvents } from "../../context/PastEvents";
 import PastEvents from "./PastEvents";
 import './GroupDetails.css'
+import OpenModalButton from "../OpenModalButton/OpenModalButton";
+import DeleteGroupModal from "../DeleteGroupModal/DeleteGroupModal";
+import { useIsDeletedObj } from '../../context/IsDeleted'
 
 const GroupDetails = () => {
     const [isHidden, setIsHidden] = useState('hidden')
@@ -16,13 +19,21 @@ const GroupDetails = () => {
     const {numUpEvents} = useNumEvents()
     const {numPastEvents} = useNumPastEvents()
     const {groupId} = useParams()
+    const {isDeleted, setIsDeleted} = useIsDeletedObj()
     const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+
 
     useEffect(() => {
         dispatch(getGroupDetails(groupId))
-        dispatch(getGroups)
+        dispatch(getGroups())
         dispatch(getEventsFromGroup(groupId))
-    }, [numUpEvents, numPastEvents, isHidden, setIsHidden, creatorOptions])
+        if (isDeleted) {
+            setIsDeleted(false)
+            navigate('/groups')
+        }
+    }, [numUpEvents, numPastEvents, isHidden, setIsHidden, creatorOptions, isDeleted])
 
     const onClick = () => {
         setIsHidden('')
@@ -97,10 +108,15 @@ const GroupDetails = () => {
             </div>
             <p>Organized by {Organizer.firstName} {Organizer.lastName}</p>
             <button className={isUserCreatedGroup(currUser, groupCreatorId)} onClick={onClick}>Join this group</button>
-            <button className={creatorOptions}>Create event</button>
-            <button className={creatorOptions}>Update</button>
-            <button className={creatorOptions}>Delete</button>
             <p className={isHidden}>Feature coming soon!</p>
+            <div className={creatorOptions}>
+            <button className={creatorOptions} onClick={()=>navigate(`/groups/${id}/events/new`)}>Create event</button>
+            <button className={creatorOptions} onClick={()=>navigate(`/groups/${id}/edit`)} >Update</button>
+            <OpenModalButton
+                        buttonText="Delete"
+                        modalComponent={<DeleteGroupModal groupId={groupId}/>}
+            />
+            </div>
             </section>
             <section className="middle">
                 <div>

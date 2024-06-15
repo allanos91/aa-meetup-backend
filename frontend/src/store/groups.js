@@ -1,4 +1,10 @@
+import { csrfFetch } from "./csrf"
+
 const LOAD_GROUPS = "groups/LOAD_GROUPS"
+const POST_GROUP = "group/POST_GROUP"
+const UPDATE_GROUP = "groups/UPDATE_GROUP"
+const DELETE_GROUP = "group/DELETE_GROUP"
+
 
 
 const load = (data, type, id) => ({
@@ -7,11 +13,22 @@ const load = (data, type, id) => ({
     id
 })
 
+const post = (data) => ({
+    data,
+    type: POST_GROUP
+})
 
+const update = (data) => ({
+    data,
+    type: UPDATE_GROUP
+})
 
+const remove = (groupId) => ({
+    type:DELETE_GROUP,
+    groupId
+})
 
 const initialState = {}
-
 
 export const getGroups = () => async dispatch => {
     const response = await fetch(`/api/groups`)
@@ -20,9 +37,51 @@ export const getGroups = () => async dispatch => {
     return data
 }
 
+export const postGroup = (data) => async dispatch => {
+    const response = await csrfFetch(`/api/groups`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    if (response.ok) {
+        const group = await response.json()
+        dispatch(post(group))
+        return group
+    }
+}
 
+export const updateGroupDetails = (data, id) => async dispatch => {
+    const response = await csrfFetch(`/api/groups/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
 
+    if (response.ok) {
+        const group = await response.json()
+        dispatch(update(data))
+        return group
+    }
+}
 
+export const removeGroup = (groupId) => async dispatch => {
+    const response = await csrfFetch(`/api/groups/${groupId}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+
+    if (response.ok) {
+        const res = response.json()
+        dispatch(remove(groupId))
+        return res
+    }
+}
 
 const groupsReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -34,6 +93,38 @@ const groupsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...newGroups
+            }
+        }
+        case POST_GROUP: {
+            if (!state.groups) {
+                state[action.data.id] = action.data
+                const newState = {
+                    ...state,
+                };
+                return newState
+            }
+            state[action.data.id] = action.data
+            return {
+                ...state
+            }
+        }
+        case UPDATE_GROUP: {
+            if (!state.groups) {
+                state[action.data.id] = action.data
+                const newState = {
+                    ...state
+                }
+                return newState
+            }
+            state[action.data.id] = action.data
+            return {
+                ...state
+            }
+        }
+        case DELETE_GROUP: {
+            delete state[action.groupId]
+            return {
+                ...state
             }
         }
         default:

@@ -24,7 +24,7 @@ const LandingPage = () => {
             return (
             <div className='column-three'>
                 <p>Icon here</p>
-                <p className='disabled-link'>Start a new group</p>
+                <p className='disabled-link' >Start a new group</p>
                 <p>caption</p>
             </div>
             )
@@ -32,7 +32,7 @@ const LandingPage = () => {
             return (
             <div className='column-three'>
                 <p>Icon here</p>
-                <Link>Start a new group</Link>
+                <Link to='/groups/createGroup'>Start a new group</Link>
                 <p>caption</p>
             </div>
             )
