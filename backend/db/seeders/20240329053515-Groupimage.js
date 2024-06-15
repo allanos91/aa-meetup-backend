@@ -20,7 +20,7 @@ module.exports = {
    await Groupimage.bulkCreate([
     {
       groupId: 1,
-      url: 'groupimage1',
+      url: 'https://wallpapercave.com/wp/wp12076221.jpg',
       previewImg: true
     },
     {

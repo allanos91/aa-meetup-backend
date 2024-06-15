@@ -20,7 +20,7 @@ module.exports = {
       {
         organizerId: 1,
         name: "Alex's group1",
-        about: "aslkdfjalksdjflaksdfjalksdjfalksdfjalksdfjlasdfjlaksdfj",
+        about: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!",
         type: "In person",
         private: false,
         city: "Costa Mesa",
@@ -29,7 +29,7 @@ module.exports = {
       {
         organizerId: 2,
         name: "Nathan's group2",
-        about: "asdflklsdkfjlskdfjalskdfjalksdjfalksdfjalksdjflkasjfdlaksdjflasdlfjl",
+        about: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!",
         type: "In person",
         private: false,
         city: "Costa Mesa",
@@ -38,7 +38,7 @@ module.exports = {
       {
         organizerId: 3,
         name: "Rene's group3",
-        about: "asdfasdfasgafskjfhsdkljfhalksdjflaksdjflaksjflaskdjflaksdfjlafl",
+        about: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!",
         type: "Online",
         private: false,
         city: "Costa Mesa",

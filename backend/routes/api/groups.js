@@ -853,6 +853,7 @@ router.post('/',requireAuth, async (req, res, next) => {
     newGroup.dataValues.updatedAt = fUpdatedDate
     res.statusCode = 201
     res.json(newGroup)
+    return newMember
 } catch (error) {
     error.status = 400
     error.message = "Bad request"
