@@ -1,16 +1,9 @@
 const LOAD_GROUP_EVENTS = "groups/LOAD_GROUP_EVENTS"
-const DELETE_EVENT = "groups/DELETE_GROUP_EVENTS"
 
 const load = (data, type, id) => ({
     type,
     data,
     id
-})
-
-const removeEvent = (groupId, eventId) => ({
-    type: DELETE_EVENT,
-    eventId,
-    groupId
 })
 
 const initialState = {}
@@ -35,16 +28,6 @@ const groupEventsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...groupEvents
-            }
-        }
-        case DELETE_EVENT: {
-            for (let id in state[action.groupId]) {
-                if (obj[id].id === action.eventId) {
-                    delete obj[id].id
-                }
-            }
-            return {
-                ...state
             }
         }
         default:
