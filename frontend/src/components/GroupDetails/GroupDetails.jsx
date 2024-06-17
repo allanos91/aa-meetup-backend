@@ -36,7 +36,7 @@ const GroupDetails = () => {
     }, [numUpEvents, numPastEvents, isHidden, setIsHidden, creatorOptions, isDeleted])
 
     const onClick = () => {
-        setIsHidden('')
+        alert('Feature coming soon!')
     }
 
     const group = useSelector((state) => {
@@ -108,7 +108,6 @@ const GroupDetails = () => {
             </div>
             <p>Organized by {Organizer.firstName} {Organizer.lastName}</p>
             <button className={isUserCreatedGroup(currUser, groupCreatorId)} onClick={onClick}>Join this group</button>
-            <p className={isHidden}>Feature coming soon!</p>
             <div className={creatorOptions}>
             <button className={creatorOptions} onClick={()=>navigate(`/groups/${id}/events/new`)}>Create event</button>
             <button className={creatorOptions} onClick={()=>navigate(`/groups/${id}/edit`)} >Update</button>

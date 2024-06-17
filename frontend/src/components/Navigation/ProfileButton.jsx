@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { FaUserCircle } from 'react-icons/fa';
 import * as sessionActions from '../../store/session';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useEventHeader } from '../../context/EventHeader';
 
 
@@ -12,6 +12,7 @@ function ProfileButton({ user }) {
   const [showMenu, setShowMenu] = useState(false)
   const ulRef = useRef();
   const {setIsGrayE, setIsGrayG} = useEventHeader()
+  const navigate = useNavigate()
 
     const onClickG = () => {
         setIsGrayE('gray')
@@ -42,6 +43,7 @@ function ProfileButton({ user }) {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
+    navigate('/')
   };
 
   const toggleMenu = (e) => {
@@ -50,11 +52,13 @@ function ProfileButton({ user }) {
   }
 
   return (
-    <>
-      <Link to='/groups/createGroup'>Start a new group</Link>
-      <button onClick={toggleMenu}>
-        <FaUserCircle />
+    <div className='signup-format'>
+      <div className='link-button-container'>
+      <Link to='/groups/createGroup' className='top-link'>Start a new group</Link>
+      <button onClick={toggleMenu} className='circle-container'>
+        <FaUserCircle className='circle-profile-button'/>
       </button>
+      </div>
       <ul className={ulClassName} ref={ulRef}>
         <li>{`Hello, ${user.firstName}`}</li>
         <li>{user.username}</li>
@@ -70,8 +74,7 @@ function ProfileButton({ user }) {
         <Link to={'/groups'} onClick={onClickE}>View events</Link>
         </li>
       </ul>
-
-    </>
+    </div>
   );
 }
 
