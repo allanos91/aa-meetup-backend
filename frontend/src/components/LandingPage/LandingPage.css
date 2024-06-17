@@ -5,16 +5,13 @@
 }
 
 #section-one-desc {
-    margin-top: 10em;
-    width: 500px;
-    height: 300px;
     font-size: larger;
 }
 
 #section-one-info {
-    margin-top: 10em;
     width: 500px;
     height: 300px;
+    margin-right: 110px;
 }
 
 .section-two {
@@ -22,6 +19,7 @@
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    margin-top: 100px;
 }
 
 .section-two-desc {
@@ -36,7 +34,7 @@
 .section-three {
     display: flex;
     justify-content: space-around;
-    margin-top: 150px;
+    margin-top: 90px;
 }
 
 .section-four {
@@ -45,6 +43,62 @@
     margin-top: 50px;
 }
 
+
+.left-box-title {
+    width: 500px;
+    height: 300px;
+    text-align: left;
+    margin-left:110px;
+}
+
+h1 {
+    font-size: 40px;
+}
+
+.icon {
+    width: 100px;
+    height: 100px;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    width: 150px;
+}
+
+.link {
+    color: darkcyan;
+    font-size: 20px;
+    cursor: pointer;
+}
+
 .disabled-link {
-    color:grey
+    color:grey;
+    font-size: 20px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+span {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.join {
+    color: white;
+    background-color: red;
+    width: 200px;
+    height: 60px;
+    border-radius: 10px;
+    font-size: 25px;
+}
+
+
+.column-three.column{
+    width: 175px;
+    margin-right: 200px;
+
+}
+
+.column-one.column {
+    margin-left: 200px;
 }

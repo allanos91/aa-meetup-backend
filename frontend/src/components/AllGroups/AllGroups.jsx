@@ -9,20 +9,11 @@ import { useEventHeader } from '../../context/EventHeader';
 import { getEvents } from '../../store/events';
 import EventDetails from './EventDetails'
 
-
-
-
-
-
 const AllGroups = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate();
     const { isGrayG, isGrayE} = useEventHeader()
     const [isLoaded, setIsLoaded] = useState(false)
-
-
-
-
 
     useEffect(() => {
         dispatch(getGroups())
@@ -97,12 +88,12 @@ const AllGroups = () => {
                     return (
                         <>
                         <div className={groupClassName()} key={`groupbox${id}`}>
-                            <section key={id} className='group-section' onClick={() => navigate(`/groups/${id}/details`)}>
+                            <section key={id} className='group-section group-content' onClick={() => navigate(`/groups/${id}/details`)}>
                                 <img className='group-img' src={previewImage}/>
-                                <h2 key={name} className='groupname'>{name}</h2>
-                                <h3 key="location" className='location'>{`${city}, ${state}`}</h3>
-                                <p key="description" className='about'>{about}</p>
-                                <div className='numevents'>
+                                <h2 key={name} className='groupname group-content'>{name}</h2>
+                                <h3 key="location" className='location group-content'>{`${city}, ${state}`}</h3>
+                                <p key="description" className='about group-content'>{about}</p>
+                                <div className='numevents group-content'>
                                     <GroupEvents id={id} private={group.private}/>
                                     <p className='center-dot'>.</p>
                                     <p>{group.private ? 'Private' : 'Public'}</p>
@@ -116,51 +107,52 @@ const AllGroups = () => {
                     const {id, previewImage, name, Venue, Group, startDate, groupId} = event
                     const cityState = () => {
                         if (Venue) {
-                            return (
-                                <p>{`${Venue.city} ${Venue.state}`}</p>
-                            )
+                            return `${Venue.city} ${Venue.state}`
+
                         } else {
-                            return (
-                                <p>{`${Group.city} ${Group.state}`}</p>
-                            )
+                            return `${Group.city} ${Group.state}`
                         }
                     }
                     return (
                         <>
                         <div className={eventClassName()} key={`eventbox${id}`} onClick={() => navigate(`/events/${event.id}/details/${groupId}`)}>
-                            <section key={id} className='group-section'>
+                            <section key={id} className='event-section'>
                                 <img className='event-img' src={previewImage}/>
-                                <p>{startDate}</p>
-                                <h2 key={name} className='eventname'>{name}</h2>
-                                <h3>{cityState()}</h3>
+                                <div className='start-date event-content'>
+                                <p className='event-date'>{startDate.split(' ')[0]}</p>
+                                <p className='event-time'>{startDate.split(' ')[1]}</p>
+                                </div>
+                                <h2 key={name} className='eventname event-content'>{name}</h2>
+                                <h3 className='event-content event-location'>{cityState()}</h3>
                                 <EventDetails id={id}/>
                             </section>
-                        </div> 
+                        </div>
                         </>
                     )
                 })}
                 {prevEvents.map(event => {
                     //event previewImage, start/end date, price, type, details, venue city/state ? group city/statesadf
                     const {id, previewImage, name, Venue, Group, startDate, groupId} = event
+
                     const cityState = () => {
                         if (Venue) {
-                            return (
-                                <p>{`${Venue.city} ${Venue.state}`}</p>
-                            )
+                            return `${Venue.city} ${Venue.state}`
                         } else {
-                            return (
-                                <p>{`${Group.city} ${Group.state}`}</p>
-                            )
+                            return `${Group.city} ${Group.state}`
+
                         }
                     }
                     return (
                         <>
                         <div className={eventClassName()} key={`eventbox${id}`} onClick={() => navigate(`/events/${event.id}/details/${groupId}`)}>
-                            <section key={id} className='group-section'>
+                            <section key={id} className='event-section'>
                                 <img className='event-img' src={previewImage}/>
-                                <p>{startDate}</p>
-                                <h2 key={name} className='eventname'>{name}</h2>
-                                <h3>{cityState()}</h3>
+                                <div className='start-date event-content'>
+                                <p className='event-date'>{startDate.split(' ')[0]}</p>
+                                <p className='event-time'>{startDate.split(' ')[1]}</p>
+                                </div>
+                                <h2 key={name} className='eventname event-content'>{name}</h2>
+                                <h3 className='event-content event-location'>{cityState()}</h3>
                                 <EventDetails id={id}/>
                             </section>
                         </div>

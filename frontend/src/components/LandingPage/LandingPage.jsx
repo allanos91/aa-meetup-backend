@@ -22,18 +22,18 @@ const LandingPage = () => {
     const ColumnThree = () => {
         if (!isLoggedIn) {
             return (
-            <div className='column-three'>
-                <p>Icon here</p>
-                <p className='disabled-link' >Start a new group</p>
-                <p>caption</p>
+            <div className='column-three column'>
+                <img className="icon" src='https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/1606224/team-huddle-clipart-md.png'/>
+                <p  className='disabled-link' >Start a new group</p>
+                <p>Can&apos;t find what you are looking for? Organize your own group here</p>
             </div>
             )
         } else {
             return (
-            <div className='column-three'>
-                <p>Icon here</p>
-                <Link to='/groups/createGroup'>Start a new group</Link>
-                <p>caption</p>
+            <div className='column-three column'>
+                <img className="icon" src='https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/1606224/team-huddle-clipart-md.png'/>
+                <Link to='/groups/createGroup' className='link'>Start a new group</Link>
+                <p>Can&apos;t find what you are looking for? Organize your own group here</p>
             </div>
             )
         }
@@ -43,8 +43,11 @@ const LandingPage = () => {
     return (
         <span>
         <section className='section-one'>
+            <div className='left-box-title'>
+            <h1>THE SPORTS PLATFORM- WHERE PLAYERS AND ATHLETES MEET</h1>
             <p id='section-one-desc'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Iste aperiam eveniet dolore nobis molestias cupiditate, culpa voluptate a, magni aliquid quidem. Beatae autem nesciunt fuga facilis neque temporibus sint expedita.</p>
-            <p id='section-one-info'> THIS IS WHERE INFOGRAPH GOES</p>
+            </div>
+            <img id='section-one-info' src='https://png.pngtree.com/template/20221027/ourlarge/pngtree-sports-infographic-template-infograph-sport-image_1845839.jpg'/>
         </section>
         <section className='section-two'>
             <h2 className='section-two-desc' id="section-two-title">How Cleet Up! works</h2>
@@ -53,20 +56,20 @@ const LandingPage = () => {
             <h3 className='section-two-desc'>3. CLEET UP!</h3>
         </section>
         <section className='section-three'>
-            <div className='column-one'>
-                <p>Icon here</p>
-                <Link to={'/groups'} onClick={onClick}>See all groups</Link>
-                <p>caption</p>
+            <div className='column-one column'>
+                <img className="icon" src='https://www.clipartmax.com/png/full/467-4676556_stock-photography-join-hands-working-together-clip-art.png'/>
+                <Link to={'/groups'} onClick={onClick} className='link'>See all groups</Link>
+                <p>Find a group that is the best fit for you.</p>
             </div>
-            <div className='column-two'>
-                <p>Icon here</p>
-                <Link to={'/groups'} onClick={onClickE}>Find an event</Link>
-                <p>caption</p>
+            <div className='column-two column'>
+                <img className="icon" src='https://creazilla-store.fra1.digitaloceanspaces.com/icons/3204714/ticket-icon-md.png'/>
+                <Link to={'/groups'} onClick={onClickE} className='link'>Find an event</Link>
+                <p>Search upcoming events and jump right in the game</p>
             </div>
             <ColumnThree/>
         </section>
         <section className='section-four'>
-            <button>Join Cleet Up!</button>
+            <button className='join'>Join Cleet Up!</button>
         </section>
         </span>
     )

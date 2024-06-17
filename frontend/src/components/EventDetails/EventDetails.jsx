@@ -50,7 +50,9 @@ const EventDetails = () => {
     })
 
     const userId = useSelector((state)=>{
-        return state.session.user.id
+        if (state.session.user) {
+            return state.session.user.id
+        }
     })
 
     if (details && groupDetails) {

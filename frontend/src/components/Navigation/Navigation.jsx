@@ -27,7 +27,7 @@ function Navigation({ isLoaded }) {
             buttonText="Sign Up"
             modalComponent={<SignupFormModal/>}
         />
-    
+
     </div>
   );
 
@@ -35,6 +35,7 @@ function Navigation({ isLoaded }) {
 
     <ul className='user-login-signup'>
       <div id="home">
+        <h1 id='page-name'>Cleet Up!</h1>
         <NavLink to="/">
             <img
             className='logo'
