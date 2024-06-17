@@ -7,6 +7,7 @@ import { useEventHeader } from '../../context/EventHeader'
 import OpenModalButton from '../OpenModalButton/OpenModalButton'
 import { useIsDeletedObj } from '../../context/IsDeleted'
 import DeleteEventModal from '../DeleteEventModal/DeleteEventModal'
+import "./EventDetails.css"
 
 
 
@@ -85,33 +86,43 @@ const EventDetails = () => {
             <>
             <section className='top-event-details'>
                 <Link onClick={onClickE} to={'/groups'}>{'< Events'}</Link>
-                <h2>{name}</h2>
-                <p>Hosted by: {hostName}</p>
+                <h2 className='top-event-name'>{name}</h2>
+                <p className='host-name'>Hosted by: {hostName}</p>
             </section>
             <section className='bottom-event-details'>
-                <p>{eventImg}</p>
-                <div className="group-name-img">
-                    <p>{groupImg}</p>
-                    <h3>{groupDetails.name}</h3>
-                    <p>{type}</p>
-                </div>
-                <div>
-                    <div className ="start-end-date">
-                        <p>Start {startDate}</p>
-                        <p>End {endDate}</p>
+                <div className='mid-section'>
+                    <img src={eventImg} className='event-detail-image'/>
+                    <div className="group-name-img">
+                        <img className='event-detail-group-image' src={groupImg}/>
+                        <h3>{groupDetails.name}</h3>
+                        <p className='event-group-detail-type'>{type}</p>
                     </div>
-                    <p>{price ? price : 'Free'}</p>
-                    <p>{type}</p>
-                    <div className={hiddenClass()}>
-                    <button className={hiddenClass()}>Update</button>
-                    <OpenModalButton
+                    <div className='event-detail-info'>
+                        <div className ="start-end-date">
+                            <p className='start-text'>START</p>
+                            <p className='start-date-num'>{startDate.split(' ')[0]}</p>
+                            <p className='center-dot-event-detail-start'>.</p>
+                            <p className='start-time-num'>{startDate.split(' ')[1]}</p>
+                            <p>END</p>
+                            <p className='end-date-num'>{endDate.split(' ')[0]}</p>
+                            <p className='center-dot-event-detail-end'>.</p>
+                            <p className='end-time-num'>{endDate.split(' ')[1]}</p>
+                        </div>
+                        <p>{price ? price : 'Free'}</p>
+                        <div className='event-detail-price-button'>
+                        <p className='event-detail-type'>{type}</p>
+                        <div className={hiddenClass()} id='creator-buttons-event-detail'>
+                        <button className={hiddenClass()}>Update</button>
+                        <OpenModalButton
                         buttonText="Delete"
                         modalComponent={<DeleteEventModal eventId={eventId}/>}
-                    />
+                        />
+                        </div>
+                        </div>
                     </div>
                 </div>
-                <h2>Details</h2>
-                <p>{description}</p>
+                <h2 className='event-bottom-details'>Details</h2>
+                <p className='event-bottom-details'>{description}</p>
             </section>
             </>
         )
