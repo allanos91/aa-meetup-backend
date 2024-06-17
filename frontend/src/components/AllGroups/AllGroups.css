@@ -25,15 +25,11 @@
 }
 
 .numevents {
-    display: grid;
-    grid-row: 4;
-    grid-column: 2;
-    grid-template-columns: 60px 10px 40px 1fr;
-    grid-template-rows: auto;
-    align-items: center;
-    justify-items: center;
     height: 30px;
     margin-bottom: 10px;
+    display:flex;
+    justify-content: space-between;
+    width: 130px;
 }
 
 .group-section {
@@ -125,13 +121,12 @@
     margin-left: 30px;
 }
 
-.event-description {
-    grid-row: 5;
-    grid-column: 1 / span 2;
-    margin-top: 30px;
-    margin-bottom: 0px;
-    text-align: left;
-    margin-left: 0px;
+.event-img {
+    height: 150px;
+    width: 200px;
+    object-fit: cover;
+    grid-row: 1 / span 4;
+    grid-column: 1;
 }
 
 .start-date {
@@ -139,7 +134,9 @@
     margin-bottom: 0px;
     height: fit-content;
 }
-
+.event-time {
+    margin-left: 20px;
+}
 .event-date {
     margin-top: 0px;
     margin-bottom:0px;
@@ -149,15 +146,9 @@
     margin-top: 0px;
     margin-bottom:0px;
 }
-
-.event-img {
-    height: 150px;
-    width: 200px;
-    object-fit: cover;
-    grid-row: 1 / span 4;
-    grid-column: 1;
+.event-content {
+    margin-left:30px;
 }
-
 .eventname {
     grid-row: 2;
     grid-column: 2;
@@ -165,14 +156,6 @@
     margin-bottom: 0px;
     margin-top: 0px;
     font-family: Arial, Helvetica, sans-serif;
-}
-
-.event-time {
-    margin-left: 20px;
-}
-
-.event-content {
-    margin-left:30px;
 }
 
 .event-location {
@@ -183,4 +166,13 @@
     font-size: small;
     font-family:Arial, Helvetica, sans-serif;
     color: rgb(180, 180, 180)
+}
+
+.event-description {
+    grid-row: 5;
+    grid-column: 1 / span 2;
+    margin-top: 30px;
+    margin-bottom: 0px;
+    text-align: left;
+    margin-left: 0px;
 }

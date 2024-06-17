@@ -19,11 +19,13 @@ function Navigation({ isLoaded }) {
   ) : (
     <div className='user-buttons'>
         <OpenModalButton
+            className="login-signout"
             buttonText="Log In"
             modalComponent={<LoginFormModal/>}
             />
 
         <OpenModalButton
+            className="login-signout"
             buttonText="Sign Up"
             modalComponent={<SignupFormModal/>}
         />
