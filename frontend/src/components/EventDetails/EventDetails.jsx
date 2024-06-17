@@ -8,6 +8,9 @@ import OpenModalButton from '../OpenModalButton/OpenModalButton'
 import { useIsDeletedObj } from '../../context/IsDeleted'
 import DeleteEventModal from '../DeleteEventModal/DeleteEventModal'
 import "./EventDetails.css"
+import {CiAlarmOn} from 'react-icons/ci'
+import {RiMoneyDollarCircleLine} from 'react-icons/ri'
+import { FaMapPin } from "react-icons/fa";
 
 
 
@@ -98,19 +101,27 @@ const EventDetails = () => {
                         <p className='event-group-detail-type'>{type}</p>
                     </div>
                     <div className='event-detail-info'>
+
                         <div className ="start-end-date">
-                            <p className='start-text'>START</p>
-                            <p className='start-date-num'>{startDate.split(' ')[0]}</p>
+                            <CiAlarmOn className='alarm-icon'/>
+                            <p className='start-text date-content'>START</p>
+                            <p className='start-date-num date-content'>{startDate.split(' ')[0]}</p>
                             <p className='center-dot-event-detail-start'>.</p>
-                            <p className='start-time-num'>{startDate.split(' ')[1]}</p>
-                            <p>END</p>
-                            <p className='end-date-num'>{endDate.split(' ')[0]}</p>
+                            <p className='start-time-num date-content'>{startDate.split(' ')[1]}</p>
+                            <p className='end-text date-content'>END</p>
+                            <p className='end-date-num date-content'>{endDate.split(' ')[0]}</p>
                             <p className='center-dot-event-detail-end'>.</p>
-                            <p className='end-time-num'>{endDate.split(' ')[1]}</p>
+                            <p className='end-time-num date-content'>{endDate.split(' ')[1]}</p>
                         </div>
-                        <p>{price ? price : 'Free'}</p>
+                        <div className='price-flex'>
+                        <RiMoneyDollarCircleLine className='money-icon'/>
+                        <p className='price-num'>{price ? price : 'FREE'}</p>
+                        </div>
                         <div className='event-detail-price-button'>
+                            <div className='event-detail-type-flex'>
+                        <FaMapPin className="map-pin-icon"/>
                         <p className='event-detail-type'>{type}</p>
+                            </div>
                         <div className={hiddenClass()} id='creator-buttons-event-detail'>
                         <button className={hiddenClass()}>Update</button>
                         <OpenModalButton
