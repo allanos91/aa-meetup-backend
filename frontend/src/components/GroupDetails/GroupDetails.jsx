@@ -12,6 +12,7 @@ import './GroupDetails.css'
 import OpenModalButton from "../OpenModalButton/OpenModalButton";
 import DeleteGroupModal from "../DeleteGroupModal/DeleteGroupModal";
 import { useIsDeletedObj } from '../../context/IsDeleted'
+import { useEventHeader } from "../../context/EventHeader";
 
 const GroupDetails = () => {
     const [isHidden, setIsHidden] = useState('hidden')
@@ -20,6 +21,7 @@ const GroupDetails = () => {
     const {numPastEvents} = useNumPastEvents()
     const {groupId} = useParams()
     const {isDeleted, setIsDeleted} = useIsDeletedObj()
+    const {setIsGrayE, setIsGrayG} = useEventHeader()
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
@@ -37,6 +39,11 @@ const GroupDetails = () => {
 
     const onClick = () => {
         alert('Feature coming soon!')
+    }
+
+    const gOnClick = () => {
+        setIsGrayE('gray')
+        setIsGrayG('')
     }
 
     const group = useSelector((state) => {
@@ -97,7 +104,7 @@ const GroupDetails = () => {
         return (
             <>
             <section className="top">
-            <Link to={'/groups'} className="group-link">{'< Groups'}</Link>
+            <Link to={'/groups'} className="group-link" onClick={gOnClick}>{'< Groups'}</Link>
             <div className="top-content">
             <img className="group-image" src={previewImage}/>
             <div className="content-grid">
