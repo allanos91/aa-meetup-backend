@@ -19,29 +19,47 @@ module.exports = {
     await Group.bulkCreate([
       {
         organizerId: 1,
-        name: "Alex's group1",
-        about: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!",
+        name: "Amon-Ra's Wide Reciever Program",
+        about: "Wide reciever training grouped coached by none other than detroits best wide reciever. Join if you want to catch a ball. asdfasdfasdfasdfasdfasdfasdfasdfasdf",
         type: "In person",
         private: false,
-        city: "Costa Mesa",
-        state: "CA"
+        city: "Detroit",
+        state: "MI"
       },
       {
         organizerId: 2,
-        name: "Nathan's group2",
-        about: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!",
+        name: "Pat and his Mahomies",
+        about: "A group for winners. If you aren't a winner you are not welcome. You must be a winner, no exceptions and no excuses. asdf asdfasdfasdfasdfasdfasdf",
         type: "In person",
         private: false,
-        city: "Costa Mesa",
-        state: "CA"
+        city: "Kansas City",
+        state: "MO"
       },
       {
         organizerId: 3,
-        name: "Rene's group3",
-        about: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius exercitationem eaque ea, ducimus molestiae similique tempore cum saepe ut perspiciatis, sed amet eos quidem quia molestias voluptates necessitatibus esse ipsa!",
+        name: "McCaffery's running back support network",
+        about: "A place where all RBs can complain about how underpaid we are. Mom is bringing cake and cookies. asdfasdfasdfasdfasdfasdfasf",
         type: "Online",
         private: false,
-        city: "Costa Mesa",
+        city: "San Francisco",
+        state: "CA"
+      },
+      {
+        organizerId: 4,
+        name: "You know what this is about.",
+        about: "A group for playing REAL football. Auto bans for anyone that calls it soccer. alskdfj alksdfj aklsdjf laksdfj alksdf jlaks",
+        private: false,
+        type: "In person",
+        city: "Miami",
+        state: "FL"
+      },
+      {
+        organizerId: 5,
+        name: "Dream team",
+        about: "A group where all your dreams will come true. Even your nightmares? Especially your nightmares. Not for the faint of heart.",
+        private: false,
+        type: "In person",
+        city: "Los Angeles",
         state: "CA"
       }
     ], {validate: true})
@@ -57,7 +75,7 @@ module.exports = {
     options.tableName = 'Groups';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      name: { [Op.in]: ["Rene's group", "Nathan's group", "Alex's group"] }
+      name: { [Op.in]: [] }
     }, {truncate: true, cascade: true ,restartIdentity: true,});
   }
 };

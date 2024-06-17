@@ -1,4 +1,5 @@
 import { useEventHeader } from '../../context/EventHeader'
+import "./EventGroupHeader.css"
 
 const EventGroupHeader = () => {
     const {isGrayG, setIsGrayG} = useEventHeader()
@@ -31,10 +32,14 @@ const EventGroupHeader = () => {
     }
 
     return (
-        <div className='event-group-header'>
+        <div className='group-header-box'>
+        <div className='event-group-header test'>
+            <div className='event-group-buttons'>
             <p className={eventClassName()} onClick={onClickE}>Events</p>
             <p className={groupClassName()} onClick={onClickG}>Groups</p>
-            <p>{textGE()} in Cleet Up!</p>
+            </div>
+            <p className='second-row'>{textGE()} in Cleet Up!</p>
+        </div>
         </div>
     )
 }

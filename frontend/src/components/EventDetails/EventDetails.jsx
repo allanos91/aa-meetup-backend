@@ -7,6 +7,10 @@ import { useEventHeader } from '../../context/EventHeader'
 import OpenModalButton from '../OpenModalButton/OpenModalButton'
 import { useIsDeletedObj } from '../../context/IsDeleted'
 import DeleteEventModal from '../DeleteEventModal/DeleteEventModal'
+import "./EventDetails.css"
+import {CiAlarmOn} from 'react-icons/ci'
+import {RiMoneyDollarCircleLine} from 'react-icons/ri'
+import { FaMapPin } from "react-icons/fa";
 
 
 
@@ -50,7 +54,9 @@ const EventDetails = () => {
     })
 
     const userId = useSelector((state)=>{
-        return state.session.user.id
+        if (state.session.user) {
+            return state.session.user.id
+        }
     })
 
     if (details && groupDetails) {
@@ -83,33 +89,51 @@ const EventDetails = () => {
             <>
             <section className='top-event-details'>
                 <Link onClick={onClickE} to={'/groups'}>{'< Events'}</Link>
-                <h2>{name}</h2>
-                <p>Hosted by: {hostName}</p>
+                <h2 className='top-event-name'>{name}</h2>
+                <p className='host-name'>Hosted by: {hostName}</p>
             </section>
             <section className='bottom-event-details'>
-                <p>{eventImg}</p>
-                <div className="group-name-img">
-                    <p>{groupImg}</p>
-                    <h3>{groupDetails.name}</h3>
-                    <p>{type}</p>
-                </div>
-                <div>
-                    <div className ="start-end-date">
-                        <p>Start {startDate}</p>
-                        <p>End {endDate}</p>
+                <div className='mid-section'>
+                    <img src={eventImg} className='event-detail-image'/>
+                    <div className="group-name-img">
+                        <img className='event-detail-group-image' src={groupImg}/>
+                        <h3>{groupDetails.name}</h3>
+                        <p className='event-group-detail-type'>{type}</p>
                     </div>
-                    <p>{price ? price : 'Free'}</p>
-                    <p>{type}</p>
-                    <div className={hiddenClass()}>
-                    <button className={hiddenClass()}>Update</button>
-                    <OpenModalButton
+                    <div className='event-detail-info'>
+
+                        <div className ="start-end-date">
+                            <CiAlarmOn className='alarm-icon'/>
+                            <p className='start-text date-content'>START</p>
+                            <p className='start-date-num date-content'>{startDate.split(' ')[0]}</p>
+                            <p className='center-dot-event-detail-start'>.</p>
+                            <p className='start-time-num date-content'>{startDate.split(' ')[1]}</p>
+                            <p className='end-text date-content'>END</p>
+                            <p className='end-date-num date-content'>{endDate.split(' ')[0]}</p>
+                            <p className='center-dot-event-detail-end'>.</p>
+                            <p className='end-time-num date-content'>{endDate.split(' ')[1]}</p>
+                        </div>
+                        <div className='price-flex'>
+                        <RiMoneyDollarCircleLine className='money-icon'/>
+                        <p className='price-num'>{price ? price : 'FREE'}</p>
+                        </div>
+                        <div className='event-detail-price-button'>
+                            <div className='event-detail-type-flex'>
+                        <FaMapPin className="map-pin-icon"/>
+                        <p className='event-detail-type'>{type}</p>
+                            </div>
+                        <div className={hiddenClass()} id='creator-buttons-event-detail'>
+                        <button className={hiddenClass()}>Update</button>
+                        <OpenModalButton
                         buttonText="Delete"
                         modalComponent={<DeleteEventModal eventId={eventId}/>}
-                    />
+                        />
+                        </div>
+                        </div>
                     </div>
                 </div>
-                <h2>Details</h2>
-                <p>{description}</p>
+                <h2 className='event-bottom-details'>Details</h2>
+                <p className='event-bottom-details'>{description}</p>
             </section>
             </>
         )

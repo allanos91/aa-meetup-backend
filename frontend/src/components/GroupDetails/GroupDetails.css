@@ -2,6 +2,210 @@
     display:none
 }
 
-.event {
+.event-detail {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto auto auto 1fr;
+    width: 600px;
+    height: fit-content;
+    border-style: solid;
+    border-left-color: white;
+    border-right-color: white;
+    border-bottom-color: white;
+    border-top-color: lightgray;
     cursor: pointer;
+    align-items: start;
+    background-color: white;
+    border-style: solid;
+    border-color: white;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    padding-left: 50px;
+    padding-top: 25px;
+
+}
+
+.group-image {
+    width: 500px;
+    height: 250px;
+    object-fit: cover;
+    margin-left: 200px;
+}
+
+.top {
+    display: flex;
+    flex-direction: column;
+}
+
+.top-content {
+    display: flex;
+}
+
+.group-link {
+    font-family: Arial, Helvetica, sans-serif;
+    margin-left: 200px;
+}
+
+section {
+    font-family: Arial, Helvetica, sans-serif
+}
+
+.center-dot {
+    margin-right: 0px;
+}
+
+.middle {
+    background-color: rgb(242, 242, 242);
+    padding-left: 200px;
+}
+
+.bottom {
+    background-color: rgb(242, 242, 242);
+}
+
+.about-detail-page {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.up-coming-title {
+    margin-top: 0px;
+    padding-top: 30px;
+    padding-left: 200px;
+}
+
+.t-content {
+    margin-left: 20px;
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-rows: auto auto auto auto 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr;
+}
+
+.location-detail {
+    grid-row: 3;
+    color: rgb(193, 193, 193)
+}
+
+.numevents-detail{
+    display:flex;
+    justify-content: space-between;
+    width: 125px;
+    grid-row: 4;
+    grid-column: 1;
+    color: rgb(193, 193, 193)
+}
+
+.join-button {
+    grid-row: 8;
+    background-color:red ;
+    color:white;
+    font-size: larger;
+}
+
+.organizer-info {
+    grid-row: 5;
+    color: rgb(193, 193, 193)
+}
+
+.middle-organizer {
+    padding-top: 30px;
+    margin-top: 30px;
+}
+
+.margin-org {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+
+.about-detail-title {
+    margin-bottom: 0px;
+}
+
+.organizer-middle {
+    margin-top: 0px;
+}
+
+.creator-buttons {
+    grid-row: 8;
+}
+#create-event-button {
+    background-color:red ;
+    color:white;
+    font-size: larger;
+}
+
+#update-event-button {
+    margin-left: 10px;
+    margin-right: 10px;
+    background-color:red ;
+    color:white;
+    font-size: larger;
+}
+
+.delete-button {
+    background-color:red ;
+    color:white;
+    font-size: larger;
+}
+
+.event-img-detail {
+    height: 150px;
+    width: 200px;
+    object-fit: cover;
+    grid-row: 1 / span 4;
+    grid-column: 1;
+}
+
+.start-date-detail {
+    display: flex;
+    margin-bottom: 0px;
+    height: fit-content;
+}
+.event-time-detail {
+    margin-left: 20px;
+}
+.event-date-detail {
+    margin-top: 0px;
+    margin-bottom:0px;
+}
+
+.event-time-detail {
+    margin-top: 0px;
+    margin-bottom:0px;
+}
+.eventname-detail {
+    grid-row: 2;
+    grid-column: 2;
+    height: auto;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.event-location-detail {
+    grid-row: 3;
+    grid-column: 2;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    font-size: small;
+    font-family:Arial, Helvetica, sans-serif;
+    color: rgb(180, 180, 180)
+}
+
+.event-description-detail {
+    grid-row: 5;
+    grid-column: 1 / span 2;
+    margin-top: 30px;
+    margin-bottom: 0px;
+    text-align: left;
+    margin-left: 0px;
+}
+
+.event-box-detail {
+    padding-left: 200px;
 }

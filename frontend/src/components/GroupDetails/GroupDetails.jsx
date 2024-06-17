@@ -36,7 +36,7 @@ const GroupDetails = () => {
     }, [numUpEvents, numPastEvents, isHidden, setIsHidden, creatorOptions, isDeleted])
 
     const onClick = () => {
-        setIsHidden('')
+        alert('Feature coming soon!')
     }
 
     const group = useSelector((state) => {
@@ -97,44 +97,47 @@ const GroupDetails = () => {
         return (
             <>
             <section className="top">
-            <Link to={'/groups'}>{'< Groups'}</Link>
-            <p>{previewImage}</p>
-            <h2>{name}</h2>
-            <p>{city}, {state}</p>
-            <div className='numevents'>
+            <Link to={'/groups'} className="group-link">{'< Groups'}</Link>
+            <div className="top-content">
+            <img className="group-image" src={previewImage}/>
+            <div className="content-grid">
+            <h2 className="t-content">{name}</h2>
+            <p className="t-content location-detail">{city}, {state}</p>
+            <div className='numevents-detail t-content'>
                 <p>{numEvents} events</p>
                 <p className='center-dot'>.</p>
                 <p>{group.private ? 'Private' : 'Public'}</p>
             </div>
-            <p>Organized by {Organizer.firstName} {Organizer.lastName}</p>
-            <button className={isUserCreatedGroup(currUser, groupCreatorId)} onClick={onClick}>Join this group</button>
-            <p className={isHidden}>Feature coming soon!</p>
-            <div className={creatorOptions}>
-            <button className={creatorOptions} onClick={()=>navigate(`/groups/${id}/events/new`)}>Create event</button>
-            <button className={creatorOptions} onClick={()=>navigate(`/groups/${id}/edit`)} >Update</button>
-            <OpenModalButton
+            <p className="t-content organizer-info">Organized by {Organizer.firstName} {Organizer.lastName}</p>
+            <button className={`${isUserCreatedGroup(currUser, groupCreatorId)} t-content join-button`} onClick={onClick}>Join this group</button>
+                <div className={`${creatorOptions} t-content creator-buttons`}>
+                <button className={creatorOptions} id="create-event-button" onClick={()=>navigate(`/groups/${id}/events/new`)}>Create event</button>
+                <button className={creatorOptions} id="update-event-button" onClick={()=>navigate(`/groups/${id}/edit`)} >Update</button>
+                <OpenModalButton
                         buttonText="Delete"
                         modalComponent={<DeleteGroupModal groupId={groupId}/>}
-            />
+                />
+                </div>
+            </div>
             </div>
             </section>
             <section className="middle">
-                <div>
-                <h2>Organizer</h2>
-                <p>{Organizer.firstName} {Organizer.lastName}</p>
+                <div className= "middle-organizer">
+                <h2 className="margin-org">Organizer</h2>
+                <p className="organizer-middle">{Organizer.firstName} {Organizer.lastName}</p>
                 </div>
                 <div>
-                <h2>What we&apos;re about</h2>
-                <p>{about}</p>
+                <h2 className="about-detail-title">What we&apos;re about</h2>
+                <p className="about-detail-page">{about}</p>
                 </div>
             </section>
             <section className="bottom">
-                <div className={isHiddenFunc(numUpEvents)}>
-                    <h2>Upcoming Events ({numUpEvents})</h2>
+                <div className={`${isHiddenFunc(numUpEvents)}`}>
+                    <h2 className="up-coming-title">Upcoming Events ({numUpEvents})</h2>
                     <UpComingEvent id={id}/>
                 </div>
                 <div className={isHiddenFunc(numPastEvents)}>
-                    <h2>Past Events ({numPastEvents})</h2>
+                    <h2 className="up-coming-title">Past Events ({numPastEvents})</h2>
                     <PastEvents id={id}/>
                 </div>
             </section>

@@ -57,18 +57,25 @@ const PastEvents = (id) => {
         }
 
         return (
-            <>
+            <div>
             {newEventArr.map(event => {
                 return (
-                    <div className="event" key={event.id} onClick={() => navigate(`/events/${event.id}/details/${id.id}`)}>
-                    <p key={event.id}>{event.previewImage ? event.previewImage: 'no image'}</p>
-                    <p>{event.startDate}</p>
-                    <h2>{event.name}</h2>
-                    <p>{event.description}</p>
+
+                    <div key={event.id} className="event-box-detail">
+                    <div className="event-detail format-event-detail" key={event.id} onClick={() => navigate(`/events/${event.id}/details/${id.id}`)}>
+                        <img src={event.previewImage} className="event-img-detail"/>
+                        <div className='start-date event-content-detail'>
+                    <p className='event-date-detail'>{event.startDate.split(' ')[0]}</p>
+                    <p className='event-time'>{event.startDate.split(' ')[1]}</p>
+                    </div>
+                    <h2 className="eventname-detail event-content-detail">{event.name}</h2>
+                    <h3 className="event-location-detail event-content-detail">{event.Group.city} {event.Group.state}</h3>
+                    <p className="event-description-detail">{event.description}</p>
+                    </div>
                     </div>
                 )
             })}
-            </>
+            </div>
         )
     }
 }

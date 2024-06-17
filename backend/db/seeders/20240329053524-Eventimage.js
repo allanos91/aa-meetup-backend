@@ -21,43 +21,43 @@ module.exports = {
     await Eventimage.bulkCreate([
       {
         eventId: 1,
-        url: 'eventimage1',
-        previewImg: true
-      },
-      {
-        eventId: 1,
-        url: 'eventimage2',
-        previewImg: false
-      },
-      {
-        eventId: 1,
-        url: 'eventimage3',
-        previewImg: false
-      },
-      {
-        eventId: 2,
-        url: 'eventimage4',
+        url: 'https://bloximages.chicago2.vip.townnews.com/eagletribune.com/content/tncms/assets/v3/editorial/4/8c/48c9f60c-77ca-11ed-b459-4744044ed98a/639340b841971.image.jpg',
         previewImg: true
       },
       {
         eventId: 2,
-        url: 'eventimage5',
-        previewImg: false
-      },
-      {
-        eventId: 3,
-        url: 'eventimage6',
+        url: 'https://www.profootballhof.com/pfhof/media/Assets/NFLSchedule1050Web1.jpg?ext=.jpg',
         previewImg: true
       },
       {
         eventId: 3,
-        url: 'eventimage7',
-        previewImg: false
+        url: 'https://www.profootballhof.com/pfhof/media/Assets/NFLSchedule1050Web1.jpg?ext=.jpg',
+        previewImg: true
       },
       {
-        eventId: 3,
-        url: 'eventimage8',
-        previewImg: false
+        eventId: 4,
+        url: 'https://www.profootballhof.com/pfhof/media/Assets/NFLSchedule1050Web1.jpg?ext=.jpg',
+        previewImg: true
+      },
+      {
+        eventId: 5,
+        url: 'https://www.profootballhof.com/pfhof/media/Assets/NFLSchedule1050Web1.jpg?ext=.jpg',
+        previewImg: true
+      },
+      {
+        eventId: 6,
+        url: 'https://www.profootballhof.com/pfhof/media/Assets/NFLSchedule1050Web1.jpg?ext=.jpg',
+        previewImg: true
+      },
+      {
+        eventId: 7,
+        url: 'https://www.profootballhof.com/pfhof/media/Assets/NFLSchedule1050Web1.jpg?ext=.jpg',
+        previewImg: true
+      },
+      {
+        eventId: 8,
+        url: 'https://www.profootballhof.com/pfhof/media/Assets/NFLSchedule1050Web1.jpg?ext=.jpg',
+        previewImg: true
       }
      ])
   },

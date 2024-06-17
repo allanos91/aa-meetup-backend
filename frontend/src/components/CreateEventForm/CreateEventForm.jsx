@@ -148,7 +148,7 @@ const CreateEventForm = () => {
                     </select>
                 </div>
                 <label htmlFor="price">What is the price for your event?</label>
-                <input name="price" type="number" onChange={handlePrice}/>
+                <input name="price" type="number" onChange={handlePrice} placeholder="0"/>
             </section>
             <section>
                 <div>

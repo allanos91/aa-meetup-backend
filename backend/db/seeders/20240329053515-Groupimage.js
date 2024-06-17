@@ -35,7 +35,7 @@ module.exports = {
     },
     {
       groupId: 2,
-      url: 'groupimage4',
+      url: 'https://thyblackman.com/wp-content/uploads/2019/11/PatrickMahomes.jpg',
       previewImg: true
     },
     {
@@ -45,7 +45,7 @@ module.exports = {
     },
     {
       groupId: 3,
-      url: 'groupimage6',
+      url: 'https://a2.espncdn.com/combiner/i?img=%2Fphoto%2F2022%2F1024%2Fr1080744_1296x729_16-9.jpg',
       previewImg: true
     },
     {
@@ -57,6 +57,16 @@ module.exports = {
       groupId: 3,
       url: 'groupimage8',
       previewImg: false
+    },
+    {
+      groupId: 4,
+      url: 'https://blog.confirmbets.com/wp-content/uploads/2019/07/Messi.jpg',
+      previewImg:true
+    },
+    {
+      groupId: 5,
+      url: 'https://www.jacketsland.com/wp-content/uploads/2023/10/Taylor-Swift-Kansas-City-Chiefs-Sweatshirt.jpg',
+      previewImg: true
     }
    ])
 
