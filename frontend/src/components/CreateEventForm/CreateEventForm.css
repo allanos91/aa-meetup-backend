@@ -1,0 +1,90 @@
+.event-form {
+    margin-left: 200px;
+    margin-right: 200px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#create-event-title {
+    margin-bottom: 0px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.top-section-event-form {
+    height: 115px;
+    border-style: solid;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-color: black;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.label-event-name {
+    margin-top: 10px;
+}
+
+.second-section-event-form {
+    margin-top: 20px;
+    border-style: solid;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-color: black;
+    padding-bottom: 20px;
+    height: 150px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.third-section-event-form {
+    margin-top: 20px;
+    border-style: solid;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-color: black;
+    padding-bottom: 20px;
+    height: 130px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.fourth-section-event-form {
+    margin-top: 20px;
+    border-style: solid;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-color: black;
+    padding-bottom: 20px;
+    height: 55px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.fifth-section-event-form {
+    margin-top: 20px;
+    padding-bottom: 20px;
+    height: fit-content;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.margin-top-event-form {
+    margin-top: 10px;
+}
+
+.text-area-event-form {
+    height: 200px;
+    width: 500px;
+}
+
+.submit-event-form-button{
+    margin-top: 20px;
+    color: white;
+    background-color: red;
+    height: 50px;
+    font-size: larger;
+    width: 150px;
+}
+
+.third-section-div-event-form{
+    height: 63px;
+}

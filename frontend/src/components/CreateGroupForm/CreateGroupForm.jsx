@@ -102,7 +102,7 @@ const CreateGroupForm = () => {
     return (
         <form className="group-form" onSubmit={handleSubmit}>
             <section className="header-section">
-            <h1>Start a New Group</h1>
+            <h2 id="start-group-title">Start a New Group</h2>
             <h2>We&apos;ll walk you through a few steps to build your local community</h2>
             </section>
             <section className="group-location-section">
@@ -125,7 +125,7 @@ const CreateGroupForm = () => {
                     <li>Who should join?</li>
                     <li>What will you do at your events?</li>
                 </ol>
-                <textarea type="text" name="description" value={desc} placeholder="Please write at least 30 characters" onChange={handleDesc}></textarea>
+                <textarea className="text-area-group" type="text" name="description" value={desc} placeholder="Please write at least 30 characters" onChange={handleDesc}></textarea>
                 <p className={`errors ${hidden}`}>{errors.desc}</p>
             </section>
             <section className="final-steps">
@@ -144,7 +144,9 @@ const CreateGroupForm = () => {
                 <input name="image" id="image" type="text" value={img} onChange={handleImg} placeholder="Image Url"/>
                 <p className={`errors ${hidden}`}>{errors.img}</p>
             </section>
-            <button type="submit">Create Group</button>
+            <div className="submit-group-flex">
+                <button id="submit-group-form-button" type="submit">Create Group</button>
+            </div>
         </form>
     )
 }

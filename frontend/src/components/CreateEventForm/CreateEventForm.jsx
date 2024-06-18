@@ -7,11 +7,12 @@ import { getEventsFromGroup } from "../../store/groupevents"
 import { getEvents } from "../../store/events"
 import { getGroups } from "../../store/groups"
 import { getGroupDetails } from "../../store/groupdetails"
+import "./CreateEventForm.css"
 
 
 const CreateEventForm = () => {
     const [eName, setEName] = useState('')
-    const [price, setPrice] = useState(0)
+    const [price, setPrice] = useState()
     const [startD, setStartD] = useState('')
     const [type, setType] = useState('In person')
     const [endD, setEndD] = useState('')
@@ -97,13 +98,17 @@ const CreateEventForm = () => {
         }
 
         if (!endD) {
-            errors.endD = "End date and time is required"
+            errors.endDate = "End date and time is required"
         }
         if (!validateImg(img)) {
             errors.image = "Image url must end in .png, .jpg, or .jpeg"
         }
         if (desc.length < 30) {
             errors.description = "Description must have 30 or more characters."
+        }
+
+        if (!price && price !== 0) {
+            errors.price = "Price is required."
         }
         setErrors(errors)
 
@@ -126,53 +131,54 @@ const CreateEventForm = () => {
 
         return (
             <form className="event-form" onSubmit={handleSubmit}>
-            <section>
-                <h1>Create an event for {group.name}</h1>
-                <label htmlFor="Event Name">What is the name of your event?</label>
+            <section className="top-section-event-form">
+                <h2 id="create-event-title">Create an event for {group.name}</h2>
+                <label htmlFor="Event Name" className="label-event-name">What is the name of your event?</label>
                 <input name ="Event Name" placeholder="Event Name" onChange={handleEName}/>
                 <p className={`errors ${hidden}`}>{errors.name}</p>
             </section>
-            <section>
+            <section className="second-section-event-form">
                 <div>
-                    <label htmlFor="type">Is this an in person or online event?</label>
+                    <label htmlFor="type" className="margin-top-event-form">Is this an in person or online event?</label>
                     <select name="type" onChange={handleType}>
                         <option>In person</option>
                         <option>Online</option>
                     </select>
                 </div>
                 <div>
-                    <label htmlFor="private" onChange={handlePrivate}>Is this event private or public?</label>
+                    <label htmlFor="private" onChange={handlePrivate} className="margin-top-event-form">Is this event private or public?</label>
                     <select name="private">
                         <option>public</option>
                         <option>private</option>
                     </select>
                 </div>
-                <label htmlFor="price">What is the price for your event?</label>
+                <label htmlFor="price" className="margin-top-event-form">What is the price for your event?</label>
                 <input name="price" type="number" onChange={handlePrice} placeholder="0"/>
+                <p className={`errors ${hidden}`}>{errors.price}</p>
             </section>
-            <section>
-                <div>
-                <label htmlFor="start-date">When does your event start?</label>
+            <section className="third-section-event-form">
+                <div className="third-section-div-event-form">
+                <label htmlFor="start-date" className="margin-top-event-form">When does your event start?</label>
                 <input name="start-date" type="datetime-local" placeholder="MM/DD/YYYY, HH/mm AM" onChange={handleStartD}/>
                 <p className={`errors ${hidden}`}>{errors.startDate}</p>
                 </div>
                 <div>
-                <label htmlFor="end-date">When does your event end?</label>
+                <label htmlFor="end-date" className="margin-top-event-form">When does your event end?</label>
                 <input name="end-date" type="datetime-local" placeholder="MM/DD/YYYY, HH/mm AM" onChange={handleEndD}/>
                 <p className={`errors ${hidden}`}>{errors.endDate}</p>
                 </div>
             </section>
-            <section>
+            <section className="fourth-section-event-form">
                 <label>Please add in image url for your event below</label>
                 <input placeholder="Image Url" onChange={handleImg}/>
                 <p className={`errors ${hidden}`}>{errors.image}</p>
             </section>
-            <section>
+            <section className="fifth-section-event-form">
                 <label>Please describe your event:</label>
-                <textarea placeholder="Please include at least 30 characters" onChange={handleDesc}></textarea>
+                <textarea placeholder="Please include at least 30 characters" onChange={handleDesc} className="text-area-event-form"></textarea>
                 <p className={`errors ${hidden}`}>{errors.description}</p>
             </section>
-            <button type="submit">Create Event</button>
+            <button type="submit" className="submit-event-form-button">Create Event</button>
             </form>
         )
     }
