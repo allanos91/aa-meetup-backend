@@ -188,7 +188,7 @@ const UpdateGroupForm = () => {
                 <input name="image" id="image" type="text" value={img} onChange={handleImg} placeholder="Image Url"/>
                 <p className={`errors ${hidden}`}>{errors.img}</p>
             </section>
-            <button type="submit">Update Group</button>
+            <button type="submit" className="update-submit">Update Group</button>
         </form>
         )
     } else {
