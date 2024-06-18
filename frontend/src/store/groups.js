@@ -4,6 +4,7 @@ const LOAD_GROUPS = "groups/LOAD_GROUPS"
 const POST_GROUP = "group/POST_GROUP"
 const UPDATE_GROUP = "groups/UPDATE_GROUP"
 const DELETE_GROUP = "group/DELETE_GROUP"
+const REFRESH = "group/REFRESH"
 
 
 
@@ -26,6 +27,11 @@ const update = (data) => ({
 const remove = (groupId) => ({
     type:DELETE_GROUP,
     groupId
+})
+
+const refresh = (data)=> ({
+    data,
+    type: REFRESH,
 })
 
 const initialState = {}
@@ -83,6 +89,13 @@ export const removeGroup = (groupId) => async dispatch => {
     }
 }
 
+export const refreshGroups = () => async dispatch => {
+    const response = await csrfFetch(`/api/groups`)
+    const data = await response.json()
+    dispatch(refresh(data))
+    return data
+}
+
 const groupsReducer = (state = initialState, action) => {
     switch (action.type) {
         case LOAD_GROUPS: {
@@ -125,6 +138,15 @@ const groupsReducer = (state = initialState, action) => {
             delete state[action.groupId]
             return {
                 ...state
+            }
+        }
+        case REFRESH: {
+            const newGroups = {}
+            action.data.Groups.forEach(group => {
+                newGroups[group.id] = group
+            })
+            return {
+                ...newGroups
             }
         }
         default:

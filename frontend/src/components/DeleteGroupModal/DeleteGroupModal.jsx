@@ -3,6 +3,7 @@ import { useModal } from '../../context/Modal'
 import { removeGroup } from '../../store/groups'
 import { useIsDeletedObj } from '../../context/IsDeleted'
 import { refreshEvents } from '../../store/events'
+import { refreshGroups } from '../../store/groups'
 
 
 function DeleteGroupModal(groupId) {
@@ -14,6 +15,7 @@ function DeleteGroupModal(groupId) {
         return dispatch(removeGroup(groupId.groupId))
         .then(closeModal)
         .then(dispatch(refreshEvents()))
+        .then(dispatch(refreshGroups()))
         .then(setIsDeleted(true))
     }
 
