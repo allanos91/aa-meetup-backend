@@ -4,4 +4,92 @@
 
 .errors {
     color: red;
+    margin-bottom: 0px;
+    margin-top: 5px;
+}
+
+.header-section {
+    border-style: solid;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    margin-left: 200px;
+    margin-right: 200px;
+}
+
+#start-group-title {
+    color: teal
+}
+
+.group-location-section {
+    margin-left: 200px;
+    margin-right: 200px;
+    border-style: solid;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    height: 170px;
+}
+
+.group-name-section {
+    margin-left: 200px;
+    margin-right: 200px;
+    border-style: solid;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    height: 170px;;
+}
+
+.group-description-section {
+    margin-left: 200px;
+    margin-right: 200px;
+    border-style: solid;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    height: 445px;
+}
+
+.text-area-group {
+    width: 485px;
+    height: 240px;
+    resize: none;
+}
+
+.final-steps {
+    margin-left: 200px;
+    margin-right: 200px;
+    border-style: solid;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    height: 220px;
+}
+
+#submit-group-form-button {
+    background-color: red;
+    color:white;
+    height: 50px;
+    font-size: larger;
+}
+
+.submit-group-flex {
+    margin-top: 30px;
+    margin-left: 200px;
+    margin-right: 200px;
+}
+
+#type {
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    margin-bottom: 10px;
+}
+
+#public {
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    margin-bottom: 10px;
 }
