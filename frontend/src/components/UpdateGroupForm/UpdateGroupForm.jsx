@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { getGroupDetails } from "../../store/groupdetails"
 import { updateGroupDetails } from "../../store/groups"
 import { postImageGroup } from "../../store/groupimages"
+import "./UpdateGroupForm.css"
 
 
 
@@ -168,7 +169,7 @@ const UpdateGroupForm = () => {
                     <li>Who should join?</li>
                     <li>What will you do at your events?</li>
                 </ol>
-                <textarea type="text" name="description" value={desc} placeholder="Please write at least 30 characters" onChange={handleDesc}></textarea>
+                <textarea type="text" name="description" value={desc} placeholder="Please write at least 30 characters" onChange={handleDesc} className="text-area-group-1"></textarea>
                 <p className={`errors ${hidden}`}>{errors.desc}</p>
             </section>
             <section className="final-steps">

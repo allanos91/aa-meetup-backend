@@ -74,6 +74,7 @@
 .text-area-event-form {
     height: 200px;
     width: 500px;
+    resize: none;
 }
 
 .submit-event-form-button{
