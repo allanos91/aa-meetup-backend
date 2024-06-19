@@ -3,3 +3,12 @@
     width: 500px;
     resize: none;
 }
+
+.update-submit {
+    margin-left: 200px;
+    background-color: red;
+    color: white;
+    height: 50px;
+    font-size: larger;
+    margin-top: 20px;
+}
